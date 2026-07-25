@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+  Powered by 8th Wall Engine
+  Copyright (c) 2026 Niantic Spatial, Inc. All rights reserved.
+  The engine is provided under the Distributed Engine Binary License.
+  See https://8thwall.org/docs/migration/faq for details.
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>8theye - Eyewear Try-on</title>
+  <!-- 8th Wall requires these scripts to be loaded for its XR tracking -->
+  <script src="/lib/xr.js" async data-preload-chunks="face,slam"></script>
+  <script src="/lib/xrextras.js"></script>
+  <script src="/lib/landing-page.js"></script>
+</head>
+
+<body style="margin: 0; padding: 0; overflow: hidden; background-color: #000;">
+  <div id="root"></div>
+  <script>
+    // window.trikomi_lic = '/assets/v3d_victorshell_com.lic';
+  </script>
+  <script type="module" src="./src/main.jsx"></script>
+</body>
+
+</html>

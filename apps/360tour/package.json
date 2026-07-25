@@ -1,0 +1,23 @@
+{
+  "name": "@trikomi/360tour",
+  "description": "Trikomi 360° Virtual Tour — panoramic tour builder and viewer with OPFS storage and ZIP export",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && pnpm build:export",
+    "build:export": "vite build -c src/export-template/vite.config.js && node scripts/generate-asset-list.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1784947042607.tgz",
+    "idb-keyval": "^6.2.5",
+    "jszip": "^3.10.1",
+    "mobx": "^6.15.3",
+    "mobx-react-lite": "^4.1.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.14.2",
+    "three": "^0.184.0"
+  }
+}

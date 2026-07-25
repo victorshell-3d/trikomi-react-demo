@@ -1,0 +1,19 @@
+{
+  "name": "@trikomi/app-viewer",
+  "description": "Trikomi 3D Viewer — standalone WebGPU 3D model viewer app with post-processing controls",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1784947042607.tgz",
+    "jszip": "^3.10.1",
+    "leva": "^0.10.1",
+    "mobx-react-lite": "^4.1.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  }
+}

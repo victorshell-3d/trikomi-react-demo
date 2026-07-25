@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRIKOMI 3D SDK – Developer Docs</title>
+  <meta name="description"
+    content="Developer documentation for the @trikomi/core SDK and its demo applications. Covers architecture, plugin system, building, and deployment." />
+  <link rel="icon" href="../svgs/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07080f;
+      --bg2: #0d0f1a;
+      --bg3: #12151f;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.4);
+      --text: #e2e4ef;
+      --text-muted: #7b7f99;
+      --accent: #6366f1;
+      --accent2: #00f2fe;
+      --accent3: #a855f7;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --code-bg: #0a0c14;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── Layout ─────────────────────────────── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ────────────────────────────── */
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .sidebar-logo-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .sidebar-logo-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .nav-group {
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .nav-group-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 0.5rem 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      transition: all 0.15s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+    }
+
+    .nav-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Main Content ───────────────────────── */
+    .main {
+      flex: 1;
+      max-width: 860px;
+      padding: 4rem 3rem;
+    }
+
+    /* ── Typography ─────────────────────────── */
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #a0a3c4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 1.375rem;
+      font-weight: 600;
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      color: #fff;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      color: #d4d6f0;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── Code ───────────────────────────────── */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8em;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: #a5b4fc;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.85rem;
+      color: #c9d1e8;
+      line-height: 1.6;
+    }
+
+    .kw {
+      color: #818cf8;
+    }
+
+    .fn {
+      color: #67e8f9;
+    }
+
+    .str {
+      color: #86efac;
+    }
+
+    .cm {
+      color: #4b5280;
+    }
+
+    .cn {
+      color: #f0abfc;
+    }
+
+    .num {
+      color: #fbbf24;
+    }
+
+    /* ── Cards / Callouts ───────────────────── */
+    .callout {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-left: 3px solid;
+      font-size: 0.9rem;
+    }
+
+    .callout-info {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: var(--accent);
+    }
+
+    .callout-tip {
+      background: rgba(34, 197, 94, 0.08);
+      border-color: var(--green);
+    }
+
+    .callout-warn {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: var(--yellow);
+    }
+
+    .callout-label {
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+    }
+
+    .callout-info .callout-label {
+      color: var(--accent);
+    }
+
+    .callout-tip .callout-label {
+      color: var(--green);
+    }
+
+    .callout-warn .callout-label {
+      color: var(--yellow);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--border-accent);
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #fff;
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+    }
+
+    .tag-free {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--green);
+    }
+
+    .tag-premium {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--accent3);
+    }
+
+    .tag-app {
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+    }
+
+    /* ── Table ──────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* ── Tree view ──────────────────────────── */
+    .tree {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      line-height: 1.75;
+    }
+
+    .tree .dir {
+      color: #93c5fd;
+    }
+
+    .tree .file {
+      color: #c9d1e8;
+    }
+
+    .tree .note {
+      color: #4b5280;
+    }
+
+    /* ── Hero ───────────────────────────────── */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      margin-bottom: 1.25rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse-dot 2s ease infinite;
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    .hero-intro {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 640px;
+    }
+
+    /* ── Scrollbar ──────────────────────────── */
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .main {
+        padding: 2rem 1.25rem;
+      }
+    }
+
+    /* ── Section anchors ────────────────────── */
+    .section {
+      scroll-margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- ── Sidebar ── -->
+    <nav class="sidebar" aria-label="Documentation navigation">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon" style="background: transparent; box-shadow: none;">
+          <img src="../public/logos/trikomi.png" alt="logo" style="height: 2em; vertical-align: middle;">
+        </div>
+        <div>
+          <div class="sidebar-logo-text">TRIKOMI 3D SDK</div>
+          <div class="sidebar-logo-sub">Developer Docs</div>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Getting Started</div>
+        <a class="nav-link" href="#overview"><span class="nav-dot"></span>Overview</a>
+        <a class="nav-link" href="#quickstart"><span class="nav-dot"></span>Quick Start</a>
+        <a class="nav-link" href="#structure"><span class="nav-dot"></span>Project Structure</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Core SDK</div>
+        <a class="nav-link" href="#threeviewer"><span class="nav-dot"></span>ThreeViewer</a>
+        <a class="nav-link" href="#plugins"><span class="nav-dot"></span>Plugin System</a>
+        <a class="nav-link" href="#plugin-reference"><span class="nav-dot"></span>Plugin Reference</a>
+        <a class="nav-link" href="#viewerstore"><span class="nav-dot"></span>ViewerStore</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Applications</div>
+        <a class="nav-link" href="#apps"><span class="nav-dot"></span>App Overview</a>
+        <a class="nav-link" href="#app-viewer"><span class="nav-dot"></span>3D Viewer</a>
+        <a class="nav-link" href="#app-sportswear"><span class="nav-dot"></span>Sportswear</a>
+        <a class="nav-link" href="#app-eyewear"><span class="nav-dot"></span>Eyewear Tryon</a>
+        <a class="nav-link" href="#app-face"><span class="nav-dot"></span>Face Mocap</a>
+        <a class="nav-link" href="#app-jewelry"><span class="nav-dot"></span>Jewelry</a>
+        <a class="nav-link" href="#app-box"><span class="nav-dot"></span>Box Configurator</a>
+        <a class="nav-link" href="#app-360tour"><span class="nav-dot"></span>360 Virtual Tour</a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Build & Deploy</div>
+        <a class="nav-link" href="#build"><span class="nav-dot"></span>Build Pipeline</a>
+        <a class="nav-link" href="#paths"><span class="nav-dot"></span>Asset Paths</a>
+
+      </div>
+    </nav>
+
+    <!-- ── Main ── -->
+    <main class="main">
+
+      <!-- Overview -->
+      <section id="overview" class="section">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          @trikomi/core · Three.js WebGPU · React · Vite
+        </div>
+        <h1>TRIKOMI 3D SDK Documentation</h1>
+        <p class="hero-intro">
+          A modular 3D rendering SDK built on Three.js (WebGPU renderer), React, MobX, and Vite.
+          The SDK ships as a pre-compiled package (<code>@trikomi/core</code>) consumed by six demo applications in a
+          Yarn workspace monorepo.
+        </p>
+
+        <div class="callout callout-info">
+          <div class="callout-label">ℹ Info</div>
+          The <strong>core source code is private</strong>. The demo repo ships only the compiled
+          <code>dist/sdk.js</code> and TypeScript type declarations. App developers build on top of the public plugin
+          API.
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- Quickstart -->
+      <section id="quickstart" class="section">
+        <h2>Quick Start</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+          <li><a href="https://nodejs.org" target="_blank">Node.js</a> ≥ 20</li>
+          <li><a href="https://yarnpkg.com" target="_blank">Yarn</a> v1.x (classic)</li>
+        </ul>
+
+        <h3>Install & Run Dev Server</h3>
+        <pre><code><span class="cm"># Clone the monorepo</span>
+git clone &lt;repo-url&gt; 3dviewer
+cd 3dviewer
+
+<span class="cm"># Install all workspaces</span>
+yarn install
+
+<span class="cm"># Start the root dev server (serves all apps at their paths)</span>
+yarn dev</code></pre>
+
+        <p>The Vite dev server starts at <code>http://localhost:5173</code>. Individual apps are accessible at:</p>
+        <ul style="list-style: none; padding-left: 0;">
+          <li style="margin-bottom: 8px;"><img src="../public/logos/trikomi.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/viewer/</code> — 3D Core
+            Viewer</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/jersey.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/sportswear-configurator/</code>
+            — Sportswear Configurator</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/eyewear.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/eyewear-tryon/</code> —
+            Eyewear Try-on</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/facemocap.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/face-mocap/</code> — Face
+            Motion Capture</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/jewel.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/jewelry-configurator/</code>
+            — Jewelry Configurator</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/box.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/box-configurator/</code> —
+            Box Configurator</li>
+          <li style="margin-bottom: 8px;"><img src="../public/logos/360.png" alt="logo"
+              style="height: 1.2em; vertical-align: middle; margin-right: 8px;"><code>/apps/360tour/</code> — 360
+            Virtual Tour</li>
+        </ul>
+
+        <h3>Production Build</h3>
+        <pre><code><span class="cm"># Builds core SDK + all apps → ./dist/</span>
+yarn build
+
+<span class="cm"># Serve the built output locally</span>
+yarn serve
+<span class="cm"># → http://localhost:3000</span></code></pre>
+
+        <div class="callout callout-tip">
+          <div class="callout-label">✓ Tip</div>
+          To build and preview a single app without rebuilding everything, use the workspace shortcuts:
+          <code>yarn build:viewer</code>, <code>yarn build:sportswear</code>, <code>yarn build:eyewear</code>, etc.
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- Structure -->
+      <section id="structure" class="section">
+        <h2>Project Structure</h2>
+
+        <div class="tree">
+          <span class="dir">3dviewer/</span>
+          ├── <span class="dir">apps/</span> <span class="note">← Demo applications (each is a Vite+React
+            workspace)</span>
+          │ ├── <span class="dir">box-configurator/</span>
+          │ ├── <span class="dir">eyewear-tryon/</span>
+          │ ├── <span class="dir">face-mocap/</span>
+          │ ├── <span class="dir">jewelry-configurator/</span>
+          │ ├── <span class="dir">sportswear-configurator/</span>
+          │ └── <span class="dir">viewer/</span>
+          │
+          ├── <span class="dir">packages/</span>
+          │ └── <span class="dir">core/</span> <span class="note">← @trikomi/core (private source, compiled SDK)</span>
+          │ ├── <span class="dir">src/</span> <span class="note">← Private source (not in demo repo)</span>
+          │ └── <span class="dir">dist/</span> <span class="note">← Compiled output consumed by apps</span>
+          │ ├── <span class="file">sdk.js</span> <span class="note">← Bundled ES module</span>
+          │ ├── <span class="file">index.d.ts</span> <span class="note">← TypeScript declarations</span>
+          │ └── <span class="dir">assets/</span> <span class="note">← 3D assets (GLBs, HDRs, textures)</span>
+          │
+          ├── <span class="dir">public/</span> <span class="note">← Shared static assets served by all apps</span>
+          │ ├── <span class="dir">assets/wasm/</span> <span class="note">← MediaPipe WASM files (face tracking)</span>
+          │ ├── <span class="dir">draco/gltf/</span> <span class="note">← Draco GLTF decoder binaries</span>
+          │ ├── <span class="dir">textures/</span> <span class="note">← Shared textures (fabric normals, SVGs)</span>
+          │ └── <span class="dir">js/</span> <span class="note">← Third-party scripts (jQuery, Kendo, Pako)</span>
+          │
+          ├── <span class="file">build-monorepo.js</span> <span class="note">← Merges all app builds into ./dist/</span>
+
+          ├── <span class="file">index.html</span> <span class="note">← Root hub page (links to all apps)</span>
+          └── <span class="file">package.json</span> <span class="note">← Yarn workspaces root</span>
+        </div>
+
+        <h3>Why a Shared <code>public/</code>?</h3>
+        <p>
+          All six apps share a single <code>public/</code> directory at the monorepo root. Each app's
+          <code>vite.config.*</code>
+          sets <code>publicDir: '../../public'</code>, so static assets like WASM binaries, Draco decoders, and textures
+          are always available without duplicating them per app.
+        </p>
+      </section>
+
+      <hr />
+
+      <!-- ThreeViewer -->
+      <section id="threeviewer" class="section">
+        <h2>ThreeViewer</h2>
+        <p>
+          <code>ThreeViewer</code> is the core engine class. It sets up the Three.js WebGPU renderer, scene, camera,
+          lighting, and render loop. It is the central object that all plugins attach to.
+        </p>
+
+        <h3>Constructor</h3>
+        <pre><code><span class="kw">import</span> { ThreeViewer, viewerStore } <span class="kw">from</span> <span class="str">'@trikomi/core'</span>;
+
+<span class="kw">const</span> viewer = <span class="kw">new</span> <span class="cn">ThreeViewer</span>(
+  containerElement,  <span class="cm">// HTMLDivElement to mount the canvas into</span>
+  viewerStore,       <span class="cm">// MobX ViewerStore instance (shared across components)</span>
+  {
+    assetBaseUrl<span class="cm">?: string</span>,       <span class="cm">// Path prefix for built-in 3D assets</span>
+  }
+);</code></pre>
+
+        <h3>Key Properties</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>viewer.scene</code></td>
+              <td><code>THREE.Scene</code></td>
+              <td>The Three.js scene. Add your meshes here.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.camera</code></td>
+              <td><code>THREE.PerspectiveCamera</code></td>
+              <td>Main perspective camera (45° FOV by default).</td>
+            </tr>
+            <tr>
+              <td><code>viewer.renderer</code></td>
+              <td><code>THREE.WebGPURenderer</code></td>
+              <td>WebGPU renderer with ACESFilmic tone mapping.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.store</code></td>
+              <td><code>ViewerStore</code></td>
+              <td>Reactive MobX store driving UI state.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.directionalLight</code></td>
+              <td><code>THREE.DirectionalLight</code></td>
+              <td>Primary directional light (adjustable).</td>
+            </tr>
+            <tr>
+              <td><code>viewer.ambientLight</code></td>
+              <td><code>THREE.AmbientLight</code></td>
+              <td>Ambient fill light.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.secureSdk</code></td>
+              <td><code>SecureWasmSdk</code></td>
+              <td>WASM sandbox for premium shader execution.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.authStatus</code></td>
+              <td><code>AuthStatus</code></td>
+              <td><code>'AUTHENTICATING' | 'AUTHORIZED' | 'UNAUTHORIZED' | 'TAMPERED'</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Key Methods</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>viewer.addPlugin(plugin)</code></td>
+              <td>Attaches a plugin to the viewer. Calls <code>plugin.onAttach(viewer)</code>.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.getPlugin(PluginClass)</code></td>
+              <td>Returns a plugin by its class constructor, or <code>undefined</code>.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.removePlugin(PluginClass)</code></td>
+              <td>Detaches and removes a plugin by its class constructor.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.mount(container)</code></td>
+              <td>Mounts the canvas into a new DOM element (re-mount after navigation).</td>
+            </tr>
+            <tr>
+              <td><code>viewer.dispose()</code></td>
+              <td>Cleans up all resources, cancels animation frame, disposes plugins.</td>
+            </tr>
+            <tr>
+              <td><code>viewer.handleResize()</code></td>
+              <td>Updates camera aspect ratio and renderer size. Called automatically on <code>resize</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>The <code>assetBaseUrl</code> Rule</h3>
+        <p>
+          Built-in assets (GLB models, HDR env maps) live in <code>packages/core/dist/assets/</code> at the source level
+          and are copied to <code>dist/assets/core/</code> in the production build. The viewer resolves asset URLs using
+          <code>assetBaseUrl</code>:
+        </p>
+        <ul>
+          <li><strong>Dev</strong>: <code>'/packages/core/dist/assets/'</code> (absolute, served from Vite root)</li>
+          <li><strong>Prod</strong>: <code>'../assets/core/'</code> (navigates up from the app subfolder to the shared
+            <code>dist/assets/</code>)
+          </li>
+        </ul>
+      </section>
+
+      <hr />
+
+      <!-- Plugin System -->
+      <section id="plugins" class="section">
+        <h2>Plugin System</h2>
+        <p>
+          Every feature of the viewer — from orbit controls to diamond shaders — is encapsulated in a
+          <strong>plugin</strong>.
+          Plugins are decoupled, composable, and lifecycle-managed by <code>ThreeViewer</code>.
+        </p>
+
+        <h3>Creating a Custom Plugin</h3>
+        <pre><code><span class="kw">import</span> { ViewerPlugin, ThreeViewer } <span class="kw">from</span> <span class="str">'@trikomi/core'</span>;
+
+<span class="kw">export class</span> <span class="cn">MyPlugin</span> <span class="kw">extends</span> <span class="cn">ViewerPlugin</span> {
+  <span class="kw">readonly</span> id = <span class="str">'MyPlugin'</span>;  <span class="cm">// Unique identifier</span>
+
+  <span class="fn">onAttach</span>(viewer: <span class="cn">ThreeViewer</span>): <span class="kw">void</span> {
+    <span class="kw">super</span>.<span class="fn">onAttach</span>(viewer);
+    <span class="cm">// Setup code here – viewer.scene, viewer.camera, etc. are available</span>
+  }
+
+  <span class="fn">onUpdate</span>(deltaTime: <span class="kw">number</span>): <span class="kw">void</span> {
+    <span class="cm">// Called every animation frame with seconds since last frame</span>
+  }
+
+  <span class="fn">onDetach</span>(): <span class="kw">void</span> {
+    <span class="cm">// Cleanup resources (remove event listeners, dispose geometries, etc.)</span>
+    <span class="kw">super</span>.<span class="fn">onDetach</span>();
+  }
+}
+
+<span class="cm">// Attach to a viewer instance:</span>
+viewer.<span class="fn">addPlugin</span>(<span class="kw">new</span> <span class="cn">MyPlugin</span>());
+
+<span class="cm">// Retrieve later:</span>
+<span class="kw">const</span> myPlugin = viewer.<span class="fn">getPlugin</span>(<span class="str">MyPlugin</span>);</code></pre>
+
+        <h3>Plugin Lifecycle</h3>
+        <ul>
+          <li><code>onAttach(viewer)</code> — called immediately when the plugin is added via <code>addPlugin()</code>.
+            Sets up Three.js objects, event listeners, reactions.</li>
+          <li><code>onUpdate(deltaTime)</code> — called each animation frame (optional). Use for animations and
+            per-frame logic.</li>
+          <li><code>onRender()</code> — called after the Three.js render call (optional). Use for post-render
+            operations.</li>
+          <li><code>onDetach()</code> — called when plugin is removed. Must dispose all resources to prevent memory
+            leaks.</li>
+        </ul>
+
+
+
+      <hr />
+
+      <!-- Plugin Reference -->
+      <section id="plugin-reference" class="section">
+        <h2>Plugin Reference</h2>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">GLTFPlugin</div>
+            <div class="card-desc">Loads <code>.glb</code>/<code>.gltf</code> files with Draco and Meshopt
+              decompression. Call <code>plugin.loadModel(url)</code> to swap models at runtime.</div>
+            <span class="card-tag tag-free">Free</span>
+          </div>
+          <div class="card">
+            <div class="card-title">OrbitControlsPlugin</div>
+            <div class="card-desc">Mouse/touch orbit, pan, and zoom. Configurable damping, polar angle limits, and
+              auto-rotate.</div>
+            <span class="card-tag tag-free">Free</span>
+          </div>
+          <div class="card">
+            <div class="card-title">EnvironmentPlugin</div>
+            <div class="card-desc">Loads HDR/EXR environment maps for Image-Based Lighting. Includes several built-in
+              env maps from the core assets.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">DiamondPlugin</div>
+            <div class="card-desc">Physically-based diamond ray-tracing shader. Multi-bounce internal reflections,
+              dispersion, and fire effects.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">SSGIPlugin</div>
+            <div class="card-desc">Screen-Space Global Illumination for indirect lighting bounces. Significant realism
+              boost for metallic scenes.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">SSRPlugin</div>
+            <div class="card-desc">Screen-Space Reflections for glossy surfaces. Works best with environment maps.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">ProgressiveShadowPlugin</div>
+            <div class="card-desc">Accumulates soft ground shadows over multiple frames. Provides studio-quality contact
+              shadows.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">FloorPlugin</div>
+            <div class="card-desc">Adds a reflective ground plane. Configurable opacity, color, and roughness.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">BloomPlugin</div>
+            <div class="card-desc">HDR bloom post-processing using Three.js TSL. Configurable threshold, strength, and
+              radius.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">CinematicPlugin</div>
+            <div class="card-desc">Premium cinematic grading and post-processing. Controls Vignette, Chromatic
+              Aberration, Film Grain, Exposure, Contrast, and Saturation.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">DOFPlugin</div>
+            <div class="card-desc">Depth of Field (bokeh) post-processing. Configurable focus distance and aperture.
+            </div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">FaceMocapPlugin</div>
+            <div class="card-desc">Real-time face tracking via MediaPipe. Drives 3D avatar blend shapes. Supports live
+              video, LiveLink, and debug overlays.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">AnimationPlugin</div>
+            <div class="card-desc">Plays and controls GLTF animation clips. Supports blend weights, cross-fading, and
+              speed control.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">CenterModelPlugin</div>
+            <div class="card-desc">Centers and floors a model based on its bounding box. Auto-adjusts camera distance.
+            </div>
+            <span class="card-tag tag-free">Free</span>
+          </div>
+          <div class="card">
+            <div class="card-title">TransformGizmoPlugin</div>
+            <div class="card-desc">Translate / rotate / scale gizmo for selected objects. Keyboard shortcuts: G, R, S.
+            </div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">MaterialRaycasterPlugin</div>
+            <div class="card-desc">Click-to-select mesh by raycasting. Fires selection events consumed by MaterialEditor
+              UI.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">MeasurementPlugin</div>
+            <div class="card-desc">Click two points to measure distance in 3D space. Renders line and label in scene.
+            </div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">OutlinePlugin</div>
+            <div class="card-desc">Post-process outline effect for selected objects. Configurable color and thickness.
+            </div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">ExportPlugin</div>
+            <div class="card-desc">Exports the scene as PNG screenshot or GLTF file.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">GridHelperPlugin</div>
+            <div class="card-desc">Toggleable infinite grid overlay for spatial reference.</div>
+            <span class="card-tag tag-free">Free</span>
+          </div>
+          <div class="card">
+            <div class="card-title">StatsPlugin</div>
+            <div class="card-desc">Overlays FPS, draw calls, and memory stats. Uses <code>stats.js</code> internally.
+            </div>
+            <span class="card-tag tag-free">Free</span>
+          </div>
+          <div class="card">
+            <div class="card-title">CameraPlugin</div>
+            <div class="card-desc">Save and recall named camera positions. Smooth tween between viewpoints.</div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+          <div class="card">
+            <div class="card-title">TourPlugin</div>
+            <div class="card-desc">Renders 360-degree spherical panoramas and manages interactive room-linking hotspots.
+            </div>
+            <span class="card-tag tag-premium">Premium</span>
+          </div>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- ViewerStore -->
+      <section id="viewerstore" class="section">
+        <h2>ViewerStore</h2>
+        <p>
+          <code>viewerStore</code> is a singleton MobX observable store exported from <code>@trikomi/core</code>.
+          It acts as the reactive bridge between the 3D engine and React UI components.
+          Wrap components with MobX's <code>observer()</code> to auto-render on store changes.
+        </p>
+        <pre><code><span class="kw">import</span> { viewerStore } <span class="kw">from</span> <span class="str">'@trikomi/core'</span>;
+<span class="kw">import</span> { observer } <span class="kw">from</span> <span class="str">'mobx-react-lite'</span>;
+
+<span class="cm">// In React components:</span>
+<span class="kw">const</span> MyUI = <span class="fn">observer</span>(() =&gt; (
+  <span class="str">&lt;div&gt;</span>{viewerStore.activeModelName}<span class="str">&lt;/div&gt;</span>
+));
+
+<span class="cm">// Update from anywhere – UI auto-updates:</span>
+viewerStore.<span class="fn">setBackgroundColor</span>(<span class="str">'#1a1a2e'</span>);
+viewerStore.<span class="fn">setActiveModelName</span>(<span class="str">'My Model'</span>);</code></pre>
+
+        <p>Key observable properties include <code>activeModelName</code>, <code>backgroundColor</code>,
+          <code>isModelLoading</code>, <code>modelError</code>, <code>floorTransparent</code>, and
+          <code>environmentIntensity</code>.
+        </p>
+      </section>
+
+      <hr />
+
+      <!-- Apps -->
+      <section id="apps" class="section">
+        <h2>Demo Applications</h2>
+        <p>Each app is an independent Vite + React workspace under <code>apps/</code> that imports
+          <code>@trikomi/core</code> as a dependency.
+        </p>
+
+        <div class="callout callout-info">
+          <div class="callout-label">ℹ Info</div>
+          All apps share a root <code>public/</code> directory via <code>publicDir: '../../public'</code> in their
+          <code>vite.config</code>. This means static assets (WASM, Draco, textures) are never duplicated.
+        </div>
+      </section>
+
+      <section id="app-viewer" class="section">
+        <h3><img src="../public/logos/trikomi.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">3D Viewer (<code>apps/viewer</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Full-featured model
+          viewer</span>
+        <p>
+          A complete 3D model viewer with a full plugin suite. Demonstrates using nearly all available plugins together.
+          Features a side panel <strong>MaterialEditor</strong> for PBR material editing, a <strong>ModelLoader</strong>
+          for drag-and-drop GLTF uploads, and a <strong>DiamondTest</strong> page for showcasing the ray-tracing diamond
+          shader.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>src/components/ThreeCanvas.tsx</code></td>
+              <td>Engine init, plugin attachment, auth-gating pattern</td>
+            </tr>
+            <tr>
+              <td><code>src/components/MaterialEditor.tsx</code></td>
+              <td>PBR material property editor panel</td>
+            </tr>
+            <tr>
+              <td><code>src/pages/DiamondTest.tsx</code></td>
+              <td>Diamond shader demo page</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="app-sportswear" class="section">
+        <h3><img src="../public/logos/jersey.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">Sportswear Configurator
+          (<code>apps/sportswear-configurator</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Product
+          customization</span>
+        <p>
+          An interactive jersey configurator. Users can change panel colors, upload logos, add text, switch fabric
+          normal maps
+          (mesh / knit / smooth), and move graphics freely on the UV canvas. Uses a custom
+          <strong>TextureCompositor</strong>
+          to composite SVG layers onto a WebGL canvas texture in real time.
+        </p>
+        <h4>Key architecture</h4>
+        <ul>
+          <li><strong>TextureCompositor</strong> — composites SVG base + user logos + text into a single
+            <code>THREE.CanvasTexture</code>.
+          </li>
+          <li><strong>ConfiguratorStore</strong> — MobX store tracking parts, colors, logos, and text items.</li>
+          <li>Fabric normal maps loaded from <code>public/textures/</code>; SVG base from
+            <code>public/textures/JSY-85 RL.svg</code>.
+          </li>
+        </ul>
+      </section>
+
+      <section id="app-eyewear" class="section">
+        <h3><img src="../public/logos/eyewear.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">Eyewear Try-on
+          (<code>apps/eyewear-tryon</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">AR face try-on</span>
+        <p>
+          Augmented Reality eyewear try-on using <strong>FaceMocapPlugin</strong> and a live webcam feed.
+          Tracks 478 facial landmarks via MediaPipe and positions/orients 3D glasses onto the face in real time.
+          Allows material editing of lens and frame properties. Includes a natural lighting mode
+          that samples the webcam background for environment-matched reflections.
+        </p>
+        <h4>Setup notes</h4>
+        <ul>
+          <li>Requires HTTPS (webcam permission). In dev, uses <code>@vitejs/plugin-basic-ssl</code> for a self-signed
+            cert.</li>
+          <li>MediaPipe WASM is loaded from <code>public/assets/wasm/</code>. In prod the path resolves to
+            <code>../assets/wasm/</code>.
+          </li>
+          <li>The face occluder (<code>head_occluder.obj</code>) is rendered as a depth mask to hide the glasses behind
+            the face boundary.</li>
+        </ul>
+      </section>
+
+      <section id="app-face" class="section">
+        <h3><img src="../public/logos/facemocap.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">Face Motion Capture
+          (<code>apps/face-mocap</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Unreal/Unity
+          LiveLink</span>
+        <p>
+          Full-face motion capture streaming blend shapes to Unreal Engine or Unity via a WebSocket LiveLink protocol.
+          Tracks 52 ARKit-compatible blend shapes. Supports raccoon and glasses avatar modes for local preview.
+          Blend shapes are displayed in real time in the UI panel.
+        </p>
+        <h4>LiveLink</h4>
+        <p>Enter your Unreal/Unity LiveLink server address (e.g. <code>192.168.1.100:11111</code>) in the panel
+          and click Connect. Blend shape data is streamed over WebSocket.</p>
+      </section>
+
+      <section id="app-jewelry" class="section">
+        <h3><img src="../public/logos/jewel.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">Jewelry Configurator
+          (<code>apps/jewelry-configurator</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Diamond rendering</span>
+        <p>
+          Showcases the <strong>DiamondPlugin</strong> with an engagement ring model. Demonstrates multi-bounce
+          ray-traced internal reflections with wavelength-accurate dispersion (fire). Supports switching gem
+          cut styles and adjusting render quality settings.
+        </p>
+      </section>
+
+      <section id="app-box" class="section">
+        <h3><img src="../public/logos/box.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">Box Configurator
+          (<code>apps/box-configurator</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Parametric
+          packaging</span>
+        <p>
+          A parametric 3D box builder. Users set width, height, depth, wall thickness, and flap style.
+          The box geometry is procedurally generated by the <strong>BoxBuilder</strong> class from scratch
+          using <code>THREE.BufferGeometry</code>. Supports switching between different lid types.
+        </p>
+      </section>
+
+      <section id="app-360tour" class="section">
+        <h3><img src="../public/logos/360.png" alt="logo"
+            style="height: 1.2em; vertical-align: middle; margin-right: 8px;">360 Virtual Tour
+          (<code>apps/360tour</code>)</h3>
+        <span class="card-tag tag-app" style="margin-bottom: 0.75rem; display: inline-block;">Interactive tour
+          builder</span>
+        <p>
+          An interactive 360-degree virtual tour editor and viewer. Uses the <strong>TourPlugin</strong> from the
+          <code>@trikomi/tour</code> package to render
+          spherical panorama images and place interactive hotspots. Features a <strong>TourEditor</strong> interface
+          for dragging and connecting hotspots to link rooms together, and a <strong>VirtualTour</strong> viewer
+          for navigating the finalized tours.
+        </p>
+      </section>
+
+      <hr />
+
+      <!-- Build -->
+      <section id="build" class="section">
+        <h2>Build Pipeline</h2>
+
+        <h3>1. Packages Build (Core SDK & Plugins)</h3>
+        <p>
+          The core SDK and all separated plugin packages (like <code>@trikomi/face-mocap</code>,
+          <code>@trikomi/tour</code>, etc.) are bundled with <strong>esbuild</strong>, not Vite. This keeps them
+          modular, framework-agnostic, and produces clean ES modules. The core build also:
+        </p>
+        <ul>
+          <li>Performs security hardening and integrity checks on the compiled output.</li>
+          <li>Copies 3D assets (<code>.glb</code>, <code>.hdr</code>, <code>.exr</code>) to <code>dist/assets/</code>.
+          </li>
+          <li>Generates TypeScript type declarations.</li>
+        </ul>
+
+        <h3>2. App Builds (Vite)</h3>
+        <p>
+          Each app is built independently with <code>vite build</code>. All apps use these key config values:
+        </p>
+        <pre><code><span class="cm">// apps/&lt;any-app&gt;/vite.config.ts</span>
+<span class="fn">defineConfig</span>({
+  base: <span class="str">'./'</span>,               <span class="cm">// Relative asset references → works in any subfolder</span>
+  publicDir: <span class="str">'../../public'</span>, <span class="cm">// Shared WASM, Draco, textures</span>
+  build: {
+    outDir: <span class="str">'../../dist/&lt;appname&gt;'</span>,
+  }
+})</code></pre>
+
+        <h3>3. Monorepo Merge (<code>build-monorepo.js</code>)</h3>
+        <p>After all apps are built, this script:</p>
+        <ol>
+          <li>Creates a shared <code>dist/assets/</code> directory.</li>
+          <li>Rewrites <code>index.html</code> asset references from <code>./assets/</code> → <code>../assets/</code> so
+            they point to the shared root.</li>
+          <li>Moves each app's hashed JS/CSS/WASM chunks into the shared <code>dist/assets/</code> folder.</li>
+          <li>Copies the root <code>index.html</code> hub page to <code>dist/index.html</code>.</li>
+        </ol>
+
+        <h4>Final dist layout</h4>
+        <div class="tree">
+          <span class="dir">dist/</span>
+          ├── <span class="file">index.html</span> <span class="note">← Hub page</span>
+          ├── <span class="dir">assets/</span> <span class="note">← All hashed JS/CSS/WASM chunks (shared)</span>
+          │ ├── <span class="file">index-XXX.js</span>
+          │ └── <span class="dir">core/</span> <span class="note">← Built-in 3D assets copied from
+            packages/core/dist/assets/</span>
+          ├── <span class="dir">draco/</span> <span class="note">← Draco decoder binaries (from public/)</span>
+          ├── <span class="dir">textures/</span> <span class="note">← Fabric/SVG textures (from public/)</span>
+          ├── <span class="dir">assets/wasm/</span> <span class="note">← MediaPipe WASM (from public/)</span>
+          ├── <span class="dir">viewer/</span>
+          │ └── <span class="file">index.html</span> <span class="note">← App entry (references ../assets/)</span>
+          ├── <span class="dir">sportswear-configurator/</span>
+          ├── <span class="dir">eyewear-tryon/</span>
+          ├── <span class="dir">face-mocap/</span>
+          ├── <span class="dir">jewelry-configurator/</span>
+          ├── <span class="dir">box-configurator/</span>
+          ├── <span class="dir">360tour/</span>
+          └── <span class="dir">...</span>
+        </div>
+      </section>
+
+      <hr />
+
+      <!-- Asset Paths -->
+      <section id="paths" class="section">
+        <h2>Asset Path Strategy</h2>
+        <p>
+          Because apps are built with <code>base: './'</code> and deployed in subfolders
+          (e.g. <code>/demos/viewer/</code>), absolute paths like <code>/draco/</code>
+          would resolve to the domain root — not the demo subfolder root.
+          The following pattern is used throughout:
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Environment</th>
+              <th>Path Used</th>
+              <th>Resolves To</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dev (<code>yarn dev</code>)</td>
+              <td><code>'/draco/gltf/'</code></td>
+              <td><code>http://localhost:5173/draco/gltf/</code> — served from <code>public/draco/gltf/</code></td>
+            </tr>
+            <tr>
+              <td>Prod (any subfolder)</td>
+              <td><code>'../draco/gltf/'</code></td>
+              <td>Navigates up from <code>dist/viewer/</code> → <code>dist/draco/gltf/</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>The same pattern applies to:</p>
+        <ul>
+          <li><strong>Draco decoder</strong>: <code>GLTFPlugin</code> —
+            <code>import.meta.env.DEV ? '/draco/gltf/' : '../draco/gltf/'</code>
+          </li>
+          <li><strong>MediaPipe WASM</strong>: <code>FaceMocapPlugin</code> constructor arg —
+            <code>DEV ? '/assets/wasm' : '../assets/wasm'</code>
+          </li>
+          <li><strong>Textures</strong>: Sportswear ThreeCanvas — <code>DEV ? '/textures/' : '../textures/'</code></li>
+          <li><strong>Core assets</strong>: <code>ThreeViewer</code> assetBaseUrl —
+            <code>DEV ? '/packages/core/dist/assets/' : '../assets/core/'</code>
+          </li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <div class="callout-label">✓ Rule of thumb</div>
+          When adding new static assets: place them in <code>public/</code>, then reference them as
+          <code>import.meta.env.DEV ? '/your-path' : '../your-path'</code> in JavaScript.
+          For assets imported via Vite (images, SVGs, models), use a standard ES import — Vite handles hashing and path
+          resolution automatically.
+        </div>
+      </section>
+
+      <hr />
+
+      <p style="color: var(--text-muted); font-size: 0.8rem; text-align: center; padding-bottom: 2rem;">
+        @trikomi/core SDK — Internal Developer Documentation
+      </p>
+    </main>
+  </div>
+
+  <script>
+    // Highlight active nav link on scroll
+    const sections = document.querySelectorAll('.section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -75% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+
+</html>

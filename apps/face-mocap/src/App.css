@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
+
+:root {
+  --bg-color: #0a0a0f;
+  --panel-bg: rgba(20, 20, 30, 0.6);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text-main: #f0f0f5;
+  --text-muted: #8b8b9c;
+  --accent: #00f2fe;
+  --accent-hover: #4facfe;
+  --danger: #ff4d4f;
+  --danger-hover: #ff7875;
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.15);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(79, 172, 254, 0.05), transparent 25%);
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+}
+
+/* Glassmorphism Containers */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Inputs */
+.premium-select,
+.premium-input {
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  width: 134px;
+  transition: all 0.2s ease;
+}
+
+.premium-select:focus,
+.premium-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.2);
+}
+
+/* Premium Buttons */
+.premium-btn {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.premium-btn:hover:not(:disabled) {
+  border-color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.premium-btn.accent {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color: #000;
+  border: none;
+  box-shadow: var(--shadow-glow);
+}
+
+.premium-btn.accent:hover:not(:disabled) {
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+  transform: translateY(-1px);
+}
+
+.premium-btn.danger {
+  background: var(--danger);
+  border: none;
+  color: white;
+}
+
+.premium-btn.danger:hover:not(:disabled) {
+  background: var(--danger-hover);
+  box-shadow: 0 0 20px rgba(255, 77, 79, 0.3);
+}
+
+.premium-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* Modern Checkbox */
+.premium-checkbox {
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 1px solid var(--panel-border);
+  border-radius: 0.25em;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.premium-checkbox::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--accent);
+  border-radius: 2px;
+  background-color: var(--accent);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.premium-checkbox:checked {
+  border-color: var(--accent);
+}
+
+.premium-checkbox:checked::before {
+  transform: scale(1);
+}
+
+/* Range Slider */
+.premium-range {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+.premium-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+.premium-range::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* Viewer Container */
+.viewer-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.viewer-video,
+.viewer-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.viewer-canvas {
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Floating Controls Panel */
+.floating-panel {
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  bottom: 20px;
+  width: 200px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: visible; /* so button isn't clipped */
+  padding: 15px;
+  transform: translateX(calc(100% + 20px));
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-panel.panel-open {
+  transform: translateX(0);
+}
+
+/* Panel Content Container (scrollable) */
+.floating-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 8px;
+}
+
+/* Toggle Button attached to panel */
+.panel-toggle-btn {
+  position: absolute;
+  left: -40px;
+  top: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(10,10,15,0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s ease;
+  font-size: 1.2rem;
+}
+
+.panel-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Scrollbar for Panel */
+.floating-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.floating-panel-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.floating-panel-content::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 4px;
+}
+
+.floating-panel-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.control-section:last-child {
+  border-bottom: none;
+}

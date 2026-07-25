@@ -1,0 +1,20 @@
+{
+  "tourId": "demo-property",
+  "startNodeId": "entrance",
+  "nodes": [
+    {
+      "id": "entrance",
+      "panorama": "/assets/entrance.hdr",
+      "hotspots": [
+        { "id": "kitchen-link", "targetNodeId": "kitchen", "position": [10, 0, -5] }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "panorama": "/assets/kitchen.hdr",
+      "hotspots": [
+        { "id": "entrance-link", "targetNodeId": "entrance", "position": [-10, 0, 5] }
+      ]
+    }
+  ]
+}

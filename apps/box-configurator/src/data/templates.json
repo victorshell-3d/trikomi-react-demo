@@ -1,0 +1,812 @@
+{
+  "flapTemplates": [
+    {
+      "id": "temp-tuck",
+      "name": "Standard Tuck",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.4,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.4,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "temp-sideflap",
+      "name": "Side Flap",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.4,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.4,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "temp-gum",
+      "name": "Gum Panel",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0.8
+        },
+        {
+          "type": "L",
+          "x": 0.3,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "temp-rounded",
+      "name": "Rounded Flap",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0.6
+        },
+        {
+          "type": "C",
+          "x": 0.25,
+          "y": 1,
+          "cp1x": 0.5,
+          "cp1y": 0.85,
+          "cp2x": 0.38,
+          "cp2y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.25,
+          "y": 1
+        },
+        {
+          "type": "C",
+          "x": -0.5,
+          "y": 0.6,
+          "cp1x": -0.38,
+          "cp1y": 1,
+          "cp2x": -0.5,
+          "cp2y": 0.85
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "temp-tablock",
+      "name": "Tab Lock Flap",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.45,
+          "y": 0.5
+        },
+        {
+          "type": "L",
+          "x": 0.35,
+          "y": 0.5
+        },
+        {
+          "type": "L",
+          "x": 0.3,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.3,
+          "y": 1
+        },
+        {
+          "type": "L",
+          "x": -0.35,
+          "y": 0.5
+        },
+        {
+          "type": "L",
+          "x": -0.45,
+          "y": 0.5
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "id": "temp-wave",
+      "name": "Wave Edge Flap",
+      "path": [
+        {
+          "type": "M",
+          "x": -0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0
+        },
+        {
+          "type": "L",
+          "x": 0.5,
+          "y": 0.3
+        },
+        {
+          "type": "C",
+          "x": 0,
+          "y": 0.7,
+          "cp1x": 0.45,
+          "cp1y": 0.7,
+          "cp2x": 0.25,
+          "cp2y": 0.9
+        },
+        {
+          "type": "C",
+          "x": -0.5,
+          "y": 0.3,
+          "cp1x": -0.25,
+          "cp1y": 0.5,
+          "cp2x": -0.45,
+          "cp2y": 0.1
+        },
+        {
+          "type": "L",
+          "x": -0.5,
+          "y": 0
+        }
+      ]
+    }
+  ],
+  "boxTemplates": [
+    {
+      "id": "box-tuck-end",
+      "name": "Standard Tuck End Box (STE)",
+      "description": "Standard packaging box with top and bottom closing tuck flaps. Suitable for cosmetics, pharmaceuticals, and small items.",
+      "rootNode": {
+        "id": "panel-back",
+        "name": "Panel 1",
+        "type": "panel",
+        "extent": 2,
+        "crossExtent": 1.5,
+        "rotation": [0, 0, 0],
+        "foldedAngle": 0,
+        "unfoldedAngle": 0,
+        "color": "#ffffff",
+        "attachments": {
+          "left": {
+            "id": "panel-left",
+            "name": "Panel 2",
+            "type": "panel",
+            "extent": 1,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {
+              "right": {
+                "id": "flap-tl",
+                "name": "Flap 1",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 0.7,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "left": {
+                "id": "flap-bl",
+                "name": "Flap 2",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 0.7,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          },
+          "right": {
+            "id": "panel-right",
+            "name": "Panel 3",
+            "type": "panel",
+            "extent": 1,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {
+              "left": {
+                "id": "flap-tr",
+                "name": "Flap 3",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 0.7,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "right": {
+                "id": "flap-br",
+                "name": "Flap 4",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 0.7,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "top": {
+                "id": "panel-front",
+                "name": "Panel 4",
+                "type": "panel",
+                "extent": 1.5,
+                "foldedAngle": -90,
+                "unfoldedAngle": 0,
+                "animStart": 0.0,
+                "animEnd": 0.4,
+                "color": "#ffffff",
+                "attachments": {
+                  "top": {
+                    "id": "flap-gum",
+                    "name": "Gum Flap 1",
+                    "type": "flap",
+                    "extent": 0.3,
+                    "foldedAngle": -93,
+                    "unfoldedAngle": 0,
+                    "animStart": 0.3,
+                    "animEnd": 0.55,
+                    "color": "#ffffff",
+                    "shapeTemplateId": "temp-gum",
+                    "flipped": false,
+                    "attachments": {}
+                  }
+                }
+              }
+            }
+          },
+          "top": {
+            "id": "panel-top",
+            "name": "Panel 5",
+            "type": "panel",
+            "extent": 1,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.65,
+            "animEnd": 0.85,
+            "color": "#ffffff",
+            "attachments": {
+              "top": {
+                "id": "flap-toptuck",
+                "name": "Tuck 1",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.85,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-tuck",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          },
+          "bottom": {
+            "id": "panel-bottom",
+            "name": "Panel 6",
+            "type": "panel",
+            "extent": 1,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.65,
+            "animEnd": 0.85,
+            "color": "#ffffff",
+            "attachments": {
+              "top": {
+                "id": "flap-bottomtuck",
+                "name": "Tuck 2",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.85,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-tuck",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "box-open-tray",
+      "name": "Open Organizer Tray",
+      "description": "Simple 5-sided box without top lids. Ideal for desk storage, drawer organizers, and counter displays.",
+      "rootNode": {
+        "id": "panel-base",
+        "name": "Base Panel",
+        "type": "panel",
+        "extent": 1.5,
+        "crossExtent": 2,
+        "rotation": [90, 0, 0],
+        "foldedAngle": 0,
+        "unfoldedAngle": 0,
+        "color": "#ffffff",
+        "attachments": {
+          "top": {
+            "id": "wall-top",
+            "name": "Top Wall",
+            "type": "panel",
+            "extent": 0.8,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {}
+          },
+          "bottom": {
+            "id": "wall-bottom",
+            "name": "Bottom Wall",
+            "type": "panel",
+            "extent": 0.8,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {}
+          },
+          "left": {
+            "id": "wall-left",
+            "name": "Left Wall",
+            "type": "panel",
+            "extent": 0.8,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {
+              "left": {
+                "id": "flap-wl1",
+                "name": "Inner Tab 1",
+                "type": "flap",
+                "extent": 0.3,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "right": {
+                "id": "flap-wl2",
+                "name": "Inner Tab 2",
+                "type": "flap",
+                "extent": 0.3,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          },
+          "right": {
+            "id": "wall-right",
+            "name": "Right Wall",
+            "type": "panel",
+            "extent": 0.8,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.4,
+            "color": "#ffffff",
+            "attachments": {
+              "left": {
+                "id": "flap-wr1",
+                "name": "Inner Tab 3",
+                "type": "flap",
+                "extent": 0.3,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "right": {
+                "id": "flap-wr2",
+                "name": "Inner Tab 4",
+                "type": "flap",
+                "extent": 0.3,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.4,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "box-mailer",
+      "name": "Hinged Mailer Box",
+      "description": "Double-walled protective shipping box with a hinged lid and dust flaps. Standard for e-commerce subscription boxes and retail packaging.",
+      "rootNode": {
+        "id": "mailer-bottom",
+        "name": "Bottom Base",
+        "type": "panel",
+        "extent": 2,
+        "crossExtent": 2,
+        "rotation": [90, 0, 0],
+        "foldedAngle": 0,
+        "unfoldedAngle": 0,
+        "color": "#ffffff",
+        "attachments": {
+          "left": {
+            "id": "mailer-left-wall",
+            "name": "Left Wall",
+            "type": "panel",
+            "extent": 0.7,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.35,
+            "color": "#ffffff",
+            "attachments": {
+              "left": {
+                "id": "mailer-flap-lt",
+                "name": "Left Front Tab",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.35,
+                "animEnd": 0.55,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "right": {
+                "id": "mailer-flap-lb",
+                "name": "Left Back Tab",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.35,
+                "animEnd": 0.55,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          },
+          "right": {
+            "id": "mailer-right-wall",
+            "name": "Right Wall",
+            "type": "panel",
+            "extent": 0.7,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.35,
+            "color": "#ffffff",
+            "attachments": {
+              "left": {
+                "id": "mailer-flap-rt",
+                "name": "Right Front Tab",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.35,
+                "animEnd": 0.55,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              },
+              "right": {
+                "id": "mailer-flap-rb",
+                "name": "Right Back Tab",
+                "type": "flap",
+                "extent": 0.5,
+                "foldedAngle": -93,
+                "unfoldedAngle": 0,
+                "animStart": 0.35,
+                "animEnd": 0.55,
+                "color": "#ffffff",
+                "shapeTemplateId": "temp-sideflap",
+                "flipped": false,
+                "attachments": {}
+              }
+            }
+          },
+          "bottom": {
+            "id": "mailer-front-wall",
+            "name": "Front Wall",
+            "type": "panel",
+            "extent": 0.7,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.55,
+            "animEnd": 0.75,
+            "color": "#ffffff",
+            "attachments": {}
+          },
+          "top": {
+            "id": "mailer-back-wall",
+            "name": "Back Wall",
+            "type": "panel",
+            "extent": 0.7,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.35,
+            "color": "#ffffff",
+            "attachments": {
+              "top": {
+                "id": "mailer-top-lid",
+                "name": "Top Lid",
+                "type": "panel",
+                "extent": 2,
+                "foldedAngle": -90,
+                "unfoldedAngle": 0,
+                "animStart": 0.55,
+                "animEnd": 0.85,
+                "color": "#ffffff",
+                "attachments": {
+                  "left": {
+                    "id": "mailer-lid-left-flap",
+                    "name": "Lid Left Flap",
+                    "type": "flap",
+                    "extent": 0.65,
+                    "foldedAngle": -93,
+                    "unfoldedAngle": 0,
+                    "animStart": 0.75,
+                    "animEnd": 0.9,
+                    "color": "#ffffff",
+                    "shapeTemplateId": "temp-sideflap",
+                    "flipped": false,
+                    "attachments": {}
+                  },
+                  "right": {
+                    "id": "mailer-lid-right-flap",
+                    "name": "Lid Right Flap",
+                    "type": "flap",
+                    "extent": 0.65,
+                    "foldedAngle": -93,
+                    "unfoldedAngle": 0,
+                    "animStart": 0.75,
+                    "animEnd": 0.9,
+                    "color": "#ffffff",
+                    "shapeTemplateId": "temp-sideflap",
+                    "flipped": false,
+                    "attachments": {}
+                  },
+                  "top": {
+                    "id": "mailer-lid-front-tuck",
+                    "name": "Front Lock Tab",
+                    "type": "flap",
+                    "extent": 0.45,
+                    "foldedAngle": -93,
+                    "unfoldedAngle": 0,
+                    "animStart": 0.85,
+                    "animEnd": 1.0,
+                    "color": "#ffffff",
+                    "shapeTemplateId": "temp-tuck",
+                    "flipped": false,
+                    "attachments": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "box-custom",
+      "name": "Custom Box Setup",
+      "description": "Start with a single base panel and build custom packaging from scratch. Perfect for unique custom shapes or multi-panel blueprints.",
+      "rootNode": {
+        "id": "panel-custom-root",
+        "name": "Base Panel",
+        "type": "panel",
+        "extent": 1.5,
+        "crossExtent": 1.5,
+        "rotation": [90, 0, 0],
+        "foldedAngle": 0,
+        "unfoldedAngle": 0,
+        "color": "#ffffff",
+        "attachments": {
+          "top": {
+            "id": "panel-custom-top",
+            "name": "Top Wall",
+            "type": "panel",
+            "extent": 1.5,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.5,
+            "color": "#ffffff",
+            "attachments": {
+              "top": {
+                "id": "panel-custom-lid",
+                "name": "Lid Panel",
+                "type": "panel",
+                "extent": 1.5,
+                "foldedAngle": -90,
+                "unfoldedAngle": 0,
+                "animStart": 0.5,
+                "animEnd": 1.0,
+                "color": "#ffffff",
+                "attachments": {}
+              }
+            }
+          },
+          "bottom": {
+            "id": "panel-custom-bottom",
+            "name": "Bottom Wall",
+            "type": "panel",
+            "extent": 1.5,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.5,
+            "color": "#ffffff",
+            "attachments": {}
+          },
+          "left": {
+            "id": "panel-custom-left",
+            "name": "Left Wall",
+            "type": "panel",
+            "extent": 1.5,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.5,
+            "color": "#ffffff",
+            "attachments": {}
+          },
+          "right": {
+            "id": "panel-custom-right",
+            "name": "Right Wall",
+            "type": "panel",
+            "extent": 1.5,
+            "foldedAngle": -90,
+            "unfoldedAngle": 0,
+            "animStart": 0.0,
+            "animEnd": 0.5,
+            "color": "#ffffff",
+            "attachments": {}
+          }
+        }
+      }
+    }
+  ]
+}

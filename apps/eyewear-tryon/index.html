@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="./svgs/white.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trikomi Eyewear Try-On</title>
+  <meta name="description" content="AR-powered virtual eyewear try-on using face tracking and IPD measurement. Accurately fits glasses frames in real time via camera.">
+  <style>
+    body {
+      margin: 0;
+      background-color: #050505;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    #spinner {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #050505;
+      transition: opacity 0.5s ease;
+    }
+    .premium-loader {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #ffffff;
+      animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+      margin-bottom: 24px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .spinner-text {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #888;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="spinner">
+    <div class="premium-loader"></div>
+    <div class="spinner-text">Loading Engine</div>
+  </div>
+  <script>
+      window.trikomi_lic = '/assets/v3d_victorshell_com.lic';
+    </script>
+    <div id="root"></div>
+  <script type="module" src="./src/main.jsx"></script>
+</body>
+
+</html>
