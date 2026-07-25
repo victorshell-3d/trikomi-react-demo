@@ -68,8 +68,8 @@ This workspace is organized as a unified `pnpm` monorepo containing 8 production
 ### 1. Installation
 Clone the repository and install shared workspace dependencies:
 ```bash
-git clone https://github.com/your-org/trikomi-demo-react.git
-cd trikomi-demo-react
+git clone https://github.com/victorshell-3d/trikomi-react-demo.git
+cd trikomi-react-demo
 pnpm install
 ```
 
