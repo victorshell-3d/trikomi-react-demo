@@ -1,10 +1,16 @@
 # Trikomi 3D Platform — React & Web App Showcase
 
+<p align="center">
+  <img src="./public/logos/trikomi.png" alt="Trikomi 3D Platform Logo" width="120" />
+</p>
+
 [![Trikomi 3D Platform](https://img.shields.io/badge/Trikomi_3D_Platform-WebGPU_Engine-6366f1?style=for-the-badge)](https://victorshell.com)
 [![SDK Version](https://img.shields.io/badge/SDK-v1.0.6-emerald?style=for-the-badge)](https://victorshell.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge)](https://www.typescriptlang.org/)
 
 Welcome to the **Trikomi 3D Platform** public demonstration monorepo. This repository provides enterprise-grade reference implementations built with **React**, **Vite**, and **TypeScript**, demonstrating how to integrate high-performance 3D visualization, real-time Augmented Reality (AR), and product customization into web applications.
+
+> 💡 **Looking for the Pure Vanilla JS (Zero-Framework) Version?** Check out the [Trikomi Vanilla JS Demos](https://github.com/victorshell-3d/trikomi-vanilla-demo/) for Shopify, WooCommerce, and liquid templates.
 
 ---
 
