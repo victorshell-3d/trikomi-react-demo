@@ -47,9 +47,9 @@ Viewports interact with the core engine through modular plugins:
 - `BloomPlugin`: Post-processing bloom render passes.
 
 ### D. License Validation & Multi-Site Configuration
-To authenticate premium WASM features (such as the `DiamondPlugin` or mathematical decaling functions), the host application must provide a cryptographic license via the global `window.trikomi_config` object (`{ apiKey, fallbackJwt }`).
+To authenticate premium features (such as the `DiamondPlugin` or mathematical decaling functions), the host application must provide a cryptographic license via the global `window.trikomi_config` object (`{ apiKey, fallbackJwt }`).
 
-**Main-Domain Architecture:** The `@trikomi/core` SDK validates licenses on the **root main-domain** level. The internal WASM security engine strips away subdomains and TLDs (e.g. `shop.brand.co.uk` maps to `brand`). This design grants clients full flexibility, allowing them to use their single license seamlessly across staging environments, multiple storefronts, and regional top-level domains without experiencing validation failures or needing distinct seats.
+The SDK's authentication module handles these credentials dynamically to unlock configured features for authorized domains.
 
 ## 3. Directory Layout
 ```
