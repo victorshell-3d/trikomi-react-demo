@@ -1,103 +1,71 @@
-# Trikomi 3D Platform — React & Web App Showcase
+# ⚛️ 3D Viewer Demo (`3dviewer-demo`) — Public React Reference Suite
 
-<p align="center">
-  <img src="./public/logos/trikomi.png" alt="Trikomi 3D Platform Logo" width="120" />
-</p>
-
-[![Trikomi 3D Platform](https://img.shields.io/badge/Trikomi_3D_Platform-WebGPU_Engine-6366f1?style=for-the-badge)](https://victorshell.com)
-[![SDK Version](https://img.shields.io/badge/SDK-v1.0.6-emerald?style=for-the-badge)](https://victorshell.com)
+[![Platform Ecosystem](https://img.shields.io/badge/Trikomi_Ecosystem-React_Demos-ff69b4?style=for-the-badge)](https://victorshell.com)
+[![SDK Version](https://img.shields.io/badge/SDK-v1.0.7--beta-emerald?style=for-the-badge)](https://victorshell.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge)](https://www.typescriptlang.org/)
 
-Welcome to the **Trikomi 3D Platform** public demonstration monorepo. This repository provides enterprise-grade reference implementations built with **React**, **Vite**, and **TypeScript**, demonstrating how to integrate high-performance 3D visualization, real-time Augmented Reality (AR), and product customization into web applications.
+---
 
-> 💡 **Looking for the Pure Vanilla JS (Zero-Framework) Version?** Check out the [Trikomi Vanilla JS Demos](https://github.com/victorshell-3d/trikomi-vanilla-demo/) for Shopify, WooCommerce, and liquid templates.
+## 📌 Repository Role & Context
+
+This repository (`3dviewer-demo`) provides public, open-source reference implementations built with **React**, **Vite**, and **TypeScript**. It demonstrates how digital agencies and software engineers can integrate the `@trikomi/core` SDK into modern single-page applications (SPAs) and e-commerce web applications.
+
+### 🌐 Trikomi Platform Ecosystem Bridge:
+- **`victorshell2`** ([Main Portal](https://victorshell.com)): SaaS dashboard for customer account creation, subscriptions, and API key management.
+- **`3dviewer`** (Source SDK Repo): Monorepo source code for `@trikomi/core`, rendering pipelines, and WASM modules.
+- **`3dviewer-demo` (This Repository)**: Public React showcase containing 8 ready-to-use e-commerce application templates.
+- **`vanilla-demos`** ([Vanilla JS Demos](https://github.com/victorshell-3d/trikomi-vanilla-demo/)): Public zero-framework HTML5/ESM implementation examples for Shopify and WooCommerce themes.
 
 ---
 
-## 🎯 Purpose & Executive Summary
+## 📦 Application Suite Included
 
-The purpose of this public demonstration suite is to provide software architects and frontend engineers with production-ready, open-source application templates powered by the compiled `@trikomi/core` WebGPU 3D Engine.
-
-### Key Objectives:
-- **Accelerate Enterprise Integration**: Reduce time-to-market by providing copy-paste React component patterns for complex 3D viewports, AR face tracking, and dynamic product customization.
-- **Demonstrate High-Performance WebGPU Render Pipeline**: Showcases real-time Physically Based Rendering (PBR), Bloom post-processing, screen-space reflections (SSR), and diamond dispersion shaders executing at 60 FPS in standard web browsers.
-- **Decoupled Architecture**: Demonstrates clean state management using MobX reactivity, completely separating 3D engine scene graphs from application UI logic.
-
----
-
-## 📦 Monorepo Application Architecture
-
-This workspace is organized as a unified `pnpm` monorepo containing 8 production-grade applications:
-
-| Application | Description | Technology Stack |
+| Application | Path | Key Capabilities |
 | :--- | :--- | :--- |
-| **`apps/sportswear-configurator`** | Interactive 3D athletic apparel customizer with real-time vector logo positioning, text projection, dynamic color swatches, and fabric texture compositing. | React, MobX, `@trikomi/core/sportswear` |
-| **`apps/face-mocap`** | Real-time browser-based webcam facial tracking and AR accessory overlay engine powered by MediaPipe. Features aspect-ratio matching and unmirrored UI text overlays. | React, MediaPipe, `@trikomi/core/face-mocap` |
-| **`apps/jewelry-configurator`** | Luxury e-commerce Studio for diamond rings featuring ray-traced internal refraction, dispersion shaders, gemstone finishes, and real-time PDP price calculation. | React, `@trikomi/core/jewelry` |
-| **`apps/box-configurator`** | Interactive 3D packaging and die-cut box configurator with dynamic dimension controls, folding animations, and custom print export. | React, Konva 2D, `@trikomi/core/box` |
-| **`apps/360tour`** | Virtual tour creator and interactive panorama viewer supporting hot-spot navigation, floor plans, and spatial audio. | React, `@trikomi/core/tour` |
-| **`apps/eyewear-tryon`** | 3D glasses previewer and named AR try-on studio with glassmorphic UI controls and snapshot captures. | React, `@trikomi/core/eyewear` |
-| **`apps/8theye`** | WebAR eyewear virtual try-on studio integrated with 8thWall surface tracking. | React, 8thWall, `@trikomi/core/8thwall` |
-| **`apps/viewer`** | Generic multi-model 3D inspection studio with environment lighting presets, material slot editing, and camera animation controls. | React, `@trikomi/core` |
+| **Jewelry Configurator** | `apps/jewelry-configurator` | Diamond ring studio, gemstone swatches, ray-traced dispersion, live PDP pricing. |
+| **Sportswear Configurator** | `apps/sportswear-configurator` | 3D jersey customizer, dynamic color layers, vector logo positioning & text projection. |
+| **Eyewear Try-On** | `apps/eyewear-tryon` | 3D glasses inspector and WebAR try-on studio with snapshot sharing. |
+| **Face Motion Capture** | `apps/face-mocap` | Real-time webcam face tracking & 3D AR accessory overlay using MediaPipe. |
+| **Box Packaging** | `apps/box-configurator` | 3D die-cut box packaging customizer with folding animations. |
+| **360° Virtual Tour** | `apps/360tour` | Hot-spot panorama tour editor and spatial audio viewer. |
+| **Multi-Model Inspector** | `apps/viewer` | Standard 3D model inspection studio with HDR environment presets. |
 
 ---
 
-## 📁 Repository Structure
+## 📊 Current Status (v1.0.7 - Active Beta)
 
-```
-3dviewer-demo/
-├── apps/                        # Production React / Vite demonstration applications
-│   ├── 360tour/                 # Virtual 360 tour editor and viewer
-│   ├── 8theye/                  # 8thWall WebAR eyewear try-on app
-│   ├── box-configurator/        # 3D packaging and die-cut configurator
-│   ├── eyewear-tryon/           # Named eyewear preview and try-on studio
-│   ├── face-mocap/              # Real-time AR webcam facial tracking
-│   ├── jewelry-configurator/    # Luxury ring & diamond dispersion studio
-│   ├── sportswear-configurator/ # 3D sportswear customizer & logo placement
-│   └── viewer/                  # Multi-model 3D inspection studio
-├── npm-staging/                 # Pre-compiled single @trikomi/core SDK tarball (.tgz)
-├── public/                      # Shared static assets (3D models, EXR environments)
-├── docs/                        # API documentation and integration guides
-├── pnpm-workspace.yaml          # Workspace configuration sharing root node_modules
-├── package.json                 # Monorepo root configuration with local dependency overrides
-└── README.md                    # Repository documentation
-```
+- [x] MobX reactive state management decoupled from 3D viewport canvas.
+- [x] Pre-compiled `@trikomi/core` tarball integration (`npm-staging/trikomi-core-1.0.7.tgz`).
+- [x] Full TypeScript definitions and React hook abstractions (`useViewer`, `useModel`).
 
 ---
 
-## 🚀 Getting Started
+## 🛣️ Development Roadmap
 
-### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **pnpm**: v8.0.0 or higher (`npm i -g pnpm`)
+- [ ] Cart state integration hooks for Shopify Storefront API and WooCommerce REST API.
+- [ ] WebGPU canvas fallback indicators for unsupported legacy browsers.
 
-### 1. Installation
-Clone the repository and install shared workspace dependencies:
+---
+
+# 🚀 Local Development Setup
+
 ```bash
-git clone https://github.com/victorshell-3d/trikomi-react-demo.git
-cd trikomi-react-demo
+# 1. Install pnpm workspace dependencies
 pnpm install
-```
 
-### 2. Running Local Development Server
-Launch the unified development environment:
-```bash
+# 2. Start Vite development server
 pnpm dev
-```
-Navigate to `http://localhost:3000` to access the main application landing portal.
 
-### 3. Building for Production
-To build all applications into a consolidated static distribution folder:
-```bash
+# 3. Build static distribution bundle for deployment
 pnpm build
 ```
-The compiled output will be generated in `./dist`, ready for deployment to any CDN or static hosting platform (e.g. Vercel, AWS S3, Cloudflare Pages).
 
 ---
 
-## 🛡️ Intellectual Property Notice
+## 💬 Community, Feedback & Issues
 
-This repository contains public demonstration applications. To protect proprietary intellectual property, the core engine source code (`packages/core/src`) is omitted. The 3D engine is distributed as a pre-compiled, security-verified SDK contained in `npm-staging/trikomi-core-*.tgz`.
+> [!NOTE]
+> Have a feature request, bug report, or idea for improvement? Feel free to open an issue or start a discussion on our GitHub repository. We welcome community feedback and contributions!
 
 ---
 
