@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6.tgz",
+    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz",
     "mobx": "^6.16.1",
     "mobx-react-lite": "^4.1.1",
     "react": "^19.2.6",
