@@ -1,0 +1,65 @@
+{
+  "name": "@trikomi/core",
+  "description": "Trikomi 3D Platform Core Engine and Application Addons",
+  "version": "1.0.6-dev.1785328267306",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./8thwall": {
+      "import": "./dist/8thwall/index.js",
+      "types": "./dist/8thwall/index.d.ts",
+      "default": "./dist/8thwall/index.js"
+    },
+    "./box": {
+      "import": "./dist/box/index.js",
+      "types": "./dist/box/index.d.ts",
+      "default": "./dist/box/index.js"
+    },
+    "./eyewear": {
+      "import": "./dist/eyewear/index.js",
+      "types": "./dist/eyewear/index.d.ts",
+      "default": "./dist/eyewear/index.js"
+    },
+    "./face-mocap": {
+      "import": "./dist/face-mocap/index.js",
+      "types": "./dist/face-mocap/index.d.ts",
+      "default": "./dist/face-mocap/index.js"
+    },
+    "./sportswear": {
+      "import": "./dist/sportswear/index.js",
+      "types": "./dist/sportswear/index.d.ts",
+      "default": "./dist/sportswear/index.js"
+    },
+    "./tour": {
+      "import": "./dist/tour/index.js",
+      "types": "./dist/tour/index.d.ts",
+      "default": "./dist/tour/index.js"
+    },
+    "./viewer": {
+      "import": "./dist/viewer/index.js",
+      "types": "./dist/viewer/index.d.ts",
+      "default": "./dist/viewer/index.js"
+    }
+  },
+  "dependencies": {
+    "@jitl/quickjs-wasmfile-release-sync": "^0.30.0",
+    "@mediapipe/tasks-vision": "^0.10.35",
+    "mobx": "^6.15.3",
+    "pca-js": "^2.0.6",
+    "quickjs-emscripten": "^0.30.0",
+    "three": "^0.184.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  }
+}

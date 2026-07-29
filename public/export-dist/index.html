@@ -16,7 +16,7 @@
         font-size: 4rem; font-weight: 900; text-transform: uppercase; transform: rotate(-30deg);
       }
     </style>
-    <script type="module" crossorigin src="./assets/index-Cisyx3bo.js"></script>
+    <script type="module" crossorigin src="./assets/index-CTChKRX9.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-QTnfLwEv.js">
     <link rel="stylesheet" crossorigin href="./assets/index-BMc5MK3B.css">
   </head>
@@ -26,8 +26,9 @@
     <script>
       (function() {
         const token = "%%INJECT_TOKEN%%";
-        if (!window.trikomi_lic && !window.location.search.includes("trikomi_lic=")) {
-          window.trikomi_lic = token;
+        const conf = window.trikomi_config || {};
+        if (!conf.fallbackJwt && !conf.apiKey && !window.location.search.includes("trikomi_lic=")) {
+          window.trikomi_config = { fallbackJwt: token, apiKey: '' };
         }
       })();
     </script>

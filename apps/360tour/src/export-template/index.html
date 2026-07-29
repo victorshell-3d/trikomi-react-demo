@@ -23,8 +23,9 @@
     <script>
       (function() {
         const token = "%%INJECT_TOKEN%%";
-        if (!window.trikomi_lic && !window.location.search.includes("trikomi_lic=")) {
-          window.trikomi_lic = token;
+        const conf = window.trikomi_config || {};
+        if (!conf.fallbackJwt && !conf.apiKey && !window.location.search.includes("trikomi_lic=")) {
+          window.trikomi_config = { fallbackJwt: token, apiKey: '' };
         }
       })();
     </script>

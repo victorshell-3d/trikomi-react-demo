@@ -11,7 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1785249950878.tgz"
+    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1785328267306.tgz",
+    "react-router-dom": "^7.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

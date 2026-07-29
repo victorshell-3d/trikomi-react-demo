@@ -23,7 +23,8 @@ const ExportDialog = ({ isOpen, onClose, tourId, tourTitle }) => {
       setIsExporting(true);
       setError('');
       
-      const actualToken = window.trikomi_lic || '';
+      const conf = window.trikomi_config || {};
+      const actualToken = conf.fallbackJwt || conf.apiKey || '';
       
       await exportApi.exportTourAsZip(tourId, actualToken, (status, percent) => {
         setStatusText(status);
