@@ -8,7 +8,8 @@ import './index.css';
 const App = () => {
     useEffect(() => {
         store.isArActive = true;
-        const sdk = new EighthWallSDK(store, AVAILABLE_MODELS);
+        const occluderUrl = (import.meta.env.BASE_URL + 'models/head-occluder.glb').replace('//', '/');
+        const sdk = new EighthWallSDK(store, AVAILABLE_MODELS, undefined, occluderUrl);
 
         const waitForXR8 = setInterval(() => {
             if (window.XR8) {
