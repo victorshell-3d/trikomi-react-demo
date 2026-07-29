@@ -64,7 +64,8 @@ for (const app of apps) {
   const appIndexHtml = path.join(appDist, 'index.html');
   if (fs.existsSync(appIndexHtml)) {
     let content = fs.readFileSync(appIndexHtml, 'utf8');
-    content = content.replace(/(src|href)="(?:\.\/)?assets\//g, '$1="../assets/');
+    content = content.replace(/(src|href)="(?:\/|\.\/)?assets\//g, '$1="../assets/');
+    content = content.replace(/(src|href)="(?:\/)?(lib|logos|svgs|models|thumbs)\//g, '$1="../$2/');
     fs.writeFileSync(appIndexHtml, content, 'utf8');
     console.log(`✔ Rewrote asset paths in ${app}/index.html to point to shared assets directory.`);
   }
