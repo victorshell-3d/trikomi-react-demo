@@ -10,9 +10,14 @@ const App = () => {
         store.isArActive = true;
         const sdk = new EighthWallSDK(store, AVAILABLE_MODELS);
 
-        // Initialize 8thWall AR directly
-        sdk.initialize();
-        sdk.changeModel(store.modelIndex);
+        const waitForXR8 = setInterval(() => {
+            if (window.XR8) {
+                clearInterval(waitForXR8);
+                sdk.initialize().then(() => {
+                    sdk.changeModel(store.modelIndex);
+                });
+            }
+        }, 200);
 
         let prevModelIndex = store.modelIndex;
         const mainDisposer = autorun(() => {

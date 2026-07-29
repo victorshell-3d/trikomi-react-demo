@@ -13,7 +13,7 @@ export const Sidebar: React.FC = observer(() => {
   return (
     <div className="sidebar-container">
       <div className="sidebar-header" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img src="/logos/trikomi.png" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} alt="Viewer Logo" />
+        <img src={`${import.meta.env.BASE_URL}logos/trikomi.png`} style={{ height: '36px', width: 'auto', objectFit: 'contain' }} alt="Viewer Logo" />
         <div>
           <h2 className="title-gradient" style={{ margin: 0, fontSize: '1.25rem', lineHeight: 1.1 }}>Trikomi 3D Viewer</h2>
           <span className="subtitle" style={{ margin: 0 }}>Powered by @trikomi/core</span>

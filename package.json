@@ -5,12 +5,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "cli": "node cli.js",
     "dev": "vite",
+    "dev:sdk": "USE_LOCAL_SDK=true vite",
     "serve": "serve dist -p 3000",
     "build": "node build-monorepo.js",
-    "build:all": "node build-monorepo.js",
-    "build:core": "pnpm --filter @trikomi/core build",
+    "build:sdk": "USE_LOCAL_SDK=true node build-monorepo.js",
     "build:viewer": "pnpm --filter @trikomi/app-viewer build",
     "preview:viewer": "pnpm --filter @trikomi/app-viewer preview",
     "build:eyewear": "pnpm --filter @trikomi/eyewear-tryon build",
@@ -28,7 +27,6 @@
     "build:8theye": "pnpm --filter @trikomi/8theye build",
     "preview:8theye": "pnpm --filter @trikomi/8theye preview",
     "lint": "eslint .",
-    "export:bundle": "node export-single-bundle.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -66,9 +64,9 @@
     "vite": "^8.0.16"
   },
   "overrides": {
-    "@trikomi/core": "file:./npm-staging/trikomi-core-1.0.6-dev.1785328267306.tgz"
+    "@trikomi/core": "file:./npm-staging/trikomi-core-1.0.6-dev.1785348820568.tgz"
   },
   "resolutions": {
-    "@trikomi/core": "file:./npm-staging/trikomi-core-1.0.6-dev.1785328267306.tgz"
+    "@trikomi/core": "file:./npm-staging/trikomi-core-1.0.6-dev.1785348820568.tgz"
   }
 }

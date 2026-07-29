@@ -49,7 +49,7 @@ export const Sidebar = observer(() => {
       {/* Docked Controls Panel */}
       <div className={`editor-panel ${!isControlsOpen ? 'collapsed' : ''}`}>
         <div className="editor-panel-header" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <img src="/logos/box.png" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} alt="Box Logo" />
+          <img src={`${import.meta.env.BASE_URL}logos/box.png`} style={{ height: '24px', width: 'auto', objectFit: 'contain' }} alt="Box Logo" />
           <h1 style={{ fontSize: '13px', fontWeight: 700, margin: 0 }}>Box Configurator</h1>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button

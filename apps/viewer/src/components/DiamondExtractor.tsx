@@ -12,7 +12,7 @@ export const DiamondExtractor: React.FC = () => {
   const viewerStore = useViewerStore();
   const [loading, setLoading] = useState(false);
   const [diamonds, setDiamonds] = useState<DiamondData[]>([]);
-  const [selectedFile, setSelectedFile] = useState('/models/diamonds.glb');
+  const [selectedFile, setSelectedFile] = useState(`${import.meta.env.BASE_URL}models/diamonds.glb`);
 
   const [loadingModel, setLoadingModel] = useState(false);
 
@@ -251,8 +251,8 @@ export const DiamondExtractor: React.FC = () => {
           onChange={e => setSelectedFile(e.target.value)}
           style={{ padding: '8px', borderRadius: '4px', background: '#333', color: 'white', border: '1px solid #555' }}
         >
-          <option value="/models/diamonds.glb">diamonds.glb</option>
-          <option value="/models/diamonds2.glb">diamonds2.glb</option>
+          <option value={`${import.meta.env.BASE_URL}models/diamonds.glb`}>diamonds.glb</option>
+          <option value={`${import.meta.env.BASE_URL}models/diamonds2.glb`}>diamonds2.glb</option>
         </select>
         
         <button 

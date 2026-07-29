@@ -1,6 +1,25 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+
+// Load .env file manually so we don't need the dotenv package
+const envPath = path.resolve('.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    if (match) {
+      let key = match[1];
+      let value = match[2] || '';
+      if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+      if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+      if (process.env[key] === undefined) {
+        process.env[key] = value;
+      }
+    }
+  });
+}
 import crypto from 'crypto';
 
 const appsDir = path.resolve('apps');
@@ -60,14 +79,12 @@ for (const app of apps) {
     continue;
   }
 
-  // Rewrite asset references in app index.html from './assets/' to '../assets/'
+  // No manual HTML rewriting needed! 
+  // Vite natively handles all asset paths (including import.meta.env.BASE_URL) when a base path is configured.
+  // We simply copy the built HTML as-is.
   const appIndexHtml = path.join(appDist, 'index.html');
   if (fs.existsSync(appIndexHtml)) {
-    let content = fs.readFileSync(appIndexHtml, 'utf8');
-    content = content.replace(/(src|href)="(?:\/|\.\/)?assets\//g, '$1="../assets/');
-    content = content.replace(/(src|href)="(?:\/)?(lib|logos|svgs|models|thumbs)\//g, '$1="../$2/');
-    fs.writeFileSync(appIndexHtml, content, 'utf8');
-    console.log(`✔ Rewrote asset paths in ${app}/index.html to point to shared assets directory.`);
+    console.log(`✔ Verified ${app}/index.html exists.`);
   }
 
   // Move all other files from app root (except assets and index.html) to root dist
@@ -95,9 +112,14 @@ for (const app of apps) {
 // Copy public assets (models, environments, ml, svgs, lut) to root dist
 const publicDir = path.resolve('public');
 if (fs.existsSync(publicDir)) {
-  fs.cpSync(publicDir, rootDist, { recursive: true });
+  const items = fs.readdirSync(publicDir);
+  for (const item of items) {
+    if (item === 'packages') continue; // Do not copy the local SDK symlink into production build
+    fs.cpSync(path.join(publicDir, item), path.join(rootDist, item), { recursive: true, force: true });
+  }
   console.log('✔ Copied public assets to dist/\n');
 }
+
 
 // Create apps/ alias subfolder in dist so both /apps/<app> and /<app> links work cleanly
 const appsDistAlias = path.join(rootDist, 'apps');

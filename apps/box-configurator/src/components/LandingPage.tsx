@@ -8,7 +8,7 @@ export const LandingPage = observer(() => {
   return (
     <div className="landing-page">
       <div className="landing-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-        <img src="/logos/box.png" style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '12px' }} alt="Box Logo" />
+        <img src={`${import.meta.env.BASE_URL}logos/box.png`} style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '12px' }} alt="Box Logo" />
         <h1>Select Your Box Template</h1>
         <p>Choose one of our premium pre-engineered box designs to start customizing, or start from a blank slate with a custom setup.</p>
       </div>

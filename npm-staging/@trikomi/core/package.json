@@ -1,7 +1,7 @@
 {
   "name": "@trikomi/core",
   "description": "Trikomi 3D Platform Core Engine and Application Addons",
-  "version": "1.0.6-dev.1785328267306",
+  "version": "1.0.6-dev.1785348820568",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

@@ -5,9 +5,9 @@ import { useConfigStore } from '../store/ConfiguratorStore';
 import { SportswearConfigurator, type SportswearModelDef } from '@trikomi/core/sportswear';
 
 const AVAILABLE_MODELS: SportswearModelDef[] = [
-  { name: 'Rugby Jersey', url: '/models/RugbyJersey.gltf', svg: '/textures/JSY-85 RL.svg', mat: 'main' },
-  { name: 'Basketball Singlet', url: '/models/BasketballSinglet.gltf', svg: '/textures/BAS20_01.svg', mat: 'main' },
-  { name: 'Soccer Jersey', url: '/models/SoccerJersey.gltf', svg: '/textures/FTB20_01.svg', mat: 'main' }
+  { name: 'Rugby Jersey', url: `${import.meta.env.BASE_URL}models/RugbyJersey.gltf`, svg: `${import.meta.env.BASE_URL}textures/JSY-85 RL.svg`, mat: 'main' },
+  { name: 'Basketball Singlet', url: `${import.meta.env.BASE_URL}models/BasketballSinglet.gltf`, svg: `${import.meta.env.BASE_URL}textures/BAS20_01.svg`, mat: 'main' },
+  { name: 'Soccer Jersey', url: `${import.meta.env.BASE_URL}models/SoccerJersey.gltf`, svg: `${import.meta.env.BASE_URL}textures/FTB20_01.svg`, mat: 'main' }
 ];
 
 export const ThreeCanvas: React.FC = observer(() => {
@@ -41,7 +41,7 @@ export const ThreeCanvas: React.FC = observer(() => {
     viewer.directionalLight.intensity = 1;
 
     const isDev = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
-    const texBase = isDev ? '/textures/' : '../textures/';
+    const texBase = `${import.meta.env.BASE_URL}textures/`;
 
     const configurator = new SportswearConfigurator(viewer, configStore, texBase);
     configuratorRef.current = configurator;

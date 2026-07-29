@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import Controls from "./Controls";
 import ThreeD from "./ThreeD";
 import LiveLink from "./LiveLink";
-const spinnerSvg = "/svgs/spinner.svg";
+const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
 
 
 const _videoWidth = Math.min(480, window.innerWidth * .8);
@@ -121,7 +121,7 @@ const MediaSelector = observer(() => {
                 <div className="floating-panel-content">
                     {/* Header Branding */}
                     <div className="control-section" style={{ alignItems: 'center', textAlign: 'center' }}>
-                        <img src="/logos/facemocap.png" height={40} alt="Face Mocap Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
+                        <img src={`${import.meta.env.BASE_URL}logos/facemocap.png`} height={40} alt="Face Mocap Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
                         <h1 style={{ margin: '5px 0 0 0', fontSize: '1.4rem', letterSpacing: '1px', background: 'linear-gradient(to right, #fff, #8b8b9c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Trikomi
                         </h1>

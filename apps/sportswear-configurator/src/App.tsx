@@ -34,7 +34,7 @@ function App() {
         alignItems: 'center',
         gap: '16px'
       }}>
-        <img src="/logos/jersey.png" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} alt="Sportswear Configurator" />
+        <img src={`${import.meta.env.BASE_URL}logos/jersey.png`} style={{ height: '40px', width: 'auto', objectFit: 'contain' }} alt="Sportswear Configurator" />
         <div>
           <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
             Trikomi

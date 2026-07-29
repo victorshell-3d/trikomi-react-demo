@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
       <header className="dash-header">
         <div className="flex items-center gap-3">
           <Link to="/dashboard" className="dash-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-            <img src="/logos/360.png" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} alt="360 Tour Logo" />
+            <img src={`${import.meta.env.BASE_URL}logos/360.png`} style={{ height: '24px', width: 'auto', objectFit: 'contain' }} alt="360 Tour Logo" />
             <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>Virtual Tour Studio</span>
           </Link>
           <nav className="dash-nav">

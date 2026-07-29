@@ -5,9 +5,9 @@ import * as THREE from 'three';
 import store, { boosters, unityBlendShapes, unRealblendshapes } from "./Store";
 import { ThreeViewer, viewerStore, GLTFPlugin } from '@trikomi/core';
 import { FaceMocapPlugin } from '@trikomi/core/face-mocap';
-import glassesUrl from '/models/glasses.glb';
-import raccoonUrl from '/models/raccoon_head_small.glb';
-import headOccluderUrl from '/models/head_occluder.obj';
+const glassesUrl = import.meta.env.BASE_URL + 'models/glasses.glb';
+const raccoonUrl = import.meta.env.BASE_URL + 'models/raccoon_head_small.glb';
+const headOccluderUrl = import.meta.env.BASE_URL + 'models/head_occluder.obj';
 
 export const mocapPlugin = new FaceMocapPlugin(import.meta.env.DEV ? '/assets/wasm' : '../assets/wasm');
 

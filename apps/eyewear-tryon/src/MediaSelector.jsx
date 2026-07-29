@@ -3,7 +3,7 @@ import store from "./Store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import ThreeD, { AVAILABLE_MODELS } from "./ThreeD";
-const spinnerSvg = "/svgs/spinner.svg";
+const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
 
 
 const _videoWidth = Math.min(480, window.innerWidth * .8);
@@ -116,7 +116,7 @@ const MediaSelector = observer(() => {
             {/* Top Header */}
             <div className="app-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <img src="/logos/eyewear.png" height={40} alt="Trikomi Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
+                    <img src={`${import.meta.env.BASE_URL}logos/eyewear.png`} height={40} alt="Trikomi Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
                     <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
                         <span style={{ fontWeight: 800, fontSize: '1.4rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Trikomi</span>
                         <span style={{ fontWeight: 400, fontSize: '0.9rem', color: '#a855f7', letterSpacing: '2px', textTransform: 'uppercase' }}>Eyewear</span>

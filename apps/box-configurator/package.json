@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1785328267306.tgz",
+    "@trikomi/core": "file:../../npm-staging/trikomi-core-1.0.6-dev.1785348820568.tgz",
     "konva": "^10.3.0",
     "mobx": "^6.15.3",
     "mobx-react-lite": "^4.1.1",

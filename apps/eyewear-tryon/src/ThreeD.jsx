@@ -6,22 +6,22 @@ import store from "./Store";
 import { ThreeViewer, viewerStore, GLTFPlugin, StatsPlugin } from '@trikomi/core';
 import { FaceMocapPlugin } from '@trikomi/core/face-mocap';
 import { EyewearConfigurator } from '@trikomi/core/eyewear';
-const glassesUrl = '/models/glasses1.glb';
-const glasses2Url = '/models/glasses2.glb';
-const glasses3Url = '/models/glasses3.glb';
-const glasses4Url = '/models/glasses4.glb';
-const glasses5Url = '/models/glasses5.glb';
-const glasses6Url = '/models/glasses6.glb';
-const headOccluderUrl = '/models/head_occluder.obj';
-const envMapUrl = '/images/brown_photostudio_02.webp';
+const glassesUrl = `${import.meta.env.BASE_URL}models/glasses1.glb`;
+const glasses2Url = `${import.meta.env.BASE_URL}models/glasses2.glb`;
+const glasses3Url = `${import.meta.env.BASE_URL}models/glasses3.glb`;
+const glasses4Url = `${import.meta.env.BASE_URL}models/glasses4.glb`;
+const glasses5Url = `${import.meta.env.BASE_URL}models/glasses5.glb`;
+const glasses6Url = `${import.meta.env.BASE_URL}models/glasses6.glb`;
+const headOccluderUrl = `${import.meta.env.BASE_URL}models/head_occluder.obj`;
+const envMapUrl = `${import.meta.env.BASE_URL}images/brown_photostudio_02.webp`;
 
 export const AVAILABLE_MODELS = [
-    { name: 'Aviator Classic', url: glassesUrl, thumb: '/thumbs/glasses1.png', scale: 0.3 },
-    { name: 'Sport Wrap', url: glasses2Url, thumb: '/thumbs/glasses2.png', scale: 0.3 },
-    { name: 'Wayfarer Style', url: glasses3Url, thumb: '/thumbs/glasses3.png', scale: 0.3 },
-    { name: 'Round Metal', url: glasses4Url, thumb: '/thumbs/glasses4.png', scale: 0.3 },
-    { name: 'Clubmaster', url: glasses5Url, thumb: '/thumbs/glasses5.png', scale: 0.3 },
-    { name: 'Hexagonal', url: glasses6Url, thumb: '/thumbs/glasses6.png', scale: 0.3 }
+    { name: 'Aviator Classic', url: glassesUrl, thumb: `${import.meta.env.BASE_URL}thumbs/glasses1.png`, scale: 0.3 },
+    { name: 'Sport Wrap', url: glasses2Url, thumb: `${import.meta.env.BASE_URL}thumbs/glasses2.png`, scale: 0.3 },
+    { name: 'Wayfarer Style', url: glasses3Url, thumb: `${import.meta.env.BASE_URL}thumbs/glasses3.png`, scale: 0.3 },
+    { name: 'Round Metal', url: glasses4Url, thumb: `${import.meta.env.BASE_URL}thumbs/glasses4.png`, scale: 0.3 },
+    { name: 'Clubmaster', url: glasses5Url, thumb: `${import.meta.env.BASE_URL}thumbs/glasses5.png`, scale: 0.3 },
+    { name: 'Hexagonal', url: glasses6Url, thumb: `${import.meta.env.BASE_URL}thumbs/glasses6.png`, scale: 0.3 }
 ];
 
 export const mocapPlugin = new FaceMocapPlugin('/assets/wasm');

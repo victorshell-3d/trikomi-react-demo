@@ -6,8 +6,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 const AVAILABLE_RINGS = [
-  { name: 'Classic Solitaire', url: '/models/ring.glb', thumb: '/thumbs/ring1.png' },
-  { name: 'Halo Setting', url: '/models/ring2.glb', thumb: '/thumbs/ring2.png' },
+  { name: 'Classic Solitaire', url: `${import.meta.env.BASE_URL}models/ring.glb`, thumb: `${import.meta.env.BASE_URL}thumbs/ring1.png` },
+  { name: 'Halo Setting', url: `${import.meta.env.BASE_URL}models/ring2.glb`, thumb: `${import.meta.env.BASE_URL}thumbs/ring2.png` },
 
 ];
 
@@ -71,7 +71,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
 
   // Fetch thumbnails
   useEffect(() => {
-    fetch('/json/diamond_map.json')
+    fetch(`${import.meta.env.BASE_URL}json/diamond_map.json`)
       .then(res => res.json())
       .then(data => setDiamondThumbs(data))
       .catch(err => console.error("Failed to load diamond map", err));
@@ -80,11 +80,11 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
   // Load diamond geometries in background
   useEffect(() => {
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('/draco/gltf/');
+    dracoLoader.setDecoderPath(`${import.meta.env.BASE_URL}draco/gltf/`);
     const loader = new GLTFLoader();
     loader.setDRACOLoader(dracoLoader);
 
-    loader.load('/models/diamonds.glb', (gltf) => {
+    loader.load(`${import.meta.env.BASE_URL}models/diamonds.glb`, (gltf) => {
       const geos: Record<string, THREE.BufferGeometry> = {};
       gltf.scene.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
@@ -331,7 +331,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
         color: '#f8fafc'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-          <img src="/logos/jewel.png" alt="Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+          <img src={`${import.meta.env.BASE_URL}logos/jewel.png`} alt="Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #00f2fe 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Trikomi Jewelry
@@ -507,7 +507,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
                     boxShadow: isActive ? '0 0 10px rgba(0, 242, 254, 0.2)' : 'none'
                   }}
                 >
-                  <img src={path as string} alt={shapeName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  <img src={`${import.meta.env.BASE_URL}${(path as string).startsWith('/') ? (path as string).slice(1) : path}`} alt={shapeName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </div>
               );
             })}

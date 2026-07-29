@@ -573,14 +573,12 @@
         <p class="hero-intro">
           A modular 3D rendering SDK built on Three.js (WebGPU renderer), React, MobX, and Vite.
           The SDK ships as a pre-compiled package (<code>@trikomi/core</code>) consumed by six demo applications in a
-          Yarn workspace monorepo.
+          PNPM workspace monorepo.
         </p>
 
         <div class="callout callout-info">
           <div class="callout-label">ℹ Info</div>
-          The <strong>core source code is private</strong>. The demo repo ships only the compiled
-          <code>dist/sdk.js</code> and TypeScript type declarations. App developers build on top of the public plugin
-          API.
+          The <strong>core source code is private</strong>. The demo repo consumes the compiled SDK packages via NPM dependencies. Local development (<code>pnpm dev:sdk</code>) supports dynamic source-code mapping if the private repository is adjacent. App developers build on top of the public plugin API.
         </div>
       </section>
 
@@ -592,7 +590,7 @@
         <h3>Prerequisites</h3>
         <ul>
           <li><a href="https://nodejs.org" target="_blank">Node.js</a> ≥ 20</li>
-          <li><a href="https://yarnpkg.com" target="_blank">Yarn</a> v1.x (classic)</li>
+          <li><a href="https://pnpm.io" target="_blank">PNPM</a> v10+</li>
         </ul>
 
         <h3>Install & Run Dev Server</h3>
@@ -601,10 +599,10 @@ git clone &lt;repo-url&gt; 3dviewer
 cd 3dviewer
 
 <span class="cm"># Install all workspaces</span>
-yarn install
+pnpm install
 
 <span class="cm"># Start the root dev server (serves all apps at their paths)</span>
-yarn dev</code></pre>
+pnpm dev</code></pre>
 
         <p>The Vite dev server starts at <code>http://localhost:5173</code>. Individual apps are accessible at:</p>
         <ul style="list-style: none; padding-left: 0;">
@@ -633,16 +631,16 @@ yarn dev</code></pre>
 
         <h3>Production Build</h3>
         <pre><code><span class="cm"># Builds core SDK + all apps → ./dist/</span>
-yarn build
+pnpm build
 
 <span class="cm"># Serve the built output locally</span>
-yarn serve
+pnpm serve
 <span class="cm"># → http://localhost:3000</span></code></pre>
 
         <div class="callout callout-tip">
           <div class="callout-label">✓ Tip</div>
           To build and preview a single app without rebuilding everything, use the workspace shortcuts:
-          <code>yarn build:viewer</code>, <code>yarn build:sportswear</code>, <code>yarn build:eyewear</code>, etc.
+          <code>pnpm build:viewer</code>, <code>pnpm build:sportswear</code>, <code>pnpm build:eyewear</code>, etc.
         </div>
       </section>
 
@@ -663,13 +661,7 @@ yarn serve
           │ ├── <span class="dir">sportswear-configurator/</span>
           │ └── <span class="dir">viewer/</span>
           │
-          ├── <span class="dir">packages/</span>
-          │ └── <span class="dir">core/</span> <span class="note">← @trikomi/core (private source, compiled SDK)</span>
-          │ ├── <span class="dir">src/</span> <span class="note">← Private source (not in demo repo)</span>
-          │ └── <span class="dir">dist/</span> <span class="note">← Compiled output consumed by apps</span>
-          │ ├── <span class="file">sdk.js</span> <span class="note">← Bundled ES module</span>
-          │ ├── <span class="file">index.d.ts</span> <span class="note">← TypeScript declarations</span>
-          │ └── <span class="dir">assets/</span> <span class="note">← 3D assets (GLBs, HDRs, textures)</span>
+          ├── <span class="dir">npm-staging/</span> <span class="note">← Pre-built SDK bundles (consumed by Vite)</span>
           │
           ├── <span class="dir">public/</span> <span class="note">← Shared static assets served by all apps</span>
           │ ├── <span class="dir">assets/wasm/</span> <span class="note">← MediaPipe WASM files (face tracking)</span>
@@ -680,7 +672,7 @@ yarn serve
           ├── <span class="file">build-monorepo.js</span> <span class="note">← Merges all app builds into ./dist/</span>
 
           ├── <span class="file">index.html</span> <span class="note">← Root hub page (links to all apps)</span>
-          └── <span class="file">package.json</span> <span class="note">← Yarn workspaces root</span>
+          └── <span class="file">package.json</span> <span class="note">← PNPM workspaces root</span>
         </div>
 
         <h3>Why a Shared <code>public/</code>?</h3>
@@ -799,22 +791,10 @@ yarn serve
               <td><code>viewer.handleResize()</code></td>
               <td>Updates camera aspect ratio and renderer size. Called automatically on <code>resize</code>.</td>
             </tr>
-          </tbody>
         </table>
-
-        <h3>The <code>assetBaseUrl</code> Rule</h3>
-        <p>
-          Built-in assets (GLB models, HDR env maps) live in <code>packages/core/dist/assets/</code> at the source level
-          and are copied to <code>dist/assets/core/</code> in the production build. The viewer resolves asset URLs using
-          <code>assetBaseUrl</code>:
-        </p>
-        <ul>
-          <li><strong>Dev</strong>: <code>'/packages/core/dist/assets/'</code> (absolute, served from Vite root)</li>
-          <li><strong>Prod</strong>: <code>'../assets/core/'</code> (navigates up from the app subfolder to the shared
-            <code>dist/assets/</code>)
-          </li>
-        </ul>
       </section>
+
+
 
       <hr />
 
@@ -1241,8 +1221,6 @@ viewerStore.<span class="fn">setActiveModelName</span>(<span class="str">'My Mod
           ├── <span class="file">index.html</span> <span class="note">← Hub page</span>
           ├── <span class="dir">assets/</span> <span class="note">← All hashed JS/CSS/WASM chunks (shared)</span>
           │ ├── <span class="file">index-XXX.js</span>
-          │ └── <span class="dir">core/</span> <span class="note">← Built-in 3D assets copied from
-            packages/core/dist/assets/</span>
           ├── <span class="dir">draco/</span> <span class="note">← Draco decoder binaries (from public/)</span>
           ├── <span class="dir">textures/</span> <span class="note">← Fabric/SVG textures (from public/)</span>
           ├── <span class="dir">assets/wasm/</span> <span class="note">← MediaPipe WASM (from public/)</span>
@@ -1280,7 +1258,7 @@ viewerStore.<span class="fn">setActiveModelName</span>(<span class="str">'My Mod
           </thead>
           <tbody>
             <tr>
-              <td>Dev (<code>yarn dev</code>)</td>
+              <td>Dev (<code>pnpm dev</code>)</td>
               <td><code>'/draco/gltf/'</code></td>
               <td><code>http://localhost:5173/draco/gltf/</code> — served from <code>public/draco/gltf/</code></td>
             </tr>
@@ -1301,9 +1279,6 @@ viewerStore.<span class="fn">setActiveModelName</span>(<span class="str">'My Mod
             <code>DEV ? '/assets/wasm' : '../assets/wasm'</code>
           </li>
           <li><strong>Textures</strong>: Sportswear ThreeCanvas — <code>DEV ? '/textures/' : '../textures/'</code></li>
-          <li><strong>Core assets</strong>: <code>ThreeViewer</code> assetBaseUrl —
-            <code>DEV ? '/packages/core/dist/assets/' : '../assets/core/'</code>
-          </li>
         </ul>
 
         <div class="callout callout-tip">
