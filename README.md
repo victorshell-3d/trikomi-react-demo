@@ -25,14 +25,14 @@ This workspace is organized as a unified `pnpm` monorepo containing 8 production
 
 | Application | Description | Technology Stack |
 | :--- | :--- | :--- |
-| **`apps/sportswear-configurator`** | Interactive 3D athletic apparel customizer with real-time vector logo positioning, text projection, dynamic color swatches, and fabric texture compositing. | React, MobX, `@trikomi/core/sportswear` |
-| **`apps/face-mocap`** | Real-time browser-based webcam facial tracking and AR accessory overlay engine powered by MediaPipe. Features aspect-ratio matching and unmirrored UI text overlays. | React, MediaPipe, `@trikomi/core/face-mocap` |
-| **`apps/jewelry-configurator`** | Luxury e-commerce Studio for diamond rings featuring ray-traced internal refraction, dispersion shaders, gemstone finishes, and real-time PDP price calculation. | React, `@trikomi/core/jewelry` |
-| **`apps/box-configurator`** | Interactive 3D packaging and die-cut box configurator with dynamic dimension controls, folding animations, and custom print export. | React, Konva 2D, `@trikomi/core/box` |
-| **`apps/360tour`** | Virtual tour creator and interactive panorama viewer supporting hot-spot navigation, floor plans, and spatial audio. | React, `@trikomi/core/tour` |
-| **`apps/eyewear-tryon`** | 3D glasses previewer and named AR try-on studio with glassmorphic UI controls and snapshot captures. | React, `@trikomi/core/eyewear` |
-| **`apps/8theye`** | WebAR eyewear virtual try-on studio integrated with 8thWall surface tracking. | React, 8thWall, `@trikomi/core/8thwall` |
-| **`apps/viewer`** | Generic multi-model 3D inspection studio with environment lighting presets, material slot editing, and camera animation controls. | React, `@trikomi/core` |
+| **[`apps/sportswear-configurator`](https://victorshell-3d.github.io/trikomi-react-demo/sportswear-configurator/index.html)** | Interactive 3D athletic apparel customizer with real-time vector logo positioning, text projection, dynamic color swatches, and fabric texture compositing. | React, MobX, `@trikomi/core/sportswear` |
+| **[`apps/face-mocap`](https://victorshell-3d.github.io/trikomi-react-demo/face-mocap/index.html)** | Real-time browser-based webcam facial tracking and AR accessory overlay engine powered by MediaPipe. Features aspect-ratio matching and unmirrored UI text overlays. | React, MediaPipe, `@trikomi/core/face-mocap` |
+| **[`apps/jewelry-configurator`](https://victorshell-3d.github.io/trikomi-react-demo/jewelry-configurator/index.html)** | Luxury e-commerce Studio for diamond rings featuring ray-traced internal refraction, dispersion shaders, gemstone finishes, and real-time PDP price calculation. | React, `@trikomi/core/jewelry` |
+| **[`apps/box-configurator`](https://victorshell-3d.github.io/trikomi-react-demo/box-configurator/index.html)** | Interactive 3D packaging and die-cut box configurator with dynamic dimension controls, folding animations, and custom print export. | React, Konva 2D, `@trikomi/core/box` |
+| **[`apps/360tour`](https://victorshell-3d.github.io/trikomi-react-demo/360tour/index.html)** | Virtual tour creator and interactive panorama viewer supporting hot-spot navigation, floor plans, and spatial audio. | React, `@trikomi/core/tour` |
+| **[`apps/eyewear-tryon`](https://victorshell-3d.github.io/trikomi-react-demo/eyewear-tryon/index.html)** | 3D glasses previewer and named AR try-on studio with glassmorphic UI controls and snapshot captures. | React, `@trikomi/core/eyewear` |
+| **[`apps/8theye`](https://victorshell-3d.github.io/trikomi-react-demo/8theye/index.html)** | WebAR eyewear virtual try-on studio integrated with 8thWall surface tracking. | React, 8thWall, `@trikomi/core/8thwall` |
+| **[`apps/viewer`](https://victorshell-3d.github.io/trikomi-react-demo/viewer/index.html)** | Generic multi-model 3D inspection studio with environment lighting presets, material slot editing, and camera animation controls. | React, `@trikomi/core` |
 
 ---
 
