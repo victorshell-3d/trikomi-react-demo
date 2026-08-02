@@ -47,9 +47,8 @@ export const ThreeCanvas: React.FC = observer(() => {
     configuratorRef.current = configurator;
 
     const currentModelDef = AVAILABLE_MODELS[0];
-    const url = contextStore?.options?.model || (isDev ? currentModelDef.url : `..${currentModelDef.url}`);
-    const svgBase = isDev ? '' : '..';
-    const svgUrl = `${svgBase}${currentModelDef.svg}`;
+    const url = contextStore?.options?.model || currentModelDef.url;
+    const svgUrl = currentModelDef.svg;
 
     configurator.loadModel({ ...currentModelDef, url, svg: svgUrl }, centerPlugin);
 
@@ -67,9 +66,8 @@ export const ThreeCanvas: React.FC = observer(() => {
     if (!configuratorRef.current) return;
     const isDev = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
     const currentModelDef = AVAILABLE_MODELS[modelIndex];
-    const url = isDev ? currentModelDef.url : `..${currentModelDef.url}`;
-    const svgBase = isDev ? '' : '..';
-    const svgUrl = `${svgBase}${currentModelDef.svg}`;
+    const url = currentModelDef.url;
+    const svgUrl = currentModelDef.svg;
 
     const centerPlugin = configuratorRef.current.viewer.getPlugin(CenterModelPlugin);
     configuratorRef.current.loadModel({ ...currentModelDef, url, svg: svgUrl }, centerPlugin || undefined);
