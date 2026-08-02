@@ -1,37 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>360 Virtual Tour</title>
-    <style>
-      body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; }
-      #app { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-      #spinner { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; background: #000; color: white; z-index: 9999; font-family: monospace; font-size: 1.2rem; }
-      .watermark {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        pointer-events: none; z-index: 9999;
-        display: flex; flex-direction: column; justify-content: center; align-items: center;
-        background: rgba(255, 0, 0, 0.05); color: rgba(255, 0, 0, 0.3);
-        font-size: 4rem; font-weight: 900; text-transform: uppercase; transform: rotate(-30deg);
-      }
-    </style>
-    <script type="module" crossorigin src="/assets/index-C4fNIuV-.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-QTnfLwEv.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-BMc5MK3B.css">
-  </head>
-  <body>
-    <div id="spinner">INITIALIZING SECURE LINK...</div>
-    <div id="app"></div>
-    <script>
-      (function() {
-        const token = "%%INJECT_TOKEN%%";
-        const conf = window.trikomi_config || {};
-        if (!conf.fallbackJwt && !conf.apiKey && !window.location.search.includes("trikomi_lic=")) {
-          window.trikomi_config = { fallbackJwt: token, apiKey: '' };
-        }
-      })();
-    </script>
-    
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>360 Virtual Tour</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #spinner {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      color: white;
+      z-index: 9999;
+      font-family: monospace;
+      font-size: 1.2rem;
+    }
+
+    .watermark {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 0, 0, 0.05);
+      color: rgba(255, 0, 0, 0.3);
+      font-size: 4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      transform: rotate(-30deg);
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-C4fNIuV-.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-QTnfLwEv.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-BMc5MK3B.css">
+</head>
+
+<body>
+  <div id="spinner">INITIALIZING SECURE LINK...</div>
+  <div id="app"></div>
+  <script>
+    window.trikomi_config = {
+      apiKey: 'vk_live_mvsugpsup02xd1i7',
+      fallbackJwt: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJraWQiOiJ2a19saXZlX212c3VncHN1cDAyeGQxaTciLCJkIjpbImdpdGh1Yi5pbyIsImxvY2FsaG9zdCIsInZpY3RvcnNoZWxsLmNvbSIsIjEyNy4wLjAuMSJdLCJwbHVnaW5zIjpbIjNEIFZpZXdlciIsIkpld2VscnkgQ29uZmlndXJhdG9yIiwiU3BvcnRzd2VhciBDb25maWd1cmF0b3IiLCJCb3ggUGFja2FnaW5nIENvbmZpZ3VyYXRvciIsIkZhY2UgTW90aW9uIENhcHR1cmUiLCJFeWV3ZWFyIFZpcnR1YWwgVHJ5LU9uIiwiMzYwXHUwMGIwIFZpcnR1YWwgVG91ciIsIlZpcnR1YWwgM0QgRXhoaWJpdGlvbiJdLCJmZWF0dXJlcyI6WyJWU1QwMDIiLCJWU1QwMDMiLCJWU1QwMDUiLCJWU1QwMDYiLCJWU1QwMDgiLCJWU1QxMDMiLCJWU1QxMDciLCJWU1Q5MDEiLCJWU1QwMDEiLCJWU1QwMDQiLCJWU1QyMDEiLCJWU1QxMDQiLCJWU1QxMDYiLCJWU1QyMDIiLCJWU1QyMDMiLCJWU1QyMDQiLCJWU1QzMDEiLCJWU1QzMDIiLCJWU1QzMDMiLCJWU1QzMDQiLCJWU1QzMDUiLCJWU1QzMDYiLCJWU1Q0MDEiLCJWU1Q0MDIiLCJWU1Q0MDMiLCJWU1Q0MDQiLCJWU1Q0MDUiLCJWU1Q1MDEiLCJWU1Q1MDIiLCJWU1Q1MDMiLCJWU1Q1MDgiLCJWU1Q1MTIiLCJWU1QyMDUiLCJWU1QyMDYiXSwiZSI6MjEwMTA2MTQyMDAwMCwidSI6MSwiYiI6ZmFsc2V9.wYdTAP91vsvkhl8ZBvKzwMULPKLGEPMULrYXEvUxYH63HJ4_yPjB90ixjsNbQBzExA3ii22HS7ndXr2W_p42Hg'
+    };
+  </script>
+
+</body>
+
 </html>
