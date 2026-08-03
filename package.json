@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@jitl/quickjs-wasmfile-release-sync": "^0.30.0",
+    "dompurify": "^3.4.12",
     "leva": "^0.10.1",
     "mobx": "^6.15.3",
     "mobx-react-lite": "^4.1.1",

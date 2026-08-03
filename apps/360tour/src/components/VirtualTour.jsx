@@ -7,6 +7,7 @@ import { loadEquirectangularPanorama, createHotspotsFromJSON, createShapesFromJS
 import MediaModal from './MediaModal';
 import FloorPlanMap from './FloorPlanMap';
 import { useLocalImage } from '../hooks/useLocalImage';
+import DOMPurify from 'dompurify';
 
 const VirtualTour = observer(({ customConfigMode }) => {
   const containerRef = useRef(null);
@@ -305,7 +306,7 @@ const VirtualTour = observer(({ customConfigMode }) => {
         }}>
           <div style={{ padding: '40px' }}>
             {virtualTourStore.tourData.settings.welcome_screen.html && (
-              <div dangerouslySetInnerHTML={{ __html: virtualTourStore.tourData.settings.welcome_screen.html }} />
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(virtualTourStore.tourData.settings.welcome_screen.html) }} />
             )}
             <button className="btn btn-primary" style={{ fontSize: '1.2rem', padding: '12px 32px', marginTop: 24 }} onClick={handleStartTour}>
               Start Tour
