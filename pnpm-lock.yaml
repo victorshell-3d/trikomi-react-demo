@@ -106,8 +106,8 @@ importers:
   apps/360tour:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       idb-keyval:
         specifier: ^6.2.5
         version: 6.3.0
@@ -136,8 +136,8 @@ importers:
   apps/8theye:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       mobx:
         specifier: ^6.16.1
         version: 6.16.1
@@ -167,8 +167,8 @@ importers:
   apps/box-configurator:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       konva:
         specifier: ^10.3.0
         version: 10.3.0
@@ -234,8 +234,8 @@ importers:
         specifier: ^0.10.35
         version: 0.10.35
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
     devDependencies:
       '@vitejs/plugin-basic-ssl':
         specifier: ^2.3.0
@@ -247,8 +247,8 @@ importers:
         specifier: ^0.10.35
         version: 0.10.35
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
     devDependencies:
       '@vitejs/plugin-basic-ssl':
         specifier: ^2.3.0
@@ -257,8 +257,8 @@ importers:
   apps/jewelry-configurator:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       react-router-dom:
         specifier: ^7.1.0
         version: 7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -300,8 +300,8 @@ importers:
   apps/sportswear-configurator:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       mobx:
         specifier: ^6.15.3
         version: 6.16.1
@@ -355,8 +355,8 @@ importers:
   apps/viewer:
     dependencies:
       '@trikomi/core':
-        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz
-        version: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)
+        specifier: file:../../npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz
+        version: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -1177,9 +1177,9 @@ packages:
     peerDependencies:
       react: '>= 16.3.0'
 
-  '@trikomi/core@file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz':
-    resolution: {integrity: sha512-nJVvI2lKew7z7sc0OV3ugof2uMAqUjZXbbBrwOuK+mDOYo30A2t5jqSCUBntgUffhrSjCjyH5NB8F3OLo8KumA==, tarball: file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz}
-    version: 1.0.6-dev.1785358110780
+  '@trikomi/core@file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz':
+    resolution: {integrity: sha512-EjxGAAUxjbPz60OrdCopIX5LvKokVzfUazZ6Bdt6XXuJNBGmvse+s5jT9L8upkDYHmnCt+xxyVQJerMsz7u7hg==, tarball: file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz}
+    version: 1.0.6-dev.1788354302710
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
@@ -3620,7 +3620,7 @@ snapshots:
     dependencies:
       react: 19.2.7
 
-  '@trikomi/core@file:npm-staging/trikomi-core-1.0.6-dev.1785358110780.tgz(react@19.2.7)':
+  '@trikomi/core@file:npm-staging/trikomi-core-1.0.6-dev.1788354302710.tgz(react@19.2.7)':
     dependencies:
       '@jitl/quickjs-wasmfile-release-sync': 0.30.0
       '@mediapipe/tasks-vision': 0.10.35
