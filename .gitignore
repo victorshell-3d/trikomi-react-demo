@@ -25,3 +25,4 @@ dist-ssr/
 # OS files
 .DS_Store
 Thumbs.db
+apps/sportswear-configurator/src/components/MultiTexturePlayground.tsx

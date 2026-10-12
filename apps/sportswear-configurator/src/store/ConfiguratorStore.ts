@@ -9,6 +9,50 @@ export type PartColor = {
   color: string; // Current Hex color
 };
 
+export function renderTextToDataUrl(
+  text: string,
+  fontFamily: string = 'Impact',
+  color: string = '#ffffff'
+): { src: string; width: number; height: number; aspectRatio: number } {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+  const fontSize = 160;
+  const fontStr = `bold ${fontSize}px ${fontFamily || 'Impact, sans-serif'}`;
+  ctx.font = fontStr;
+
+  const str = text || ' ';
+  const metrics = ctx.measureText(str);
+
+  const ascent = metrics.actualBoundingBoxAscent ?? (fontSize * 0.75);
+  const descent = metrics.actualBoundingBoxDescent ?? (fontSize * 0.2);
+  const left = metrics.actualBoundingBoxLeft ?? 0;
+  const right = metrics.actualBoundingBoxRight ?? metrics.width;
+
+  const glyphWidth = Math.max(20, Math.ceil(left + right));
+  const glyphHeight = Math.max(20, Math.ceil(ascent + descent));
+
+  const padX = Math.ceil(fontSize * 0.08);
+  const padY = Math.ceil(fontSize * 0.08);
+
+  canvas.width = glyphWidth + padX * 2;
+  canvas.height = glyphHeight + padY * 2;
+
+  ctx.font = fontStr;
+  ctx.fillStyle = color || '#ffffff';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+
+  // Exact pixel placement: glyph top is at padY, glyph bottom is at padY + glyphHeight
+  ctx.fillText(str, padX + left, padY + ascent);
+
+  return {
+    src: canvas.toDataURL('image/png'),
+    width: canvas.width,
+    height: canvas.height,
+    aspectRatio: canvas.width / canvas.height
+  };
+}
+
 export type ConfiguratorLogo = {
   id: string;
   src: string;
@@ -17,6 +61,10 @@ export type ConfiguratorLogo = {
   width: number;
   height: number;
   rotation: number;
+  isText?: boolean;
+  text?: string;
+  fontFamily?: string;
+  textColor?: string;
 };
 
 export type ConfiguratorText = {
@@ -26,7 +74,8 @@ export type ConfiguratorText = {
   color: string;
   x: number;
   y: number;
-  fontSize: number;
+  width: number;
+  height: number;
   rotation: number;
 };
 
@@ -53,8 +102,14 @@ export class ConfiguratorStore {
   public logos: ConfiguratorLogo[] = [];
   public selectedLogoId: string | null = null;
 
-  public texts: ConfiguratorText[] = [];
-  public selectedTextId: string | null = null;
+  public get texts(): ConfiguratorLogo[] {
+    return this.logos.filter(l => l.isText);
+  }
+
+  public get selectedTextId(): string | null {
+    const selected = this.logos.find(l => l.id === this.selectedLogoId);
+    return selected?.isText ? selected.id : null;
+  }
 
   public activePartId: string = 'body';
   public isLoading: boolean = true;
@@ -97,12 +152,10 @@ export class ConfiguratorStore {
 
   setSelectedLogo(id: string | null) {
     this.selectedLogoId = id;
-    if (id) this.selectedTextId = null;
   }
 
   setSelectedText(id: string | null) {
-    this.selectedTextId = id;
-    if (id) this.selectedLogoId = null;
+    this.selectedLogoId = id;
   }
 
   setPartColor(id: string, color: string) {
@@ -125,21 +178,76 @@ export class ConfiguratorStore {
 
   removeLogo(id: string) {
     this.logos = this.logos.filter(l => l.id !== id);
-  }
-
-  addText(text: ConfiguratorText) {
-    this.texts.push(text);
-  }
-
-  updateText(id: string, updates: Partial<ConfiguratorText>) {
-    const index = this.texts.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.texts[index] = { ...this.texts[index], ...updates };
+    if (this.selectedLogoId === id) {
+      this.selectedLogoId = null;
     }
   }
 
+  addText(params: {
+    id: string;
+    text: string;
+    fontFamily: string;
+    color: string;
+    x: number;
+    y: number;
+    rotation?: number;
+    height?: number;
+    width?: number;
+  }) {
+    const rendered = renderTextToDataUrl(params.text, params.fontFamily, params.color);
+    const height = params.height || 120;
+    const width = Math.round(height * rendered.aspectRatio);
+
+    const overlay: ConfiguratorLogo = {
+      id: params.id,
+      src: rendered.src,
+      x: params.x,
+      y: params.y,
+      width,
+      height,
+      rotation: params.rotation || 0,
+      isText: true,
+      text: params.text,
+      fontFamily: params.fontFamily,
+      textColor: params.color
+    };
+
+    this.logos.push(overlay);
+    this.setSelectedLogo(params.id);
+  }
+
+  updateText(id: string, updates: Partial<{ text: string; fontFamily: string; color: string; x: number; y: number; width: number; height: number; rotation: number }>) {
+    const item = this.logos.find(l => l.id === id);
+    if (!item) return;
+
+    const newText = updates.text !== undefined ? updates.text : (item.text || '');
+    const newFont = updates.fontFamily !== undefined ? updates.fontFamily : (item.fontFamily || 'Impact');
+    const newColor = updates.color !== undefined ? updates.color : (item.textColor || '#ffffff');
+
+    let newSrc = item.src;
+    let newWidth = updates.width !== undefined ? updates.width : item.width;
+    let newHeight = updates.height !== undefined ? updates.height : item.height;
+
+    if (updates.text !== undefined || updates.fontFamily !== undefined || updates.color !== undefined) {
+      const rendered = renderTextToDataUrl(newText, newFont, newColor);
+      newSrc = rendered.src;
+      // Preserve current height, adjust width according to new text length
+      newWidth = Math.round(newHeight * rendered.aspectRatio);
+    }
+
+    this.updateLogo(id, {
+      ...updates,
+      text: newText,
+      fontFamily: newFont,
+      textColor: newColor,
+      src: newSrc,
+      width: newWidth,
+      height: newHeight
+    });
+  }
+
   removeText(id: string) {
-    this.texts = this.texts.filter(t => t.id !== id);
+    this.removeLogo(id);
   }
 
   setActivePart(id: string) {

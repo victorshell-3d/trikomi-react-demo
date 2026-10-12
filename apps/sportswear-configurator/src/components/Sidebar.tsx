@@ -285,9 +285,10 @@ export const Sidebar: React.FC = observer(() => {
               reader.onload = (event) => {
                 const targetX = configStore.centerUV ? configStore.centerUV.x * 2048 - 150 : 800;
                 const targetY = configStore.centerUV ? configStore.centerUV.y * 2048 - 150 : 800;
+                const newId = `logo-${Date.now()}`;
 
                 configStore.addLogo({
-                  id: `logo-${Date.now()}`,
+                  id: newId,
                   src: event.target?.result as string,
                   x: targetX,
                   y: targetY,
@@ -295,6 +296,7 @@ export const Sidebar: React.FC = observer(() => {
                   height: 300,
                   rotation: 0
                 });
+                configStore.setSelectedLogo(newId);
               };
               reader.readAsDataURL(file);
               e.target.value = '';
@@ -303,38 +305,56 @@ export const Sidebar: React.FC = observer(() => {
         </label>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {configStore.logos.map((logo, index) => (
-            <div key={logo.id} className="card">
-              <div className="item-header" style={{ marginBottom: 0 }}>
-                <span className="item-title">Logo {index + 1}</span>
-                <button 
-                  onClick={() => configStore.removeLogo(logo.id)}
-                  className="btn-remove"
-                >
-                  Remove
-                </button>
+          {configStore.logos.filter(l => !l.isText).map((logo, index) => {
+            const isSelected = configStore.selectedLogoId === logo.id;
+            return (
+              <div 
+                key={logo.id} 
+                className="card"
+                onClick={() => configStore.setSelectedLogo(logo.id)}
+                style={{ 
+                  cursor: 'pointer',
+                  border: isSelected ? '1px solid #00a8ff' : undefined,
+                  boxShadow: isSelected ? '0 0 10px rgba(0, 168, 255, 0.3)' : undefined
+                }}
+              >
+                <div className="item-header" style={{ marginBottom: 0 }}>
+                  <span className="item-title">Logo {index + 1} {isSelected && '(Active)'}</span>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      configStore.removeLogo(logo.id);
+                    }}
+                    className="btn-remove"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <h3 className="section-title">Typography</h3>
 
         <button
           onClick={() => {
-            const targetX = configStore.centerUV ? configStore.centerUV.x * 2048 : 950;
-            const targetY = configStore.centerUV ? configStore.centerUV.y * 2048 : 800;
+            const targetX = configStore.centerUV ? configStore.centerUV.x * 2048 - 150 : 850;
+            const targetY = configStore.centerUV ? configStore.centerUV.y * 2048 - 75 : 850;
+            const newId = `text-${Date.now()}`;
 
             configStore.addText({
-              id: `text-${Date.now()}`,
+              id: newId,
               text: '10',
               fontFamily: 'Impact',
               color: '#ffffff',
-              x: targetX, // We don't subtract width/2 here because text coordinates are already measured differently, or we can just drop it at centerUV precisely. Actually for text in TextureCompositor we translate to (x + width/2) so we should offset by width/2. Since default width is unknown here, we can leave it as center or roughly center. Let's just use exact projection coordinate, text is usually small.
+              x: targetX,
               y: targetY,
-              fontSize: 150,
+              width: 300,
+              height: 150,
               rotation: 0
             });
+            configStore.setSelectedText(newId);
           }}
           className="btn-primary"
           style={{ marginBottom: '16px' }}
@@ -343,42 +363,58 @@ export const Sidebar: React.FC = observer(() => {
         </button>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {configStore.texts.map((textItem, index) => (
-            <div key={textItem.id} className="card">
-              <div className="item-header">
-                <span className="item-title">Text {index + 1}</span>
-                <button 
-                  onClick={() => configStore.removeText(textItem.id)}
-                  className="btn-remove"
-                >
-                  Remove
-                </button>
-              </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <input 
-                  type="text" 
-                  value={textItem.text} 
-                  onChange={(e) => configStore.updateText(textItem.id, { text: e.target.value })}
-                  className="text-input"
-                  placeholder="Enter text..."
-                />
+          {configStore.texts.map((textItem, index) => {
+            const isSelected = configStore.selectedTextId === textItem.id;
+            return (
+              <div 
+                key={textItem.id} 
+                className="card"
+                onClick={() => configStore.setSelectedText(textItem.id)}
+                style={{ 
+                  cursor: 'pointer',
+                  border: isSelected ? '1px solid #00a8ff' : undefined,
+                  boxShadow: isSelected ? '0 0 10px rgba(0, 168, 255, 0.3)' : undefined
+                }}
+              >
+                <div className="item-header">
+                  <span className="item-title">Text {index + 1} {isSelected && '(Active)'}</span>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      configStore.removeText(textItem.id);
+                    }}
+                    className="btn-remove"
+                  >
+                    Remove
+                  </button>
+                </div>
                 
-                <div className="color-row" style={{ padding: 0 }}>
-                  <label className="color-label">Color</label>
-                  <div className="color-picker-wrap">
-                    <input
-                      type="color"
-                      value={textItem.color}
-                      onChange={(e) => configStore.updateText(textItem.id, { color: e.target.value })}
-                      className="color-input"
-                    />
-                    <span className="hex-text">{textItem.color}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <input 
+                    type="text" 
+                    value={textItem.text} 
+                    onChange={(e) => configStore.updateText(textItem.id, { text: e.target.value })}
+                    className="text-input"
+                    placeholder="Enter text..."
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  
+                  <div className="color-row" style={{ padding: 0 }} onClick={(e) => e.stopPropagation()}>
+                    <label className="color-label">Color</label>
+                    <div className="color-picker-wrap">
+                      <input
+                        type="color"
+                        value={textItem.textColor || (textItem as any).color || '#ffffff'}
+                        onChange={(e) => configStore.updateText(textItem.id, { color: e.target.value })}
+                        className="color-input"
+                      />
+                      <span className="hex-text">{textItem.textColor || (textItem as any).color || '#ffffff'}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         
         <div style={{ marginTop: '32px', marginBottom: '8px' }}>

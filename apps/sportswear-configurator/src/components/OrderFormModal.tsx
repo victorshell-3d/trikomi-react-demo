@@ -124,11 +124,11 @@ export const OrderFormModal: React.FC = observer(() => {
                 {configStore.texts.map(text => (
                   <div key={text.id} className="tp-asset-item">
                     <div className="tp-asset-thumb tp-text-thumb">
-                      <span style={{ fontFamily: text.fontFamily, color: text.color }}>T</span>
+                      <span style={{ fontFamily: text.fontFamily, color: text.textColor || (text as any).color || '#ffffff' }}>T</span>
                     </div>
                     <div className="tp-asset-details">
                       <strong>"{text.text}"</strong>
-                      <span>Font: {text.fontFamily} &nbsp;|&nbsp; Color: {text.color} &nbsp;|&nbsp; Size: {Math.round(text.fontSize)}px</span>
+                      <span>Font: {text.fontFamily} &nbsp;|&nbsp; Color: {text.textColor || (text as any).color || '#ffffff'} &nbsp;|&nbsp; Size: {Math.round(text.height)}px</span>
                     </div>
                   </div>
                 ))}
