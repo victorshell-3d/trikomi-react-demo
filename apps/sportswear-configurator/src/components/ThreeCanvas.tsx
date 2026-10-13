@@ -23,7 +23,7 @@ export const ThreeCanvas: React.FC = observer(() => {
 
     const engineStore = new ViewerStore();
     engineStore.backgroundColor = 'transparent';
-    engineStore.showStats = true;
+    engineStore.showStats = false;
 
     const viewer = new ThreeViewer(containerRef.current, engineStore, {
       onAuthorized: () => {
@@ -34,7 +34,6 @@ export const ThreeCanvas: React.FC = observer(() => {
     viewer.addPlugin(new OrbitControlsPlugin());
     const centerPlugin = new CenterModelPlugin({ center: true, floor: false, fitCamera: true });
     viewer.addPlugin(centerPlugin);
-    viewer.addPlugin(new StatsPlugin());
 
     viewer.camera.position.set(0, 1, 3);
     viewer.directionalLight.position.set(2, 5, 3);
@@ -46,6 +45,39 @@ export const ThreeCanvas: React.FC = observer(() => {
     const configurator = new SportswearConfigurator(viewer, configStore, texBase);
     configuratorRef.current = configurator;
 
+    // React application bridge: sync store updates to GPU compositor
+    configStore.onLogoTransform = (id, transform) => {
+      configurator.compositor.updateOverlayTransform(
+        id,
+        transform.x,
+        transform.y,
+        transform.width,
+        transform.height,
+        transform.rotation
+      );
+      configurator.compositor.syncGizmo();
+    };
+
+    configStore.onSelectLogo = (id) => {
+      configurator.compositor.selectedOverlayId = id;
+      configurator.compositor.syncGizmo();
+    };
+
+    configStore.onLogosChanged = () => {
+      configurator.compositor.updateOverlays(
+        configStore.logos.map(l => ({ ...l })),
+        configStore.selectedLogoId
+      );
+    };
+
+    // Safety: ensure dragging state is always cleanly reset on pointer release
+    const dom = viewer.renderer.domElement;
+    const handleGlobalPointerUp = () => {
+      (configurator as any)._isDraggingOverlay = false;
+    };
+    dom.addEventListener('pointerup', handleGlobalPointerUp);
+    dom.addEventListener('pointercancel', handleGlobalPointerUp);
+
     const currentModelDef = AVAILABLE_MODELS[0];
     const url = contextStore?.options?.model || currentModelDef.url;
     const svgUrl = currentModelDef.svg;
@@ -53,6 +85,11 @@ export const ThreeCanvas: React.FC = observer(() => {
     configurator.loadModel({ ...currentModelDef, url, svg: svgUrl }, centerPlugin);
 
     return () => {
+      configStore.onLogoTransform = undefined;
+      configStore.onSelectLogo = undefined;
+      configStore.onLogosChanged = undefined;
+      dom.removeEventListener('pointerup', handleGlobalPointerUp);
+      dom.removeEventListener('pointercancel', handleGlobalPointerUp);
       configurator.dispose();
       viewer.dispose();
     };
@@ -77,32 +114,29 @@ export const ThreeCanvas: React.FC = observer(() => {
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
 
-      {/* Model Selection Floating Bar */}
-      <div style={{
-        position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', alignItems: 'center', gap: '20px',
-        background: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)', padding: '12px 24px', borderRadius: '30px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)', zIndex: 10
-      }}>
-        <button
-          onClick={() => setModelIndex((prev) => (prev > 0 ? prev - 1 : AVAILABLE_MODELS.length - 1))}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px', color: '#0f172a', display: 'flex', alignItems: 'center' }}
-        >
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
+      {/* Left Carousel Arrow */}
+      <button
+        className="carousel-arrow left"
+        onClick={() => setModelIndex((prev) => (prev > 0 ? prev - 1 : AVAILABLE_MODELS.length - 1))}
+        aria-label="Previous Model"
+        title={AVAILABLE_MODELS[(modelIndex > 0 ? modelIndex - 1 : AVAILABLE_MODELS.length - 1)].name}
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
 
-        <div style={{ fontWeight: 600, fontSize: '14px', color: '#0f172a', minWidth: '120px', textAlign: 'center' }}>
-          {AVAILABLE_MODELS[modelIndex].name}
-        </div>
-
-        <button
-          onClick={() => setModelIndex((prev) => (prev < AVAILABLE_MODELS.length - 1 ? prev + 1 : 0))}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px', color: '#0f172a', display: 'flex', alignItems: 'center' }}
-        >
-          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-      </div>
+      {/* Right Carousel Arrow */}
+      <button
+        className="carousel-arrow right"
+        onClick={() => setModelIndex((prev) => (prev < AVAILABLE_MODELS.length - 1 ? prev + 1 : 0))}
+        aria-label="Next Model"
+        title={AVAILABLE_MODELS[(modelIndex < AVAILABLE_MODELS.length - 1 ? modelIndex + 1 : 0)].name}
+      >
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
     </div>
   );
 });

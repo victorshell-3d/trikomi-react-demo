@@ -150,12 +150,19 @@ export class ConfiguratorStore {
     this.viewTrigger = { view, timestamp: Date.now() };
   }
 
+  public onLogoTransform?: (id: string, transform: { x: number; y: number; width: number; height: number; rotation: number }) => void;
+  public onSelectLogo?: (id: string | null) => void;
+  public onLogosChanged?: () => void;
+
   setSelectedLogo(id: string | null) {
     this.selectedLogoId = id;
+    if (this.onSelectLogo) {
+      this.onSelectLogo(id);
+    }
   }
 
   setSelectedText(id: string | null) {
-    this.selectedLogoId = id;
+    this.setSelectedLogo(id);
   }
 
   setPartColor(id: string, color: string) {
@@ -167,12 +174,29 @@ export class ConfiguratorStore {
 
   addLogo(logo: ConfiguratorLogo) {
     this.logos.push(logo);
+    if (this.onLogosChanged) {
+      this.onLogosChanged();
+    }
   }
 
   updateLogo(id: string, updates: Partial<ConfiguratorLogo>) {
     const index = this.logos.findIndex(l => l.id === id);
     if (index !== -1) {
+      const srcChanged = updates.src !== undefined && updates.src !== this.logos[index].src;
       this.logos[index] = { ...this.logos[index], ...updates };
+      const item = this.logos[index];
+      if (this.onLogoTransform) {
+        this.onLogoTransform(id, {
+          x: item.x,
+          y: item.y,
+          width: item.width,
+          height: item.height,
+          rotation: item.rotation || 0
+        });
+      }
+      if (srcChanged && this.onLogosChanged) {
+        this.onLogosChanged();
+      }
     }
   }
 
@@ -180,6 +204,9 @@ export class ConfiguratorStore {
     this.logos = this.logos.filter(l => l.id !== id);
     if (this.selectedLogoId === id) {
       this.selectedLogoId = null;
+    }
+    if (this.onLogosChanged) {
+      this.onLogosChanged();
     }
   }
 
