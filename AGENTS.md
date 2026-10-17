@@ -22,3 +22,11 @@ Before performing **ANY** action (reading files, executing commands, creating fi
 ## 4. Strict Verification & No Assumptions
 - Never guess file structures, API signatures, or framework configurations.
 - Verify everything step-by-step with targeted reads and explain the intent behind each inspection.
+
+## 5. Mandatory Core Build & Ecosystem Propagation Protocol
+Whenever core engine code (`packages/core/src` in `3dviewer`) is updated:
+1. Build and pack the unified NPM bundle: `node export-single-bundle.js` in `3dviewer`.
+2. Build the vanilla ESM bundle: `node build-vanilla-bundle.js` in `3dviewer` to update `vanilla-demos/shared-assets/dist/trikomi.esm.js`.
+3. Propagate the new tarball to `3dviewer-demo/npm-staging/`, update package dependencies in `3dviewer-demo`, and run `pnpm install`.
+4. Update `victorshell2/client` dependencies with the new tarball and run `pnpm install`.
+5. Verify builds across all repos to ensure full ecosystem compatibility and zero runtime regressions.
