@@ -43,7 +43,8 @@ html, body, #root {
 .luxury-studio-stage {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* fallback for browsers without dynamic viewport units */
+  height: 100dvh;
   overflow: hidden;
   background-color: #f1f5f9;
 }
@@ -243,7 +244,7 @@ html, body, #root {
    -------------------------------------------------------------------------- */
 .alive-bottom-dock {
   position: absolute;
-  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 40;
@@ -362,7 +363,7 @@ html, body, #root {
    -------------------------------------------------------------------------- */
 .dock-tooltip-bubble {
   position: absolute;
-  bottom: 88px;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
@@ -730,7 +731,7 @@ html, body, #root {
   }
   
   .alive-bottom-dock {
-    bottom: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     gap: 4px;
     padding: 5px 6px;
   }
@@ -745,7 +746,7 @@ html, body, #root {
   }
   
   .dock-tooltip-bubble {
-    bottom: 78px;
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
     padding: 8px 10px;
   }
 }
