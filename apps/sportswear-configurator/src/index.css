@@ -43,7 +43,8 @@ html, body, #root {
 .luxury-studio-stage {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* fallback for browsers without dynamic viewport units */
+  height: 100dvh;
   overflow: hidden;
   background-color: #f1f5f9;
 }
