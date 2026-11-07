@@ -7,7 +7,7 @@ import {
   findBoxNode, findParentNodeAndEdge,
   propagateWidthChange, clampHoleToBounds,
   applyGlobalAnimationTiming, applyGlobalBoxColor,
-  convertToDisplay, convertToInternal, getFormattedValue,
+  convertToDisplay, convertToInternal, getFormattedValue, DESIGN_SCALE,
 } from '@trikomi/core/box';
 
 // Re-export package types for convenience — UI components can import from here
@@ -44,7 +44,7 @@ export interface BoxConfigJson {
 export class ConfigStore {
 
   // Animation State
-  unfoldProgress: number = 0; // 0 = fully folded (closed), 1 = fully unfolded (flat)
+  unfoldProgress: number = 1; // 0 = flat, 1 = fully folded
 
   // Whole Box Templates (sourced from @trikomi/box package)
   boxTemplates = boxTemplates;
@@ -71,7 +71,7 @@ export class ConfigStore {
       // Deep clone to prevent mutating the original template
       this.rootNode = JSON.parse(JSON.stringify(boxTpl.rootNode));
       this.setSelectedNodeId(this.rootNode.id);
-      this.unfoldProgress = 0; // Reset animation
+      this.unfoldProgress = 1; // Reset animation
       
       // Auto-recenter camera or trigger updates
       if (this.viewerInstance) {

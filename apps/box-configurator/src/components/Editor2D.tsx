@@ -1,5 +1,5 @@
 import { drawUniversalHole, _PathAdapter, DESIGN_SCALE, _DESIGN_CENTER_X, _DESIGN_CENTER_Y, _DESIGN_WIDTH, _DESIGN_HEIGHT, getPatternCanvasCached, getClockwisePath } from '@trikomi/core/box';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Stage, Layer, Rect, Transformer, Line, Text, Group, Circle, Image, Shape } from 'react-konva';
 import { observer } from 'mobx-react-lite';
 import { configStore } from '../store/ConfigStore';
@@ -646,30 +646,28 @@ export const Editor2D = observer(() => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const prevWidthRef = useRef(0);
-  const stageScaleRef = useRef(stageScale);
-
-  useEffect(() => {
-    stageScaleRef.current = stageScale;
-  }, [stageScale]);
+  const lastPinchDistRef = useRef(0);
+  const fittedRef = useRef(false);
 
   // Overlay state for adding nodes
   const [addMenuOverlay, setAddMenuOverlay] = useState<{ x: number; y: number; nodeId: string; edge: 'top' | 'bottom' | 'left' | 'right' } | null>(null);
+  const addMenuRef = useRef<HTMLDivElement>(null);
+  const [addMenuFlipped, setAddMenuFlipped] = useState(false);
+
+  // Flip the add menu below the click point when there is not enough room above it
+  useLayoutEffect(() => {
+    if (addMenuOverlay && addMenuRef.current) {
+      setAddMenuFlipped(addMenuOverlay.y - addMenuRef.current.offsetHeight - 16 < 0);
+    }
+  }, [addMenuOverlay]);
 
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current) {
-        const w = containerRef.current.offsetWidth;
-        const h = containerRef.current.offsetHeight;
-        setDimensions({ width: w, height: h });
-
-        if (w > 0 && prevWidthRef.current === 0) {
-          setStagePos({
-            x: w / 2 - (configStore.layoutBounds.width / 2) * stageScaleRef.current,
-            y: h / 2 - (configStore.layoutBounds.height / 2) * stageScaleRef.current
-          });
-        }
-        prevWidthRef.current = w;
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
+        });
       }
     };
     handleResize();
@@ -734,6 +732,36 @@ export const Editor2D = observer(() => {
     });
   };
 
+  const handlePinchMove = (e: Event) => {
+    const t1 = e.evt.touches[0];
+    const t2 = e.evt.touches[1];
+    const stage = stageRef.current;
+    if (!t1 || !t2 || !stage) return;
+    e.evt.preventDefault();
+    stage.stopDrag();
+    const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+    if (lastPinchDistRef.current) {
+      const rect = stage.container().getBoundingClientRect();
+      const mid = { x: (t1.clientX + t2.clientX) / 2 - rect.left, y: (t1.clientY + t2.clientY) / 2 - rect.top };
+      const oldScale = stage.scaleX();
+      const pointTo = {
+        x: mid.x / oldScale - stage.x() / oldScale,
+        y: mid.y / oldScale - stage.y() / oldScale,
+      };
+      const newScale = Math.min(5, Math.max(0.05, oldScale * dist / lastPinchDistRef.current));
+      setStageScale(newScale);
+      setStagePos({
+        x: -(pointTo.x - mid.x / newScale) * newScale,
+        y: -(pointTo.y - mid.y / newScale) * newScale,
+      });
+    }
+    lastPinchDistRef.current = dist;
+  };
+
+  const handlePinchEnd = () => {
+    lastPinchDistRef.current = 0;
+  };
+
   const addText = () => {
     const id = Date.now().toString();
     const b = configStore.layoutBounds;
@@ -785,25 +813,55 @@ export const Editor2D = observer(() => {
     }
   };
 
-  const zoomIn = () => {
-    setStageScale(prev => Math.min(5, prev * 1.15));
+  const zoom = (factor: number) => {
+    const stage = stageRef.current;
+    if (!stage || !containerRef.current) return;
+    const oldScale = stage.scaleX();
+    const newScale = Math.min(5, Math.max(0.05, oldScale * factor));
+    const center = {
+      x: containerRef.current.offsetWidth / 2,
+      y: containerRef.current.offsetHeight / 2
+    };
+    const pointTo = {
+      x: (center.x - stage.x()) / oldScale,
+      y: (center.y - stage.y()) / oldScale
+    };
+    setStageScale(newScale);
+    setStagePos({
+      x: center.x - pointTo.x * newScale,
+      y: center.y - pointTo.y * newScale
+    });
   };
 
-  const zoomOut = () => {
-    setStageScale(prev => Math.max(0.05, prev / 1.15));
-  };
+  const zoomIn = () => zoom(1.15);
+
+  const zoomOut = () => zoom(1 / 1.15);
 
   const recenter = () => {
-    if (containerRef.current) {
-      const w = containerRef.current.offsetWidth;
-      const h = containerRef.current.offsetHeight;
-      setStageScale(0.4);
-      setStagePos({
-        x: w / 2 - (configStore.layoutBounds.width / 2) * 0.4,
-        y: h / 2 - (configStore.layoutBounds.height / 2) * 0.4
-      });
-    }
+    const stage = stageRef.current;
+    if (!stage || !containerRef.current) return;
+    const w = containerRef.current.offsetWidth;
+    const h = containerRef.current.offsetHeight;
+    const r = stage.findOne('Layer').getClientRect();
+    if (!r.width || !r.height) return;
+    const old = stage.scaleX() || 1;
+    const bw = r.width / old;
+    const bh = r.height / old;
+    const scale = Math.min(0.4, (w * 0.9) / bw, (h * 0.9) / bh);
+    setStageScale(scale);
+    setStagePos({
+      x: w / 2 - ((r.x - stage.x()) / old + bw / 2) * scale,
+      y: h / 2 - ((r.y - stage.y()) / old + bh / 2) * scale
+    });
   };
+
+  // Fit the dieline into the pane once it has been drawn
+  useEffect(() => {
+    if (fittedRef.current || dimensions.width === 0 || !stageRef.current) return;
+    if (stageRef.current.findOne('Layer').getClientRect().width === 0) return;
+    recenter();
+    fittedRef.current = true;
+  }, [dimensions, configStore.layoutBounds]);
 
   return (
     <div className="editor-2d-container" style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}>
@@ -831,6 +889,8 @@ export const Editor2D = observer(() => {
             ref={stageRef}
             onMouseDown={checkDeselect}
             onTouchStart={checkDeselect}
+            onTouchMove={handlePinchMove}
+            onTouchEnd={handlePinchEnd}
             draggable
             onDragEnd={(e) => {
               if (e.target === e.target.getStage()) {
@@ -849,6 +909,7 @@ export const Editor2D = observer(() => {
 
         {/* Bottom Toolbar for 2D Layout Controls */}
         <div
+          className="floating-toolbar"
           style={{
             position: 'absolute',
             bottom: '16px',
@@ -1038,6 +1099,7 @@ export const Editor2D = observer(() => {
         {/* HTML Context Menu Overlay for Adding Attachments */}
         {addMenuOverlay && (
           <div
+            ref={addMenuRef}
             style={{
               position: 'absolute',
               left: addMenuOverlay.x,
@@ -1051,8 +1113,10 @@ export const Editor2D = observer(() => {
               gap: '4px',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
               zIndex: 10,
-              transform: 'translate(-50%, -100%)', // Center above the click point
-              marginTop: '-16px'
+              transform: addMenuFlipped ? 'translate(-50%, 0)' : 'translate(-50%, -100%)', // Center on the click point, flipping below it when there is no room above
+              marginTop: addMenuFlipped ? '16px' : '-16px',
+              maxHeight: 'calc(100% - 32px)',
+              overflowY: 'auto'
             }}
           >
             <div style={{ fontSize: '0.8rem', color: '#a0aec0', marginBottom: '4px', textAlign: 'center', fontWeight: 'bold' }}>Add to {addMenuOverlay.edge}</div>

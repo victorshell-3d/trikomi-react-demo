@@ -9,6 +9,7 @@ import { reaction } from 'mobx';
 const ThreeCanvasToolbar = observer(({ handleZoom, handleRecenterCamera }: { handleZoom: (f: number) => void, handleRecenterCamera: () => void }) => {
   return (
     <div
+      className="floating-toolbar"
       style={{
         position: 'absolute',
         bottom: '16px',

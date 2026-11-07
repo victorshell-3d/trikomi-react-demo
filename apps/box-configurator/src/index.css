@@ -53,6 +53,7 @@ body {
 .app-container {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
   position: relative;
@@ -64,6 +65,7 @@ body {
   flex: 1;
   flex-direction: row;
   height: 100vh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
 }
@@ -461,10 +463,11 @@ input[type="number"] {
 .angle-row-name {
   font-weight: 500;
   color: var(--color-text-main);
+  flex-shrink: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 90px;
+  max-width: 120px;
 }
 
 .angle-row-inputs {
@@ -551,7 +554,7 @@ button.primary-btn:hover {
 }
 
 .editor-2d-container .header {
-  padding: 14px 20px !important;
+  padding: 14px 280px 14px 20px !important;
   border-bottom: 1px solid var(--color-border);
   background: rgba(16, 18, 22, 0.8) !important;
   backdrop-filter: var(--glass-blur);
@@ -854,6 +857,7 @@ button.primary-btn:hover {
     top: 0;
     left: 0;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     z-index: 100;
   }
@@ -862,6 +866,53 @@ button.primary-btn:hover {
     width: 0;
     margin-left: -100vw;
   }
+
+  .landing-page {
+    justify-content: flex-start;
+  }
+
+  .editor-2d-container .header {
+    padding: 56px 12px 12px 68px !important;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .editor-2d-container .header h2 {
+    display: none;
+  }
+
+  .editor-2d-container .header > div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .floating-toolbar {
+    width: max-content;
+    max-width: 96%;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 4px;
+  }
+
+  .view-switcher-container {
+    top: 10px;
+    right: 10px;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .editor-2d-wrapper,
+  .canvas-container {
+    min-height: 0;
+  }
+
+  .editor-2d-wrapper {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
 }
 
 

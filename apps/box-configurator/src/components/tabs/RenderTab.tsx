@@ -112,7 +112,7 @@ const MaterialFinishCard = observer(() => {
           <path d="M2 17l10 5 10-5" />
           <path d="M2 12l10 5 10-5" />
         </svg>
-        Cardboard Finish & Finish
+        Cardboard Finish
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
