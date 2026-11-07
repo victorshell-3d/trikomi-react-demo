@@ -9,6 +9,7 @@ import {
   ExportPlugin
 } from '@trikomi/core';
 import { EighthWallSlamSDK } from '@trikomi/core/8thwall';
+import { pullBackForPortrait, shrinkModelForAR, restoreModelAfterAR } from '../utils/cameraFit';
 
 declare global {
   interface Window {
@@ -31,6 +32,7 @@ export const Toolbar: React.FC = observer(() => {
         const instance = slamSdkRef.current || window.__SLAM_SDK_INSTANCE__;
         instance?.stop();
       }
+      restoreModelAfterAR(viewer);
       viewerStore.setIsArActive(false);
     } else {
       if (typeof window === 'undefined' || !(window as any).XR8) {
@@ -41,6 +43,7 @@ export const Toolbar: React.FC = observer(() => {
         slamSdkRef.current = new EighthWallSlamSDK(viewer);
         window.__SLAM_SDK_INSTANCE__ = slamSdkRef.current;
       }
+      shrinkModelForAR(viewer);
       slamSdkRef.current.initialize();
       viewerStore.setIsArActive(true);
     }
@@ -111,6 +114,7 @@ export const Toolbar: React.FC = observer(() => {
     const orbitPlugin = viewer?.getPlugin(OrbitControlsPlugin);
     if (orbitPlugin && typeof orbitPlugin.resetView === 'function') {
       orbitPlugin.resetView();
+      pullBackForPortrait(viewer);
     }
   };
 

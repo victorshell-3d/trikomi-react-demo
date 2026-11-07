@@ -59,7 +59,7 @@ export const MaterialEditor: React.FC = observer(() => {
         border: '1px solid rgba(255, 255, 255, 0.1)',
         color: '#f8f9fa',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-        zIndex: 50,
+        zIndex: 101,
         fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
       }}
     >

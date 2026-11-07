@@ -16,6 +16,13 @@ export const CameraViews: React.FC = observer(() => {
       const controlsPlugin = viewer.getPlugin(OrbitControlsPlugin);
       if (controlsPlugin) {
         controlsPlugin.setView(axis);
+        const camera = viewer.camera;
+        if (camera && camera.aspect < 1 && controlsPlugin.controls) {
+          // pull back on portrait screens so the whole model stays in frame
+          const offset = camera.position.clone().sub(controlsPlugin.controls.target);
+          camera.position.copy(controlsPlugin.controls.target).addScaledVector(offset, 1 / camera.aspect);
+          controlsPlugin.controls.update();
+        }
       }
     }
   };

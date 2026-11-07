@@ -19,9 +19,8 @@ export const AnimationTimeline: React.FC = observer(() => {
     : null;
 
   return (
-    <div style={{
+    <div className="animation-timeline" style={{
       position: 'absolute',
-      bottom: '83px',
       left: '50%',
       transform: 'translateX(-50%)',
       width: '600px',

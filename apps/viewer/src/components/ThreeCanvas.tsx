@@ -25,6 +25,7 @@ import {
   CinematicPlugin,
   useViewerStore
 } from '@trikomi/core';
+import { pullBackForPortrait } from '../utils/cameraFit';
 
 declare global {
   interface Window {
@@ -106,6 +107,13 @@ export const ThreeCanvas = observer(() => {
       modelGroup.add(torusKnot);
 
       viewerStore.setActiveModelName('Metallic Torus Knot (Protected Engine)');
+    }
+
+    // Frame the model on portrait phones, same as the Reset button does
+    const modelGroup = viewer.scene.getObjectByName('ModelGroup');
+    if (viewer.camera.aspect < 1 && modelGroup && modelGroup.children.length > 0) {
+      viewer.getPlugin(OrbitControlsPlugin)?.resetView();
+      pullBackForPortrait(viewer);
     }
   }, [viewer]);
 

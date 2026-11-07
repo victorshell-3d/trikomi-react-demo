@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useViewerStore } from '@trikomi/core';
+import { useViewerStore, ThreeViewer } from '@trikomi/core';
 import { ThreeCanvas } from './components/ThreeCanvas';
 import { Sidebar } from './components/Sidebar';
 import { Toolbar } from './components/Toolbar';
@@ -9,6 +9,7 @@ import { AnimationTimeline } from './components/AnimationTimeline';
 import { CameraViews } from './components/CameraViews';
 import { MeasurementOverlay } from './components/MeasurementOverlay';
 import { DiamondExtractor } from './components/DiamondExtractor';
+import { restoreModelAfterAR } from './utils/cameraFit';
 
 const App = observer(() => {
   const viewerStore = useViewerStore();
@@ -23,6 +24,9 @@ const App = observer(() => {
   const handleExitAR = () => {
     if (typeof window !== 'undefined' && (window as any).__SLAM_SDK_INSTANCE__) {
       (window as any).__SLAM_SDK_INSTANCE__.stop();
+    }
+    if (viewerStore.viewer) {
+      restoreModelAfterAR(viewerStore.viewer as ThreeViewer);
     }
     viewerStore.setIsArActive(false);
   };
