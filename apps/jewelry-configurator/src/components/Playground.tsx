@@ -15,8 +15,7 @@ import {
   GLTFPlugin,
   CenterModelPlugin,
   CinematicPlugin,
-  useViewerStore,
-  StatsPlugin
+  useViewerStore
 } from '@trikomi/core';
 import { MaterialControls } from './MaterialControls';
 import { FloatingActions } from './FloatingActions';
@@ -56,8 +55,6 @@ export const Playground = observer(() => {
       }
     });
     viewerStore.viewer = viewer;
-    viewer.addPlugin(new StatsPlugin());
-    viewerStore.showStats = true;
 
     viewer.addPlugin(new OrbitControlsPlugin());
     viewer.addPlugin(new GLTFPlugin());
@@ -79,7 +76,14 @@ export const Playground = observer(() => {
       gltfPlugin.loadModel(modelToLoad, 'jewelry_model').then(model => {
         if (model) {
           modelGroup.add(model);
-          viewer.getPlugin(OrbitControlsPlugin)?.resetView()
+          const controlsPlugin = viewer.getPlugin(OrbitControlsPlugin);
+          controlsPlugin?.resetView()
+          // Pull back on portrait screens so the whole ring stays in frame
+          if (viewer.camera.aspect < 1 && controlsPlugin?.controls) {
+            const offset = viewer.camera.position.clone().sub(controlsPlugin.controls.target);
+            viewer.camera.position.copy(controlsPlugin.controls.target).addScaledVector(offset, 1 / viewer.camera.aspect);
+            controlsPlugin.controls.update();
+          }
           viewerStore.setActiveModelName('jewelry_model');
         }
       }).catch(err => console.error(`Failed to load ${modelToLoad}`, err));

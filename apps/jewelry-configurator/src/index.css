@@ -425,3 +425,15 @@ body {
     display: none !important;
   }
 }
+
+/* Keep the action buttons clear of the panels on phones */
+@media (max-width: 480px) {
+  .mc-left-panel {
+    top: 64px !important;
+    max-height: calc(100dvh - 84px) !important;
+  }
+
+  .mc-shapes-panel {
+    max-height: calc(100dvh - 270px) !important;
+  }
+}

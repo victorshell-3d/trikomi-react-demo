@@ -21,6 +21,8 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
   const [diamondThumbs, setDiamondThumbs] = useState<Record<string, string>>({});
   const [diamondGeometries, setDiamondGeometries] = useState<Record<string, THREE.BufferGeometry>>({});
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [leftOpen, setLeftOpen] = useState(true);
+  const [shapesOpen, setShapesOpen] = useState(true);
   const [activeShapes, setActiveShapes] = useState<Record<string, string>>({});
   const [zRotations, setZRotations] = useState<Record<string, number>>({});
   const [scales, setScales] = useState<Record<string, number>>({});
@@ -56,7 +58,14 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
 
         const ring = AVAILABLE_RINGS[index];
         const newModel = await plugin.loadModel(ring.url, `jewelry_model_${index}`);
-        viewer.getPlugin(OrbitControlsPlugin)?.resetView();
+        const controlsPlugin = viewer.getPlugin(OrbitControlsPlugin);
+        controlsPlugin?.resetView();
+        // Pull back on portrait screens so the whole ring stays in frame
+        if (viewer.camera.aspect < 1 && controlsPlugin?.controls) {
+          const offset = viewer.camera.position.clone().sub(controlsPlugin.controls.target);
+          viewer.camera.position.copy(controlsPlugin.controls.target).addScaledVector(offset, 1 / viewer.camera.aspect);
+          controlsPlugin.controls.update();
+        }
         if (newModel) {
           modelGroup.add(newModel);
           viewerStore.setActiveModelName(`jewelry_model_${index}`);
@@ -309,7 +318,21 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
       `}</style>
 
       {/* Left Panel: Materials & Colors */}
-      <div style={{
+      {!leftOpen && (
+        <button
+          onClick={() => setLeftOpen(true)}
+          title="Show panel"
+          style={{
+            position: 'absolute', top: '20px', left: '20px', zIndex: 10,
+            background: 'rgba(10, 12, 28, 0.70)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '8px',
+            color: '#94a3b8', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      )}
+      <div className="mc-left-panel" style={{
         position: 'absolute',
         top: '20px',
         left: '20px',
@@ -323,7 +346,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
         border: '1px solid rgba(255, 255, 255, 0.08)',
         borderRadius: '16px',
         padding: '16px',
-        display: 'flex',
+        display: leftOpen ? 'flex' : 'none',
         flexDirection: 'column',
         gap: '8px',
         zIndex: 10,
@@ -340,6 +363,13 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
               Configurator
             </span>
           </div>
+          <button
+            onClick={() => setLeftOpen(false)}
+            title="Hide panel"
+            style={{ marginLeft: 'auto', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
         </div>
 
         <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
@@ -464,8 +494,22 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
       </div>
 
       {/* Right Panel: Diamond Shapes */}
-      {activeMat && activeMat.isDiamond && Object.keys(diamondThumbs).length > 0 && (
-        <div style={{
+      {!shapesOpen && activeMat && activeMat.isDiamond && Object.keys(diamondThumbs).length > 0 && (
+        <button
+          onClick={() => setShapesOpen(true)}
+          title="Show shapes"
+          style={{
+            position: 'absolute', top: '80px', right: '20px', zIndex: 10,
+            background: 'rgba(10, 12, 28, 0.70)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '12px', padding: '8px',
+            color: '#94a3b8', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      )}
+      {shapesOpen && activeMat && activeMat.isDiamond && Object.keys(diamondThumbs).length > 0 && (
+        <div className="mc-shapes-panel" style={{
           position: 'absolute',
           top: '80px',
           right: '20px',
@@ -484,9 +528,18 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
           zIndex: 10,
           boxShadow: '0 24px 50px rgba(0, 0, 0, 0.4)'
         }}>
-          <span style={{ fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>
-            Shapes
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <span style={{ fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
+              Shapes
+            </span>
+            <button
+              onClick={() => setShapesOpen(false)}
+              title="Hide shapes"
+              style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '2px' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
           <div className="mc-scroll" style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', width: '100%', alignItems: 'center', paddingRight: '2px' }}>
             {Object.entries(diamondThumbs).map(([shapeName, path]) => {
               const isActive = activeShapes[activeMat.id] === shapeName;
