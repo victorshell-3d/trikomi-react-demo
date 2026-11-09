@@ -564,16 +564,3 @@ a:hover {
   color: #a855f7;
   filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.5));
 }
-
-/* Short landscape phones: keep the swatch panels clear of the header */
-@media (max-height: 450px) {
-  .app-header {
-    padding-top: 12px;
-  }
-
-  .vertical-panel {
-    gap: 8px;
-    padding: 10px 6px;
-    top: calc(50% + 24px);
-  }
-}
