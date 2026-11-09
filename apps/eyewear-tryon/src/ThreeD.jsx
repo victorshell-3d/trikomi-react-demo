@@ -97,7 +97,7 @@ const ThreeD = () => {
             }
             if (!viewer.getPlugin(StatsPlugin)) {
                 viewer.addPlugin(new StatsPlugin());
-                viewerStore.setShowStats(true);
+                viewerStore.setShowStats(false);
             }
 
             // Preload Synthetic Map for the core plugin to use
