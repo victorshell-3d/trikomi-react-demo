@@ -398,6 +398,7 @@ a:hover {
   padding: 40px 20px 20px;
   z-index: 100;
   background: transparent;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 8px rgba(0, 0, 0, 0.5);
 }
 
 .icon-button {
