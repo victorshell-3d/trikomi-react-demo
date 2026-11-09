@@ -36,7 +36,7 @@ const MediaSelector = observer(() => {
         const videoRatio = vw / vh;
         const windowRatio = window.innerWidth / window.innerHeight;
 
-        if (windowRatio > videoRatio) {
+        if (windowRatio > videoRatio && window.innerHeight >= 500) {
             // Screen is wider than video. Fill by width, let height bleed out.
             setContainerStyle({ width: '100vw', height: `${100 / videoRatio}vw` });
         } else {
