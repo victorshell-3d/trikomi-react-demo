@@ -26,7 +26,7 @@ const TourEditor = () => {
   const [uploading, setUploading] = useState(false);
   const [showProperties, setShowProperties] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(0);
-  const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
+  const [leftSidebarOpen, setLeftSidebarOpen] = useState(() => window.innerWidth > 640);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
   const [rightSidebarTab, setRightSidebarTab] = useState('hotspots');
   const [hotspotCreationMode, setHotspotCreationMode] = useState(false);
@@ -472,8 +472,14 @@ const TourEditor = () => {
           error={error}
           leftSidebarOpen={leftSidebarOpen}
           rightSidebarOpen={rightSidebarOpen}
-          onToggleLeftSidebar={() => setLeftSidebarOpen(!leftSidebarOpen)}
-          onToggleRightSidebar={() => setRightSidebarOpen(!rightSidebarOpen)}
+          onToggleLeftSidebar={() => {
+            if (!leftSidebarOpen && window.innerWidth <= 640) setRightSidebarOpen(false);
+            setLeftSidebarOpen(!leftSidebarOpen);
+          }}
+          onToggleRightSidebar={() => {
+            if (!rightSidebarOpen && window.innerWidth <= 640) setLeftSidebarOpen(false);
+            setRightSidebarOpen(!rightSidebarOpen);
+          }}
           onBack={() => navigate('/dashboard')}
           onShowProperties={() => setShowProperties(true)}
           onPreview={handlePreview}

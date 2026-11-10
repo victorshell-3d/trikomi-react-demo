@@ -1010,3 +1010,20 @@ textarea.input-field { resize: vertical; min-height: 60px; }
 .h-full { height: 100%; }
 .truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+
+/* ── Small screens ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .editor-left-sidebar,
+  .editor-right-sidebar {
+    position: absolute;
+    top: 44px;
+    bottom: 0;
+    z-index: 40;
+  }
+  .editor-left-sidebar { left: 0; }
+  .editor-right-sidebar { right: 0; }
+}
+
+@media (hover: none) {
+  .tour-actions { opacity: 1; }
+}

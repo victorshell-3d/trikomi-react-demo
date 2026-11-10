@@ -25,6 +25,7 @@ const VirtualTour = observer(({ customConfigMode }) => {
   const [mediaModal, setMediaModal] = useState({ show: false, content: null });
   const [engineReady, setEngineReady] = useState(false);
   const [tourStarted, setTourStarted] = useState(false);
+  const [sceneError, setSceneError] = useState('');
   const globalAudioRef = useRef(null);
 
   // Load tour on mount from API
@@ -43,6 +44,51 @@ const VirtualTour = observer(({ customConfigMode }) => {
     if (!containerRef.current) return;
 
     let viewer;
+
+    // Touch controls for phones - the engine plugin only listens to mouse events
+    const container = containerRef.current;
+    container.style.touchAction = 'none';
+    let lastTouch = null;
+    let pinchDist = 0;
+    const handleTouchStart = (e) => {
+      if (!vtPluginRef.current) return;
+      vtPluginRef.current.isDragging = true;
+      if (e.touches.length === 1) {
+        lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        pinchDist = 0;
+      } else if (e.touches.length === 2) {
+        lastTouch = null;
+        pinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      }
+    };
+    const handleTouchMove = (e) => {
+      const vtPlugin = vtPluginRef.current;
+      if (!vtPlugin) return;
+      e.preventDefault();
+      if (e.touches.length === 1 && lastTouch) {
+        const dx = e.touches[0].clientX - lastTouch.x;
+        const dy = e.touches[0].clientY - lastTouch.y;
+        lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        vtPlugin.targetRotation.x += dy * 0.005;
+        vtPlugin.targetRotation.y += dx * 0.005;
+        vtPlugin.targetRotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, vtPlugin.targetRotation.x));
+      } else if (e.touches.length === 2 && pinchDist > 0) {
+        const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        const cam = viewerRef.current.camera;
+        cam.fov = Math.max(25, Math.min(90, cam.fov - (dist - pinchDist) * 0.1));
+        cam.updateProjectionMatrix();
+        pinchDist = dist;
+      }
+    };
+    const handleTouchEnd = () => {
+      if (vtPluginRef.current) vtPluginRef.current.isDragging = false;
+      lastTouch = null;
+      pinchDist = 0;
+    };
+    container.addEventListener('touchstart', handleTouchStart);
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd);
+
     import('@trikomi/core').then(({ ThreeViewer, ViewerStore, VirtualTourPlugin, MotionBlurPlugin }) => {
       const store = new ViewerStore();
       viewer = new ThreeViewer(containerRef.current, store, {
@@ -128,6 +174,9 @@ const VirtualTour = observer(({ customConfigMode }) => {
     });
 
     return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
       if (viewerRef.current) {
         viewerRef.current.dispose();
       }
@@ -140,6 +189,7 @@ const VirtualTour = observer(({ customConfigMode }) => {
     
     const currentScene = virtualTourStore.currentScene;
     if (!currentScene) return;
+    setSceneError('');
 
     // sync ref with current scene id
     currentSceneIdRef.current = virtualTourStore.currentSceneId;
@@ -147,8 +197,15 @@ const VirtualTour = observer(({ customConfigMode }) => {
     const viewer = viewerRef.current;
     const vtPlugin = vtPluginRef.current;
 
-    import('@trikomi/core/tour').then(m => m.getImageObjectURL(virtualTourStore.tourData.id, currentScene.panorama)).then(resolvedUrl => {
-      loadEquirectangularPanorama(resolvedUrl || currentScene.panorama).then(async (sphere) => {
+    import('@trikomi/core/tour').then(m => m.getImageObjectURL(virtualTourStore.tourData.id, currentScene.panorama)).then(async resolvedUrl => {
+      const panoUrl = resolvedUrl || currentScene.panorama;
+      try {
+        await createImageBitmap(await (await fetch(panoUrl)).blob());
+      } catch {
+        setSceneError('This panorama could not be loaded. Try a different image.');
+        return;
+      }
+      loadEquirectangularPanorama(panoUrl).then(async (sphere) => {
         if (currentGroupRef.current) {
           viewer.scene.remove(currentGroupRef.current);
           
@@ -226,7 +283,11 @@ const VirtualTour = observer(({ customConfigMode }) => {
         if (isMutedRef.current) {
           vtPlugin.setMute(true);
         }
+      }).catch(() => {
+        setSceneError('This panorama could not be loaded. Try a different image.');
       });
+    }).catch(() => {
+      setSceneError('This panorama could not be loaded. Try a different image.');
     });
 
   }, [engineReady, virtualTourStore.tourData]);
@@ -287,6 +348,16 @@ const VirtualTour = observer(({ customConfigMode }) => {
         </div>
       )}
 
+      {sceneError && (
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          zIndex: 9999, padding: '12px 20px', borderRadius: 8, maxWidth: '80%',
+          background: 'rgba(0,0,0,0.85)', color: 'white', fontSize: '0.9rem', textAlign: 'center'
+        }}>
+          {sceneError}
+        </div>
+      )}
+
       {globalAudioLocalUrl && (
         <audio 
           ref={globalAudioRef} 
@@ -319,7 +390,6 @@ const VirtualTour = observer(({ customConfigMode }) => {
         {virtualTourStore.currentScene && (
           <div className="viewer-scene-badge">
             <strong>{virtualTourStore.currentScene.name}</strong>
-            <small>{virtualTourStore.debugInfo}</small>
           </div>
         )}
 

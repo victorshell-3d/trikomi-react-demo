@@ -57,7 +57,7 @@ const ExportDialog = ({ isOpen, onClose, tourId, tourTitle }) => {
           </div>
 
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: 20 }}>
-            The standalone viewer will be exported with the auto-auth testing token automatically injected.
+            The standalone viewer will be exported with your license key included.
           </p>
 
           {error && <div className="error-bar">{error}</div>}

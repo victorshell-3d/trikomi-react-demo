@@ -33,6 +33,17 @@ const Dashboard = () => {
     }
   };
 
+  const handleOpenTour = async (tour, e) => {
+    if (!tour.needsPermission) return;
+    e.preventDefault();
+    try {
+      await tourApi.getTour(tour.id);
+      navigate(`/editor/${tour.id}`);
+    } catch {
+      setError('Could not access this tour\'s folder. Try Open Existing to add it again.');
+    }
+  };
+
   const handleCreateTour = async (e) => {
     e.preventDefault();
     if (!newTourTitle.trim()) return;
@@ -109,7 +120,7 @@ const Dashboard = () => {
         <div className="tour-grid">
           {tours.map((tour) => (
             <div key={tour.id} className="tour-card">
-              <Link to={`/editor/${tour.id}`} style={{ display: 'block' }}>
+              <Link to={`/editor/${tour.id}`} style={{ display: 'block' }} onClick={(e) => handleOpenTour(tour, e)}>
                 <div className="tour-thumb">
                   {tour.scenes?.[0]?.thumbnail ? (
                     <TourThumbnail tourId={tour.id} url={tour.scenes[0].thumbnail} alt={tour.title} />
@@ -128,7 +139,7 @@ const Dashboard = () => {
                     <span className={`badge ${tour.status === 'published' ? 'badge-published' : 'badge-draft'}`}>
                       {tour.status || 'draft'}
                     </span>
-                    <span>{tour.scenes_count || tour.scenes?.length || 0} scenes · {new Date(tour.updated_at).toLocaleDateString()}</span>
+                    <span>{tour.scenes_count || tour.scenes?.length || 0} {(tour.scenes_count || tour.scenes?.length || 0) === 1 ? 'scene' : 'scenes'}{!isNaN(new Date(tour.updated_at).getTime()) ? ` · ${new Date(tour.updated_at).toLocaleDateString()}` : ''}</span>
                   </div>
                 </div>
               </Link>
