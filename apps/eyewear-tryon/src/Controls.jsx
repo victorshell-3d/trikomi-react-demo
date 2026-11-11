@@ -9,6 +9,24 @@ const Controls = observer(() => {
                 <input 
                     type="checkbox" 
                     className="premium-checkbox"
+                    checked={store.showOccluderWireframe} 
+                    onChange={e => store.showOccluderWireframe = e.target.checked} 
+                />
+                Show Occluder Wireframe
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                <input 
+                    type="checkbox" 
+                    className="premium-checkbox"
+                    checked={store.showDummyGlasses} 
+                    onChange={e => store.showDummyGlasses = e.target.checked} 
+                />
+                Show Dummy Glasses
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                <input 
+                    type="checkbox" 
+                    className="premium-checkbox"
                     checked={store.grid} 
                     onChange={e => store.grid = e.target.checked} 
                 />

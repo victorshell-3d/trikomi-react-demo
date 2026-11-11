@@ -5,15 +5,15 @@ import * as THREE from 'three/webgpu';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import store from "./Store";
 import { ThreeViewer, viewerStore, GLTFPlugin, StatsPlugin } from '@trikomi/core';
+import { EyewearPlugin } from '@trikomi/core/eyewear';
 import { FaceMocapPlugin } from '@trikomi/core/face-mocap';
-import { EyewearConfigurator } from '@trikomi/core/eyewear';
 const glassesUrl = `${import.meta.env.BASE_URL}models/glasses1.glb`;
 const glasses2Url = `${import.meta.env.BASE_URL}models/glasses2.glb`;
 const glasses3Url = `${import.meta.env.BASE_URL}models/glasses3.glb`;
 const glasses4Url = `${import.meta.env.BASE_URL}models/glasses4.glb`;
 const glasses5Url = `${import.meta.env.BASE_URL}models/glasses5.glb`;
 const glasses6Url = `${import.meta.env.BASE_URL}models/glasses6.glb`;
-const headOccluderUrl = `${import.meta.env.BASE_URL}models/head-occluder.glb`;
+const headOccluderUrl = `${import.meta.env.BASE_URL}models/head_occluder.obj`;
 const envMapUrl = `${import.meta.env.BASE_URL}images/brown_photostudio_02.webp`;
 
 export const AVAILABLE_MODELS = [
@@ -34,7 +34,7 @@ export const mocapPlugin = new FaceMocapPlugin(wasmBase);
 mocapPlugin.smoothStep = 0.5; // Ensure smoothStep is defined for lerping
 
 // Override initFaceLandmarker to dynamically support base URL pathing and GPU-to-CPU fallback
-mocapPlugin.initFaceLandmarker = async function() {
+mocapPlugin.initFaceLandmarker = async function () {
     try {
         const filesetResolver = await FilesetResolver.forVisionTasks(wasmBase);
         let landmarker;
@@ -91,9 +91,14 @@ const ThreeD = () => {
             });
             viewerRef.current = viewer;
 
-            // 2. Ensure GLTFPlugin is attached
+            // 2. Ensure GLTFPlugin and EyewearPlugin are attached
             if (!viewer.getPlugin(GLTFPlugin)) {
                 viewer.addPlugin(new GLTFPlugin());
+            }
+            let eyewearPlugin = viewer.getPlugin(EyewearPlugin);
+            if (!eyewearPlugin) {
+                eyewearPlugin = new EyewearPlugin();
+                viewer.addPlugin(eyewearPlugin);
             }
             if (!viewer.getPlugin(StatsPlugin)) {
                 viewer.addPlugin(new StatsPlugin());
@@ -115,6 +120,102 @@ const ThreeD = () => {
             viewer.camera.fov = 63;
             viewer.camera.updateProjectionMatrix();
 
+            // Ensure transparent background so video underneath is visible
+            viewerStore.setBackgroundColor('transparent');
+
+            // Occluder Materials: Invisible Depth Masking vs Cyan Wireframe Debug
+            const softOcclusionMaterial = FaceMocapPlugin.createSoftOccluderMaterial();
+            const wireframeDebugMaterial = new THREE.MeshBasicMaterial({
+                wireframe: true,
+                color: 0x00ffcc,
+                transparent: true,
+                opacity: 0.85,
+                depthWrite: true,
+            });
+
+            // Create procedural rounded cranial occluder (sphere/ellipsoid for natural skull contour)
+            // Tuned to anatomical cranial volume: width 13.8cm, height 14.8cm, depth 16.5cm
+            const cranialGeo = new THREE.SphereGeometry(6.9, 32, 24);
+            cranialGeo.scale(1.0, 1.07, 1.2); // Anatomical skull proportions
+            const cranialOccluderMesh = new THREE.Mesh(
+                cranialGeo,
+                store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial
+            );
+            cranialOccluderMesh.name = 'CranialVolumeOccluder';
+            cranialOccluderMesh.position.set(0, -0.6, -5.2); // Sits at cranial core, fully behind temples & nasal plane
+            cranialOccluderMesh.renderOrder = -1;
+
+            // Load face occluder via the plugin (468 vertices with live facial landmark morphing)
+            mocapPlugin.loadOccluder(headOccluderUrl).then(mesh => {
+                if (mesh) {
+                    mesh.material = store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial;
+                }
+            });
+
+            // 4. Create dummy procedural glasses (locked as reference, hidden by default)
+            const dummyGlasses = new THREE.Group();
+            dummyGlasses.name = 'DummyGlassesReference';
+            dummyGlasses.visible = false; // Controlled by store.showDummyGlasses
+
+            const frameMat = new THREE.MeshStandardMaterial({
+                color: 0x111111,
+                roughness: 0.3,
+                metalness: 0.8
+            });
+            const lensMat = new THREE.MeshStandardMaterial({
+                color: 0x00e5ff,
+                transparent: true,
+                opacity: 0.45,
+                roughness: 0.1,
+                metalness: 0.9
+            });
+
+            const rimRadius = 1.6;
+            const rimThickness = 0.15;
+            const rimDepth = 0.35;
+            const zFrontClearance = 5.6;
+
+            const leftRimOuterGeo = new THREE.CylinderGeometry(rimRadius, rimRadius, rimDepth, 32);
+            leftRimOuterGeo.rotateX(Math.PI / 2);
+            const leftRim = new THREE.Mesh(leftRimOuterGeo, frameMat);
+            leftRim.position.set(-3.2, 2.5, zFrontClearance);
+            dummyGlasses.add(leftRim);
+
+            const leftLensGeo = new THREE.CylinderGeometry(rimRadius - rimThickness, rimRadius - rimThickness, 0.1, 32);
+            leftLensGeo.rotateX(Math.PI / 2);
+            const leftLens = new THREE.Mesh(leftLensGeo, lensMat);
+            leftLens.position.set(-3.2, 2.5, zFrontClearance);
+            dummyGlasses.add(leftLens);
+
+            const rightRimOuterGeo = new THREE.CylinderGeometry(rimRadius, rimRadius, rimDepth, 32);
+            rightRimOuterGeo.rotateX(Math.PI / 2);
+            const rightRim = new THREE.Mesh(rightRimOuterGeo, frameMat);
+            rightRim.position.set(3.2, 2.5, zFrontClearance);
+            dummyGlasses.add(rightRim);
+
+            const rightLensGeo = new THREE.CylinderGeometry(rimRadius - rimThickness, rimRadius - rimThickness, 0.1, 32);
+            rightLensGeo.rotateX(Math.PI / 2);
+            const rightLens = new THREE.Mesh(rightLensGeo, lensMat);
+            rightLens.position.set(3.2, 2.5, zFrontClearance);
+            dummyGlasses.add(rightLens);
+
+            const bridgeGeo = new THREE.BoxGeometry(1.6, 0.25, 0.3);
+            const bridge = new THREE.Mesh(bridgeGeo, frameMat);
+            bridge.position.set(0, 2.7, zFrontClearance + 0.1);
+            dummyGlasses.add(bridge);
+
+            const templeLength = 9.2;
+            const templeGeo = new THREE.BoxGeometry(0.2, 0.3, templeLength);
+            const leftTemple = new THREE.Mesh(templeGeo, frameMat);
+            leftTemple.position.set(-5.4, 2.5, zFrontClearance - templeLength / 2);
+            leftTemple.rotation.y = 0.045;
+            dummyGlasses.add(leftTemple);
+
+            const rightTemple = new THREE.Mesh(templeGeo, frameMat);
+            rightTemple.position.set(5.4, 2.5, zFrontClearance - templeLength / 2);
+            rightTemple.rotation.y = -0.045;
+            dummyGlasses.add(rightTemple);
+
             // Sync local app state to the core plugin
             videoAutorun = autorun(() => {
                 if (store.camera) {
@@ -129,6 +230,24 @@ const ThreeD = () => {
                 if (store.lipstickColor) mocapPlugin.lipstickColor = store.lipstickColor;
                 if (store.lipstickOpacity !== undefined) mocapPlugin.lipstickOpacity = store.lipstickOpacity;
                 mocapPlugin.activeModelId = 'glasses';
+
+                // Occluder always stays visible and active; toggle swaps between debug wireframe and soft depth occlusion
+                mocapPlugin.occluderVisible = true;
+                const targetMat = store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial;
+
+                if (mocapPlugin.faceOccluderMesh) {
+                    mocapPlugin.faceOccluderMesh.visible = true;
+                    if (mocapPlugin.faceOccluderMesh.material !== targetMat) {
+                        mocapPlugin.faceOccluderMesh.material = targetMat;
+                    }
+                }
+
+                if (cranialOccluderMesh.material !== targetMat) {
+                    cranialOccluderMesh.material = targetMat;
+                }
+                cranialOccluderMesh.visible = true;
+
+                dummyGlasses.visible = !!store.showDummyGlasses;
 
                 // Fix mirrored stats
                 const statsPlugin = viewer.getPlugin(StatsPlugin);
@@ -152,185 +271,101 @@ const ThreeD = () => {
                 }
             }, 100);
 
-            // Ensure transparent background so video underneath is visible
-            viewerStore.setBackgroundColor('transparent');
-
-            // Load full 3D head occluder (with temples and ears for accurate occlusion)
-            const gltfLoader = new GLTFLoader();
-            gltfLoader.load(headOccluderUrl, (gltf) => {
-                const occluder = gltf.scene;
-                occluder.scale.set(1, 1.1, 1);
-                occluder.traverse((node) => {
-                    if (node.isMesh) {
-                        const mat = new THREE.MeshStandardMaterial();
-                        mat.colorWrite = false;
-                        mat.depthWrite = true;
-                        node.renderOrder = -1;
-                        node.material = mat;
-                    }
-                });
-                mocapPlugin.faceOccluderMesh = occluder;
-            }, undefined, (err) => {
-                console.warn("⚠️ Failed to load head occluder glb:", err);
-            });
-
-            // 4. Load Models and manage switcher
-            let currentModelGroup = null;
+            // 5. Load Real Eyewear Models aligned with locked front-face bounding box
             let activeLoadId = 0;
-
             const loadModel = async (index) => {
                 const loadId = ++activeLoadId;
                 const modelDef = AVAILABLE_MODELS[index];
 
                 try {
-                    const configResult = await EyewearConfigurator.changeModel(viewer, modelDef.url, modelDef.scale || 100);
-
-                    if (loadId !== activeLoadId) {
-                        configResult.scene.traverse((child) => {
-                            if (child.isMesh) {
-                                child.geometry.dispose();
-                                if (Array.isArray(child.material)) {
-                                    child.material.forEach((m) => m.dispose());
-                                } else if (child.material) {
-                                    child.material.dispose();
-                                }
-                            }
-                        });
-                        return;
-                    }
-
-                    // Remove old model
-                    if (currentModelGroup) {
-                        viewer.scene.remove(currentModelGroup);
-                        currentModelGroup.traverse((child) => {
-                            if (child.isMesh) {
-                                child.geometry.dispose();
-                                if (Array.isArray(child.material)) {
-                                    child.material.forEach((m) => m.dispose());
-                                } else if (child.material) {
-                                    child.material.dispose();
-                                }
-                            }
-                        });
-                    }
+                    const glassesNode = await eyewearPlugin.loadModel(modelDef.url);
+                    if (loadId !== activeLoadId) return;
 
                     if (configAutorun) {
                         configAutorun();
+                        configAutorun = null;
                     }
 
-                    // Scale the model so its maximum bounding box dimension is 5
-                    const box = new THREE.Box3().setFromObject(configResult.scene);
-                    const size = new THREE.Vector3();
-                    box.getSize(size);
+                    // Extract parts from the plugin's strongly typed EyewearMeshNodes
+                    const meshNodes = eyewearPlugin.meshNodes;
+                    const frameNodes = eyewearPlugin.frameNodes;
+                    const lensNodes = eyewearPlugin.lensNodes;
 
-
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    if (maxDim > 0) {
-                        const scaleFactor = 5 / maxDim;
-
-                        configResult.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-                    }
-
-                    // Center the model's geometry to ensure it aligns properly with the face anchor
-                    // Recompute box after scaling
-                    box.setFromObject(configResult.scene);
-                    const center = new THREE.Vector3();
-
-                    box.getCenter(center);
-                    // Apply manual offsets for face alignment
-                    center.y -= 2;
-                    center.z += 1;
-                    // We shift the scene negatively by the center offset
-                    configResult.scene.position.sub(center);
-
-                    // Manually extract all materials from the scene to bypass any configurator filtering
                     const extractedMatNames = [];
-                    const extractedMatProps = {};
-                    
-                    configResult.scene.traverse((child) => {
-                        if (child.isMesh && child.material) {
-                            const mats = Array.isArray(child.material) ? child.material : [child.material];
-                            mats.forEach(mat => {
-                                if (!extractedMatNames.includes(mat.name)) {
-                                    extractedMatNames.push(mat.name);
-                                    extractedMatProps[mat.name] = {
-                                        color: '#' + mat.color.getHexString(),
-                                        opacity: mat.opacity,
-                                        metalness: mat.metalness,
-                                        roughness: mat.roughness,
-                                        transparent: mat.transparent,
-                                        depthWrite: mat.depthWrite
-                                    };
-                                }
-                            });
-                        }
-                    });
+                    if (frameNodes.length > 0) extractedMatNames.push('Frame');
+                    if (lensNodes.length > 0) extractedMatNames.push('Lens');
 
                     store.glassConfigs = {
-                        meshes: configResult.meshNames || [],
+                        meshes: meshNodes.map(m => m.name),
                         materials: extractedMatNames
                     };
 
                     const newVisibility = {};
-                    configResult.meshNames.forEach(name => {
-                        newVisibility[name] = configResult.meshVisibility[name] !== false;
+                    meshNodes.forEach(m => {
+                        newVisibility[m.name] = m.visible;
                     });
                     store.meshVisibility = newVisibility;
 
                     const newProps = {};
-                    extractedMatNames.forEach(name => {
-                        const baseProps = { ...extractedMatProps[name] };
-                        const nameLower = name.toLowerCase();
-                        
-                        if (nameLower.includes('frame')) {
-                            baseProps.transparent = false;
-                            baseProps.opacity = 1.0;
-                        } else if (nameLower.includes('lens')) {
-                            baseProps.transparent = true;
-                            baseProps.opacity = 0.5;
-                            baseProps.metalness = 0.5;
-                            baseProps.roughness = 0.2;
-                            baseProps.depthWrite = false;
-                        }
-                        newProps[name] = baseProps;
-                    });
+                    if (frameNodes.length > 0) {
+                        const firstFrameMat = frameNodes[0].eyewearMaterial;
+                        newProps['Frame'] = {
+                            color: firstFrameMat.color,
+                            opacity: firstFrameMat.opacity,
+                            metalness: firstFrameMat.metalness,
+                            roughness: firstFrameMat.roughness,
+                            transparent: firstFrameMat.transparent,
+                        };
+                    }
+                    if (lensNodes.length > 0) {
+                        const firstLensMat = lensNodes[0].eyewearMaterial;
+                        newProps['Lens'] = {
+                            color: firstLensMat.color,
+                            opacity: firstLensMat.opacity,
+                            metalness: firstLensMat.metalness,
+                            roughness: firstLensMat.roughness,
+                            transparent: firstLensMat.transparent,
+                        };
+                    }
                     store.materialProps = newProps;
 
+                    // Bind reactive updates via EyewearPlugin APIs
                     configAutorun = autorun(() => {
-                        configResult.configurableMeshes.forEach(mesh => {
-                            if (store.meshVisibility[mesh.name] !== undefined) {
-                                mesh.visible = store.meshVisibility[mesh.name];
+                        // Visibility sync
+                        meshNodes.forEach(meshNode => {
+                            if (store.meshVisibility[meshNode.name] !== undefined) {
+                                meshNode.visible = store.meshVisibility[meshNode.name];
                             }
                         });
 
-                        // Ensure autorun triggers for all extracted materials
-                        configResult.scene.traverse((child) => {
-                            if (child.isMesh && child.material) {
-                                const mats = Array.isArray(child.material) ? child.material : [child.material];
-                                mats.forEach(mat => {
-                                    const props = store.materialProps[mat.name];
-                                    if (props) {
-                                        if (props.color) mat.color.set(props.color);
-                                        if (props.roughness !== undefined) mat.roughness = props.roughness;
-                                        if (props.metalness !== undefined) mat.metalness = props.metalness;
-                                        if (props.transparent !== undefined) mat.transparent = props.transparent;
-                                        if (props.depthWrite !== undefined) mat.depthWrite = props.depthWrite;
-                                        if (mat.transparent && props.opacity !== undefined) mat.opacity = props.opacity;
-                                        mat.needsUpdate = true;
-                                    }
-                                });
-                            }
-                        });
+                        // Frame material sync
+                        if (store.materialProps['Frame']) {
+                            const fp = store.materialProps['Frame'];
+                            eyewearPlugin.setFrameColor(fp.color, {
+                                roughness: fp.roughness,
+                                metalness: fp.metalness,
+                                opacity: fp.opacity
+                            });
+                        }
+
+                        // Lens material sync
+                        if (store.materialProps['Lens']) {
+                            const lp = store.materialProps['Lens'];
+                            eyewearPlugin.setLensColor(lp.color, {
+                                opacity: lp.opacity,
+                                roughness: lp.roughness,
+                                metalness: lp.metalness
+                            });
+                        }
                     });
 
-                    const group = new THREE.Group();
-                    group.add(configResult.scene);
-                    currentModelGroup = group;
+                    // Register with mocap plugin using native Object3D root
+                    glassesNode.nativeObject.add(dummyGlasses);
+                    glassesNode.nativeObject.add(cranialOccluderMesh);
 
-                    viewer.scene.add(group);
                     mocapPlugin.registerModel({
                         id: 'glasses',
-                        model: group,
+                        model: glassesNode.nativeObject,
                         scale: 1,
                         hasMorphTargets: false
                     });

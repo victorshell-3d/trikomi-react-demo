@@ -40,7 +40,8 @@ export default defineConfig(({ command }) => {
     '@trikomi/core/viewer': path.resolve(__dirname, '../../../trikomi/packages/viewer/src/index.ts'),
     '@trikomi/core/box': path.resolve(__dirname, '../../../trikomi/packages/box/src/index.ts'),
     '@trikomi/core': path.resolve(__dirname, '../../../trikomi/packages/core/src/index.ts'),
-    '@trikomi/eyewear': path.resolve(__dirname, '../../../trikomi/packages/eyewear/src/index.ts')
+    '@trikomi/eyewear': path.resolve(__dirname, '../../../trikomi/packages/eyewear/src/index.ts'),
+    '@runtime-sdk/core': path.resolve(__dirname, '../../../../trikomi-runtime/packages/core/src/index.ts')
   } : {};
 
   return {

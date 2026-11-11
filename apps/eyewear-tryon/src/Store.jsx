@@ -23,7 +23,9 @@ const store = observable({
     lipstick: false,
     lipstickColor: '#ff0055',
     lipstickOpacity: 0.6,
-    
+    showOccluderWireframe: false,
+    showDummyGlasses: false,
+
     fetchCameras() {
         if (navigator.mediaDevices) {
             navigator.mediaDevices.getUserMedia({ video: true }).then(_res => {
@@ -48,6 +50,8 @@ const store = observable({
         }
     }
 });
+
+export const keyFrames = [];
 
 export default store;
 

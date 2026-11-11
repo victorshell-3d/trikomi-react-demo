@@ -3,17 +3,21 @@ import store from "./Store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import ThreeD, { AVAILABLE_MODELS } from "./ThreeD";
+import Controls from "./Controls";
 const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
 
 
 const _videoWidth = Math.min(480, window.innerWidth * .8);
+
+const isDebugMode = new URLSearchParams(window.location.search).get('debug') === 'true' ||
+                    window.location.href.includes('debug=true');
 
 const MediaSelector = observer(() => {
     const vidRef = useRef(0);
     const fileRef = useRef(0);
     const canvasRef = useRef(0);
     const carouselRef = useRef(null);
-    const [panelOpen, setPanelOpen] = useState(true);
+    const [panelOpen, setPanelOpen] = useState(isDebugMode);
     const [containerStyle, setContainerStyle] = useState({ width: '100%', height: '100%' });
 
     useEffect(() => {
@@ -122,10 +126,22 @@ const MediaSelector = observer(() => {
                         <span style={{ fontWeight: 400, fontSize: '0.9rem', color: '#a855f7', letterSpacing: '2px', textTransform: 'uppercase' }}>Eyewear</span>
                     </div>
                 </div>
-                <button className="icon-button" title="Tools">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                </button>
+                {isDebugMode && (
+                    <button className="icon-button" title="Debug Tools" onClick={() => setPanelOpen(!panelOpen)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    </button>
+                )}
             </div>
+
+            {/* Floating Controls Panel (Only in Debug Mode) */}
+            {isDebugMode && (
+                <div className={`floating-panel ${panelOpen ? 'panel-open' : ''}`}>
+                    <div className="floating-panel-content">
+                        <h3 style={{ margin: '0 0 10px 0', fontSize: '1rem', fontWeight: 600 }}>Settings & Debug</h3>
+                        <Controls />
+                    </div>
+                </div>
+            )}
 
             {/* Vertical Color Panels */}
             {store.glassConfigs.materials.map(matName => {
