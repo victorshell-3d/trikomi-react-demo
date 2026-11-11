@@ -2,12 +2,12 @@
 
 ### 🌐 Trikomi Platform Ecosystem Bridge:
 - **`victorshell2`** ([SaaS Portal Architecture](file:///media/vijaykc/projects/victorshell2/ARCHITECTURE.md)): Main SaaS website, user authentication, subscription management, and Super Admin License Manager.
-- **`3dviewer`** ([Source SDK Architecture](file:///media/vijaykc/projects/3dviewer/ARCHITECTURE.md)): Monorepo source code for `@trikomi/core` rendering engines and WASM modules.
-- **`3dviewer-demo` (This Repository)**: Public React & TypeScript reference applications.
-- **`vanilla-demos`** ([Vanilla Demos Architecture](file:///media/vijaykc/projects/vanilla-demos/ARCHITECTURE.md)): Public zero-framework HTML5/ESM showcase hosted live on GitHub Pages.
+- **`trikomi`** ([Source SDK Architecture](file:///media/vijaykc/projects/trikomi/ARCHITECTURE.md)): Monorepo source code for `@trikomi/core` rendering engines and WASM modules.
+- **`trikomi-demo` (This Repository)**: Public React & TypeScript reference applications.
+- **`trikomi-vanilla-demos`** ([Vanilla Demos Architecture](file:///media/vijaykc/projects/trikomi-vanilla-demos/ARCHITECTURE.md)): Public zero-framework HTML5/ESM showcase hosted live on GitHub Pages.
 
 ## 1. Overview
-The `3dviewer-demo` repository contains production-ready reference applications built with **React 19**, **TypeScript**, and **Vite**. It demonstrates how enterprise B2B clients should integrate the `@trikomi/core` 3D engine into modern React environments, utilizing MobX for high-performance state binding.
+The `trikomi-demo` repository contains production-ready reference applications built with **React 19**, **TypeScript**, and **Vite**. It demonstrates how enterprise B2B clients should integrate the `@trikomi/core` 3D engine into modern React environments, utilizing MobX for high-performance state binding.
 
 ## 2. Architecture & Design Patterns
 
@@ -38,7 +38,7 @@ To optimize battery life and GPU usage on client devices, these applications hea
 
 ## 3. Directory Layout
 ```
-3dviewer-demo/
+trikomi-demo/
 ├── apps/
 │   ├── jewelry-configurator/      # Luxury ring & diamond PDP studio
 │   ├── sportswear-configurator/   # 3D sportswear customizer & logo placement

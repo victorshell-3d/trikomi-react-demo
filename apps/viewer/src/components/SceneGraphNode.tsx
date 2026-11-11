@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as THREE from 'three/webgpu';
 import { observer } from 'mobx-react-lite';
-import { useViewerStore } from '@trikomi/core';
+import { useViewerStore, ThreeViewer } from '@trikomi/core';
 
 interface SceneGraphNodeProps {
   node: THREE.Object3D;
@@ -10,6 +10,7 @@ interface SceneGraphNodeProps {
 
 export const SceneGraphNode: React.FC<SceneGraphNodeProps> = observer(({ node, depth = 0 }) => {
   const viewerStore = useViewerStore();
+  const viewer = viewerStore.viewer as ThreeViewer | null;
   const [expanded, setExpanded] = useState(true);
 
   // Filter out internal helpers (like Gizmos)
@@ -20,7 +21,7 @@ export const SceneGraphNode: React.FC<SceneGraphNodeProps> = observer(({ node, d
   // Read sceneGraphVersion to force re-render when hierarchy changes externally
   const __version = viewerStore.sceneGraphVersion;
 
-  const isSelected = viewerStore.selectedMesh === node;
+  const isSelected = viewer?.runtimeRoot?.selectedNode?.nativeObject?.uuid === node.uuid;
   
   // Handle InstancedMesh as a special case for children
   const isInstanced = (node as THREE.InstancedMesh).isInstancedMesh;
@@ -56,7 +57,11 @@ export const SceneGraphNode: React.FC<SceneGraphNodeProps> = observer(({ node, d
             if (!viewerStore.editingMode) {
               viewerStore.setEditingMode(true);
             }
-            viewerStore.setSelectedMesh(node as THREE.Object3D);
+            const runtimeRoot = viewer?.runtimeRoot;
+            if (runtimeRoot) {
+              const trikomiNode = runtimeRoot.findNodeByObject(node);
+              runtimeRoot.selectNode(trikomiNode);
+            }
           }
         }}
       >

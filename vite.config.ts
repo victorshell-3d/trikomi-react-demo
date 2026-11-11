@@ -25,7 +25,8 @@ const getDynamicAlias = (useLocalSdk: boolean) => (useLocalSdk ? {
   '@trikomi/core/viewer': path.resolve(localSdkRoot, 'viewer/src/index.ts'),
   '@trikomi/core/box': path.resolve(localSdkRoot, 'box/src/index.ts'),
   '@trikomi/core': localCoreEntry,
-  '@trikomi/sportswear': path.resolve(localSdkRoot, 'sportswear/src/index.ts')
+  '@trikomi/sportswear': path.resolve(localSdkRoot, 'sportswear/src/index.ts'),
+  '@runtime-sdk/core': path.resolve(__dirname, '../trikomi-runtime/packages/core/src/index.ts')
 } : {});
 
 const serveSecurityTxtPlugin = () => ({

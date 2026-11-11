@@ -707,15 +707,6 @@ export const Sidebar: React.FC = observer(() => {
       </div>
 
       <div className="sidebar-footer">
-        <div className="toggle-row" style={{ marginBottom: '8px' }}>
-          <span>Show Performance Stats</span>
-          <button
-            onClick={() => viewerStore.setShowStats(!viewerStore.showStats)}
-            className={`toggle-btn ${viewerStore.showStats ? 'active' : ''}`}
-          >
-            {viewerStore.showStats ? 'ON' : 'OFF'}
-          </button>
-        </div>
         <div className="footer-stats">
           <span>Engine: Three.js r165</span>
           <span>State: MobX 6</span>

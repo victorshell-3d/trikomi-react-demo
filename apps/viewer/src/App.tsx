@@ -21,8 +21,8 @@ const App = observer(() => {
   }, []);
 
   const handleExitAR = () => {
-    if (typeof window !== 'undefined' && (window as any).__SLAM_SDK_INSTANCE__) {
-      (window as any).__SLAM_SDK_INSTANCE__.stop();
+    if (typeof window !== 'undefined' && window.__SLAM_SDK_INSTANCE__) {
+      window.__SLAM_SDK_INSTANCE__.stop();
     }
     viewerStore.setIsArActive(false);
   };

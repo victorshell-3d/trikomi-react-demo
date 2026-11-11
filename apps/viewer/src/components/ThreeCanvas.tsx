@@ -5,7 +5,6 @@ import {
   ThreeViewer,
   OrbitControlsPlugin,
   GridHelperPlugin,
-  StatsPlugin,
   GLTFPlugin,
   EnvironmentPlugin,
   SSGIPlugin,
@@ -23,6 +22,7 @@ import {
   OutlinePlugin,
   MeasurementPlugin,
   CinematicPlugin,
+  modelManager,
   useViewerStore
 } from '@trikomi/core';
 
@@ -71,14 +71,13 @@ export const ThreeCanvas = observer(() => {
     // Attach basic plugins (No license required)
     viewer.addPlugin(new OrbitControlsPlugin());
     viewer.addPlugin(new GridHelperPlugin());
-    viewer.addPlugin(new StatsPlugin());
     viewer.addPlugin(new GLTFPlugin());
 
     // Scene Setup
     if (viewerStore.options.model) {
       // Load user-provided model
       const gltfPlugin = viewer.getPlugin(GLTFPlugin);
-      if (gltfPlugin) {
+      if (gltfPlugin && typeof viewerStore.options.model === 'string') {
         viewerStore.setActiveModelName('Loading custom model...');
         gltfPlugin.loadModel(viewerStore.options.model).then(model => {
           viewerStore.setActiveModelName(model.name || 'Custom Model');
@@ -86,11 +85,6 @@ export const ThreeCanvas = observer(() => {
       }
     } else {
       // Fallback: Default Torus Knot
-      const modelGroup = viewer.scene.getObjectByName('ModelGroup') as THREE.Group;
-      if (!modelGroup) {
-        console.warn("ModelGroup not found for fallback geometry");
-      }
-
       const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 150, 16);
       const material = new THREE.MeshStandardMaterial({
         color: '#6366f1',
@@ -103,8 +97,13 @@ export const ThreeCanvas = observer(() => {
       torusKnot.position.y = 1.8;
       torusKnot.castShadow = true;
       torusKnot.receiveShadow = true;
-      modelGroup.add(torusKnot);
 
+      // Cleanly clear and add directly to runtimeRoot via modelManager
+      viewer.runtimeRoot.clear();
+      const torusNode = modelManager.convert(torusKnot);
+      viewer.runtimeRoot.add(torusNode);
+
+      viewerStore.setCurrentModel(torusKnot);
       viewerStore.setActiveModelName('Metallic Torus Knot (Protected Engine)');
     }
   }, [viewer]);

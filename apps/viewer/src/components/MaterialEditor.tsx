@@ -1,30 +1,55 @@
 import React, { useRef } from 'react';
+import * as THREE from 'three/webgpu';
 import { observer } from 'mobx-react-lite';
-import { useViewerStore } from '@trikomi/core';
+import { useViewerStore, ThreeViewer } from '@trikomi/core';
 
 export const MaterialEditor: React.FC = observer(() => {
   const viewerStore = useViewerStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!viewerStore.selectedMesh) {
+  const viewer = viewerStore.viewer as ThreeViewer | null;
+  const runtimeRoot = viewer?.runtimeRoot;
+  const selectedNode = runtimeRoot?.selectedNode;
+
+  if (!selectedNode) {
     return null;
   }
 
+  const rawObject = selectedNode.nativeObject;
+  const nativeMesh = (rawObject && 'isMesh' in rawObject && rawObject.isMesh)
+    ? (rawObject as THREE.Mesh)
+    : undefined;
+  const rawMaterial = nativeMesh?.material;
+  const standardMaterial = (
+    Array.isArray(rawMaterial) ? rawMaterial[0] : rawMaterial
+  ) as THREE.MeshStandardMaterial | undefined;
+
   const handleTextureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      viewerStore.setSelectedMaterialTexture(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0 && standardMaterial) {
+      const file = e.target.files[0];
+      const url = URL.createObjectURL(file);
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load(url, (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        standardMaterial.map = texture;
+        standardMaterial.needsUpdate = true;
+      });
     }
   };
 
   const clearTexture = () => {
-    viewerStore.setSelectedMaterialTexture(null);
+    if (standardMaterial && standardMaterial.map) {
+      standardMaterial.map.dispose();
+      standardMaterial.map = null;
+      standardMaterial.needsUpdate = true;
+    }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   const closeEditor = () => {
-    viewerStore.setSelectedMesh(null);
+    runtimeRoot.selectNode(null);
   };
 
   const inputStyle = {
@@ -41,6 +66,20 @@ export const MaterialEditor: React.FC = observer(() => {
 
   const labelStyle = { fontSize: '0.75rem', color: '#9ca3af', width: '24px', flexShrink: 0 };
   const rowStyle = { display: 'flex', gap: '4px', alignItems: 'center' };
+
+  // Read direct identity transforms from selectedNode
+  const pos = selectedNode.position;
+  const rotDeg = [
+    (selectedNode.rotation.x * 180) / Math.PI,
+    (selectedNode.rotation.y * 180) / Math.PI,
+    (selectedNode.rotation.z * 180) / Math.PI
+  ];
+  const scl = selectedNode.scale;
+
+  // Material color hex
+  const currentColorHex = standardMaterial?.color
+    ? `#${standardMaterial.color.getHexString()}`
+    : '#ffffff';
 
   return (
     <div
@@ -69,7 +108,7 @@ export const MaterialEditor: React.FC = observer(() => {
             Object Editor
           </h3>
           <p style={{ margin: '2px 0 0 0', fontSize: '0.7rem', color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '160px' }}>
-            {viewerStore.selectedMesh.name || 'Unnamed Object'}
+            {selectedNode.nativeObject.name || 'Unnamed Object'}
           </p>
         </div>
         <button
@@ -88,7 +127,7 @@ export const MaterialEditor: React.FC = observer(() => {
         </button>
       </div>
 
-      {/* Transform Section */}
+      {/* Transform Section - Direct Identity */}
       <div style={{ marginBottom: '16px' }}>
         <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '8px' }}>Transform</span>
         
@@ -96,30 +135,105 @@ export const MaterialEditor: React.FC = observer(() => {
           {/* Position */}
           <div style={rowStyle}>
             <span style={labelStyle}>Pos</span>
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshPosition[0]} onChange={e => viewerStore.setSelectedMeshPosition(parseFloat(e.target.value) || 0, viewerStore.selectedMeshPosition[1], viewerStore.selectedMeshPosition[2])} />
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshPosition[1]} onChange={e => viewerStore.setSelectedMeshPosition(viewerStore.selectedMeshPosition[0], parseFloat(e.target.value) || 0, viewerStore.selectedMeshPosition[2])} />
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshPosition[2]} onChange={e => viewerStore.setSelectedMeshPosition(viewerStore.selectedMeshPosition[0], viewerStore.selectedMeshPosition[1], parseFloat(e.target.value) || 0)} />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={pos.x}
+              onChange={e => {
+                pos.x = parseFloat(e.target.value) || 0;
+              }}
+            />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={pos.y}
+              onChange={e => {
+                pos.y = parseFloat(e.target.value) || 0;
+              }}
+            />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={pos.z}
+              onChange={e => {
+                pos.z = parseFloat(e.target.value) || 0;
+              }}
+            />
           </div>
           
-          {/* Rotation */}
+          {/* Rotation (deg) */}
           <div style={rowStyle}>
             <span style={labelStyle}>Rot</span>
-            <input type="number" step="1" style={inputStyle} value={Math.round(viewerStore.selectedMeshRotation[0])} onChange={e => viewerStore.setSelectedMeshRotation(parseFloat(e.target.value) || 0, viewerStore.selectedMeshRotation[1], viewerStore.selectedMeshRotation[2])} />
-            <input type="number" step="1" style={inputStyle} value={Math.round(viewerStore.selectedMeshRotation[1])} onChange={e => viewerStore.setSelectedMeshRotation(viewerStore.selectedMeshRotation[0], parseFloat(e.target.value) || 0, viewerStore.selectedMeshRotation[2])} />
-            <input type="number" step="1" style={inputStyle} value={Math.round(viewerStore.selectedMeshRotation[2])} onChange={e => viewerStore.setSelectedMeshRotation(viewerStore.selectedMeshRotation[0], viewerStore.selectedMeshRotation[1], parseFloat(e.target.value) || 0)} />
+            <input
+              type="number"
+              step="1"
+              style={inputStyle}
+              value={Math.round(rotDeg[0])}
+              onChange={e => {
+                const deg = parseFloat(e.target.value) || 0;
+                selectedNode.rotation.x = (deg * Math.PI) / 180;
+              }}
+            />
+            <input
+              type="number"
+              step="1"
+              style={inputStyle}
+              value={Math.round(rotDeg[1])}
+              onChange={e => {
+                const deg = parseFloat(e.target.value) || 0;
+                selectedNode.rotation.y = (deg * Math.PI) / 180;
+              }}
+            />
+            <input
+              type="number"
+              step="1"
+              style={inputStyle}
+              value={Math.round(rotDeg[2])}
+              onChange={e => {
+                const deg = parseFloat(e.target.value) || 0;
+                selectedNode.rotation.z = (deg * Math.PI) / 180;
+              }}
+            />
           </div>
 
           {/* Scale */}
           <div style={rowStyle}>
             <span style={labelStyle}>Scl</span>
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshScale[0]} onChange={e => viewerStore.setSelectedMeshScale(parseFloat(e.target.value) || 0, viewerStore.selectedMeshScale[1], viewerStore.selectedMeshScale[2])} />
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshScale[1]} onChange={e => viewerStore.setSelectedMeshScale(viewerStore.selectedMeshScale[0], parseFloat(e.target.value) || 0, viewerStore.selectedMeshScale[2])} />
-            <input type="number" step="0.1" style={inputStyle} value={viewerStore.selectedMeshScale[2]} onChange={e => viewerStore.setSelectedMeshScale(viewerStore.selectedMeshScale[0], viewerStore.selectedMeshScale[1], parseFloat(e.target.value) || 0)} />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={scl.x}
+              onChange={e => {
+                scl.x = parseFloat(e.target.value) || 0;
+              }}
+            />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={scl.y}
+              onChange={e => {
+                scl.y = parseFloat(e.target.value) || 0;
+              }}
+            />
+            <input
+              type="number"
+              step="0.1"
+              style={inputStyle}
+              value={scl.z}
+              onChange={e => {
+                scl.z = parseFloat(e.target.value) || 0;
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {viewerStore.selectedMaterial && (
+      {standardMaterial && (
         <>
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '16px 0' }} />
           
@@ -128,8 +242,11 @@ export const MaterialEditor: React.FC = observer(() => {
             <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e5e7eb' }}>Base Color</span>
             <input
               type="color"
-              value={viewerStore.selectedMaterialColor}
-              onChange={(e) => viewerStore.setSelectedMaterialColor(e.target.value)}
+              value={currentColorHex}
+              onChange={(e) => {
+                standardMaterial.color.set(e.target.value);
+                standardMaterial.needsUpdate = true;
+              }}
               style={{
                 width: '32px',
                 height: '24px',
@@ -161,7 +278,7 @@ export const MaterialEditor: React.FC = observer(() => {
                   cursor: 'pointer'
                 }}
               />
-              {(viewerStore.selectedMaterial as import('three').MeshStandardMaterial).map && (
+              {standardMaterial.map && (
                 <button
                   onClick={clearTexture}
                   style={{
@@ -186,30 +303,34 @@ export const MaterialEditor: React.FC = observer(() => {
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                 <span style={{ fontSize: '0.75rem', color: '#e5e7eb' }}>Metalness</span>
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{viewerStore.selectedMaterialMetalness.toFixed(2)}</span>
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{standardMaterial.metalness.toFixed(2)}</span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.01"
-                value={viewerStore.selectedMaterialMetalness}
-                onChange={(e) => viewerStore.setSelectedMaterialMetalness(parseFloat(e.target.value))}
+                value={standardMaterial.metalness}
+                onChange={(e) => {
+                  standardMaterial.metalness = parseFloat(e.target.value);
+                }}
                 style={{ width: '100%', accentColor: '#818cf8', cursor: 'pointer', height: '4px' }}
               />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                 <span style={{ fontSize: '0.75rem', color: '#e5e7eb' }}>Roughness</span>
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{viewerStore.selectedMaterialRoughness.toFixed(2)}</span>
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>{standardMaterial.roughness.toFixed(2)}</span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="1"
                 step="0.01"
-                value={viewerStore.selectedMaterialRoughness}
-                onChange={(e) => viewerStore.setSelectedMaterialRoughness(parseFloat(e.target.value))}
+                value={standardMaterial.roughness}
+                onChange={(e) => {
+                  standardMaterial.roughness = parseFloat(e.target.value);
+                }}
                 style={{ width: '100%', accentColor: '#818cf8', cursor: 'pointer', height: '4px' }}
               />
             </div>

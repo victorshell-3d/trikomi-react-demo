@@ -6,7 +6,9 @@ import {
   ThreeViewer,
   GLTFPlugin,
   OrbitControlsPlugin,
-  ExportPlugin
+  TransformGizmoPlugin,
+  ExportPlugin,
+  modelManager
 } from '@trikomi/core';
 import { EighthWallSlamSDK } from '@trikomi/core/8thwall';
 
@@ -15,6 +17,10 @@ declare global {
     __THREE_VIEWER_INSTANCE__?: ThreeViewer;
     __SLAM_SDK_INSTANCE__?: EighthWallSlamSDK;
   }
+}
+
+interface WindowWithXR8 extends Window {
+  XR8?: unknown;
 }
 
 export const Toolbar: React.FC = observer(() => {
@@ -33,7 +39,8 @@ export const Toolbar: React.FC = observer(() => {
       }
       viewerStore.setIsArActive(false);
     } else {
-      if (typeof window === 'undefined' || !(window as any).XR8) {
+      const win = typeof window !== 'undefined' ? (window as WindowWithXR8) : null;
+      if (!win || !win.XR8) {
         alert('8th Wall WebAR engine is loading or not supported on this browser/device.');
         return;
       }
@@ -75,12 +82,10 @@ export const Toolbar: React.FC = observer(() => {
     // Optional: position randomly so they don't exactly overlap
     mesh.position.set((Math.random() - 0.5) * 4, Math.random() * 2 + 1, (Math.random() - 0.5) * 4);
 
-    const group = viewer.scene.getObjectByName('ModelGroup');
-    if (group) {
-      group.add(mesh);
-    } else {
-      viewer.scene.add(mesh);
-    }
+    // Add directly to viewer.runtimeRoot via modelManager
+    const meshNode = modelManager.convert(mesh);
+    viewer.runtimeRoot.add(meshNode);
+    viewerStore.setCurrentModel(mesh);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -293,45 +298,54 @@ export const Toolbar: React.FC = observer(() => {
       {/* Gizmo Tools (Only visible in Editing Mode) */}
       {viewerStore.editingMode && (
         <div style={{ display: 'flex', flexShrink: 0, background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '2px', marginLeft: '8px' }}>
-          <button
-            onClick={() => viewerStore.setTransformMode('translate')}
-            className={`toolbar-btn ${viewerStore.transformMode === 'translate' ? 'active' : ''}`}
-            title="Translate (Move)"
-            style={{ width: '32px', height: '32px', padding: 0 }}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="5 9 2 12 5 15" />
-              <polyline points="9 5 12 2 15 5" />
-              <polyline points="19 9 22 12 19 15" />
-              <polyline points="9 19 12 22 15 19" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <line x1="12" y1="2" x2="12" y2="22" />
-            </svg>
-          </button>
-          <button
-            onClick={() => viewerStore.setTransformMode('rotate')}
-            className={`toolbar-btn ${viewerStore.transformMode === 'rotate' ? 'active' : ''}`}
-            title="Rotate"
-            style={{ width: '32px', height: '32px', padding: 0 }}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-              <path d="M3 3v5h5" />
-            </svg>
-          </button>
-          <button
-            onClick={() => viewerStore.setTransformMode('scale')}
-            className={`toolbar-btn ${viewerStore.transformMode === 'scale' ? 'active' : ''}`}
-            title="Scale"
-            style={{ width: '32px', height: '32px', padding: 0 }}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M21 3L3 21" />
-              <path d="M21 15v6h-6" />
-              <path d="M3 9V3h6" />
-            </svg>
-          </button>
+          {(() => {
+            const gizmoPlugin = viewerStore.viewer?.getPlugin(TransformGizmoPlugin);
+            const currentMode = gizmoPlugin?.transformMode ?? 'translate';
+
+            return (
+              <>
+                <button
+                  onClick={() => gizmoPlugin?.setMode('translate')}
+                  className={`toolbar-btn ${currentMode === 'translate' ? 'active' : ''}`}
+                  title="Translate (Move)"
+                  style={{ width: '32px', height: '32px', padding: 0 }}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="5 9 2 12 5 15" />
+                    <polyline points="9 5 12 2 15 5" />
+                    <polyline points="19 9 22 12 19 15" />
+                    <polyline points="9 19 12 22 15 19" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <line x1="12" y1="2" x2="12" y2="22" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => gizmoPlugin?.setMode('rotate')}
+                  className={`toolbar-btn ${currentMode === 'rotate' ? 'active' : ''}`}
+                  title="Rotate"
+                  style={{ width: '32px', height: '32px', padding: 0 }}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => gizmoPlugin?.setMode('scale')}
+                  className={`toolbar-btn ${currentMode === 'scale' ? 'active' : ''}`}
+                  title="Scale"
+                  style={{ width: '32px', height: '32px', padding: 0 }}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M21 3L3 21" />
+                    <path d="M21 15v6h-6" />
+                    <path d="M3 9V3h6" />
+                  </svg>
+                </button>
+              </>
+            );
+          })()}
         </div>
       )}
 

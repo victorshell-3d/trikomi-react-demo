@@ -39,7 +39,7 @@ This workspace is organized as a unified `pnpm` monorepo containing 8 production
 ## 📁 Repository Structure
 
 ```
-3dviewer-demo/
+trikomi-demo/
 ├── apps/                        # Production React / Vite demonstration applications
 │   ├── 360tour/                 # Virtual 360 tour editor and viewer
 │   ├── 8theye/                  # 8thWall WebAR eyewear try-on app

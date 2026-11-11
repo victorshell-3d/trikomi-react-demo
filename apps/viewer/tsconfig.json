@@ -14,7 +14,11 @@
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@runtime-sdk/core": ["/media/vijaykc/projects/trikomi-runtime/packages/core/src/index.ts"],
+      "three": ["../../node_modules/@types/three"]
+    }
   },
   "include": ["src"]
 }

@@ -24,16 +24,17 @@ const MeasurementLabel: React.FC<LabelProps> = ({ text, worldPos, color }) => {
     
     const updatePosition = () => {
       const viewer = viewerStore.viewer as ThreeViewer;
-      if (viewer && viewer.camera) {
+      if (viewer && viewer.camera && viewer.container) {
         const vector = new THREE.Vector3(worldPos[0], worldPos[1], worldPos[2]);
-        // Project to screen space
+        // Project to screen space (-1 to +1)
         vector.project(viewer.camera);
         
-        // Convert to CSS coordinates
-        const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
-        const y = -(vector.y * 0.5 - 0.5) * window.innerHeight;
+        // Convert to container-relative coordinates
+        const rect = viewer.container.getBoundingClientRect();
+        const x = (vector.x * 0.5 + 0.5) * rect.width;
+        const y = -(vector.y * 0.5 - 0.5) * rect.height;
         
-        // Only show if it's somewhat in front of the camera
+        // Only show if it's in front of the camera
         if (vector.z < 1) {
           setPos({ x, y });
         } else {
@@ -45,7 +46,7 @@ const MeasurementLabel: React.FC<LabelProps> = ({ text, worldPos, color }) => {
 
     updatePosition();
     return () => cancelAnimationFrame(animationFrameId);
-  }, [worldPos]);
+  }, [worldPos, viewerStore.viewer]);
 
   return (
     <div
@@ -73,7 +74,8 @@ const MeasurementLabel: React.FC<LabelProps> = ({ text, worldPos, color }) => {
 
 export const MeasurementOverlay: React.FC = observer(() => {
   const viewerStore = useViewerStore();
-  if (!viewerStore.showMeasurements || !viewerStore.measurementData || !viewerStore.selectedMesh) {
+
+  if (!viewerStore.showMeasurements || !viewerStore.measurementData) {
     return null;
   }
 
