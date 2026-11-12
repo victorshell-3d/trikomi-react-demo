@@ -15,8 +15,8 @@ const App = () => {
         if (viewerMountRef.current) {
             viewer = new ThreeViewer(viewerMountRef.current, viewerStore);
             viewerStore.setBackgroundColor('transparent');
-            if (typeof viewer.play === 'function') {
-                viewer.play();
+            if (typeof viewer.pause === 'function') {
+                viewer.pause();
             }
         }
 
@@ -57,7 +57,7 @@ const App = () => {
 
     return (
         <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
-            <div ref={viewerMountRef} style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }} />
+            <div ref={viewerMountRef} style={{ display: 'none' }} />
             <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
                 <EyewearUI />
             </div>
