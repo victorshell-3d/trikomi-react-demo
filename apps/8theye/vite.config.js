@@ -36,6 +36,7 @@ export default defineConfig(({ command }) => {
     '@trikomi/core/viewer': path.resolve(__dirname, '../../../trikomi/packages/viewer/src/index.ts'),
     '@trikomi/core/box': path.resolve(__dirname, '../../../trikomi/packages/box/src/index.ts'),
     '@trikomi/core': path.resolve(__dirname, '../../../trikomi/packages/core/src/index.ts'),
+    '@runtime-sdk/core': path.resolve(__dirname, '../../../../trikomi-runtime/packages/core/src/index.ts'),
     '@trikomi/8theye': path.resolve(__dirname, '../../../trikomi/packages/8theye/src/index.ts')
   } : {};
 
