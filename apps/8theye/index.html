@@ -11,6 +11,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>8theye - Eyewear Try-on</title>
+  <style>
+    #root {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #xr-canvas {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 0 !important;
+      pointer-events: auto;
+    }
+  </style>
   <!-- 8th Wall requires these scripts to be loaded for its XR tracking -->
   <script src="%BASE_URL%lib/xr.js" async data-preload-chunks="face,slam"></script>
   <script src="%BASE_URL%lib/xrextras.js"></script>

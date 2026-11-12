@@ -2,7 +2,7 @@
 import store from "./Store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef } from "react";
-import './EyewearUI.css';
+import '../../eyewear-tryon/src/App.css';
 
 const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
 
@@ -32,17 +32,28 @@ const MediaSelector = observer(() => {
     }, [store.modelIndex]);
 
     return (
-        <div className="viewer-wrapper">
+        <div className="viewer-wrapper" style={{ background: 'transparent', pointerEvents: 'none', zIndex: 10 }}>
             {/* Loading Overlay */}
             {!store.loaded && (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.85)', color: '#00f2fe' }}>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'absolute',
+                    inset: 0,
+                    zIndex: 99,
+                    background: 'rgba(0,0,0,0.85)',
+                    color: 'var(--accent, #00f2fe)',
+                    pointerEvents: 'auto'
+                }}>
                     <img src={spinnerSvg} width={60} alt="Loading..." style={{ marginBottom: '15px' }} />
                     <div style={{ letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 600 }}>INITIALIZING ENGINE</div>
                 </div>
             )}
 
             {/* Top Header */}
-            <div className="app-header">
+            <div className="app-header" style={{ pointerEvents: 'auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                     <img src={`${import.meta.env.BASE_URL}logos/eyewear.png`} height={40} alt="Trikomi Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
                     <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
@@ -50,7 +61,6 @@ const MediaSelector = observer(() => {
                         <span style={{ fontWeight: 400, fontSize: '0.9rem', color: '#a855f7', letterSpacing: '2px', textTransform: 'uppercase' }}>Eyewear</span>
                     </div>
                 </div>
-
             </div>
 
             {/* Vertical Material Color Panels */}
@@ -82,7 +92,7 @@ const MediaSelector = observer(() => {
                 const presetColors = isFrame ? frameColors : lensColors;
 
                 return (
-                    <div key={matName} className={`vertical-panel ${isFrame ? 'left' : 'right'}`}>
+                    <div key={matName} className={`vertical-panel ${isFrame ? 'left' : 'right'}`} style={{ pointerEvents: 'auto' }}>
                         {presetColors.map(c => (
                             <button
                                 key={c.name}
@@ -90,6 +100,19 @@ const MediaSelector = observer(() => {
                                 style={{ background: c.hex }}
                                 title={c.name}
                                 onClick={() => {
+                                    const p = { ...store.materialProps[matName] };
+                                    p.color = c.hex;
+                                    if (c.name === 'Clear') {
+                                        p.opacity = 0.5;
+                                        p.transparent = true;
+                                    } else {
+                                        p.opacity = 1.0;
+                                    }
+                                    if (isLens) {
+                                        p.opacity = 0.75;
+                                    }
+                                    store.materialProps[matName] = p;
+
                                     if (window.applyMaterialColor) {
                                         window.applyMaterialColor(matName, c.hex);
                                     }
@@ -101,7 +124,7 @@ const MediaSelector = observer(() => {
             })}
 
             {/* Bottom Eyewear Model Selection Carousel */}
-            <div className="bottom-carousel-container">
+            <div className="bottom-carousel-container" style={{ pointerEvents: 'auto' }}>
                 <button
                     className="carousel-arrow"
                     onClick={() => {
