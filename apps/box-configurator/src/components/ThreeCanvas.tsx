@@ -251,12 +251,7 @@ export const ThreeCanvas = observer(({ }: {}) => {
     // 3. Initialize Box Builder
     const builder = new BoxBuilder(configStore);
     builder.update(); // Initial build
-    const modelGroup = viewer.scene.getObjectByName('ModelGroup') as THREE.Group;
-    if (modelGroup) {
-      modelGroup.add(builder.root);
-    } else {
-      viewer.scene.add(builder.root);
-    }
+    viewer.scene.add(builder.root);
 
     viewerRef.current = viewer;
     builderRef.current = builder;

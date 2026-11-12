@@ -41,34 +41,32 @@ export const Playground = observer(() => {
     viewerStore.setProgressiveShadowEnabled(false);
     viewerStore.setBloomEnabled(true);
 
-    // 2. Initialize ThreeViewer with all premium requested plugins
+    // 2. Initialize ThreeViewer with plugins
     const viewer = new ThreeViewer(containerRef.current, viewerStore, {
       onAuthorized: () => {
-        viewer.addPlugin(new EnvironmentPlugin());
         viewer.addPlugin(new SSGIPlugin());
         viewer.addPlugin(new SSRPlugin());
         viewer.addPlugin(new ProgressiveShadowPlugin());
         viewer.addPlugin(new FloorPlugin());
-        viewer.addPlugin(new BloomPlugin());
-        viewer.addPlugin(new DiamondPlugin());
         viewer.addPlugin(new ExportPlugin());
         viewer.addPlugin(new CinematicPlugin());
       }
     });
     viewerStore.viewer = viewer;
-    viewer.addPlugin(new StatsPlugin());
-    viewerStore.showStats = true;
 
+    // Attach core rendering plugins directly
+    viewer.addPlugin(new EnvironmentPlugin());
+    viewer.addPlugin(new BloomPlugin());
+    viewer.addPlugin(new DiamondPlugin());
     viewer.addPlugin(new OrbitControlsPlugin());
     viewer.addPlugin(new GLTFPlugin());
     viewer.addPlugin(new CenterModelPlugin());
+    viewer.addPlugin(new StatsPlugin());
+    viewerStore.showStats = true;
 
     // Setup initial camera
     viewer.camera.position.set(0, 2.5, 4.5);
     viewer.camera.lookAt(0, 0, 0);
-
-    // Fetch the ModelGroup expected by the DiamondPlugin
-    const modelGroup = viewer.scene.getObjectByName('ModelGroup') as THREE.Group;
 
     viewerRef.current = viewer;
 
@@ -76,11 +74,11 @@ export const Playground = observer(() => {
     const modelToLoad = viewerStore.options.model || `${import.meta.env.BASE_URL}models/ring.glb`;
     const gltfPlugin = viewer.getPlugin(GLTFPlugin);
     if (gltfPlugin) {
-      gltfPlugin.loadModel(modelToLoad, 'jewelry_model').then(model => {
-        if (model) {
-          modelGroup.add(model);
-          viewer.getPlugin(OrbitControlsPlugin)?.resetView()
-          viewerStore.setActiveModelName('jewelry_model');
+      gltfPlugin.loadModel(modelToLoad, 'jewelry_model').then(() => {
+        viewer.getPlugin(OrbitControlsPlugin)?.resetView();
+        const diamondPlugin = viewer.getPlugin(DiamondPlugin) as any;
+        if (diamondPlugin && typeof diamondPlugin.applyDiamondMaterial === 'function') {
+          diamondPlugin.applyDiamondMaterial();
         }
       }).catch(err => console.error(`Failed to load ${modelToLoad}`, err));
     }

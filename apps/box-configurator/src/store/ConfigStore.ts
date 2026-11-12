@@ -80,10 +80,7 @@ export class ConfigStore {
         if (centerPlugin) {
           // Wait a frame for meshes to be generated
           setTimeout(() => {
-            const builder = this.viewerInstance!.scene.getObjectByName('ModelGroup');
-            if (builder) {
-              centerPlugin.center(builder);
-            }
+            centerPlugin.center(this.viewerInstance!.scene);
           }, 0);
         }
       }

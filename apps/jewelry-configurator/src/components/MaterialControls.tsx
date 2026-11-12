@@ -36,36 +36,22 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     if (!plugin) return;
 
     setActiveRingIndex(index);
-    viewerStore.setIsModelLoading(true);
+    setExpandedId(null);
+    setActiveShapes({});
+    setZRotations({});
+    setScales({});
+    setYOffsets({});
 
     try {
-      const modelGroup = viewer.scene.getObjectByName('ModelGroup') as THREE.Group;
-      if (modelGroup) {
-        // Remove existing children
-        while (modelGroup.children.length > 0) {
-          const child = modelGroup.children[0];
-          modelGroup.remove(child);
-        }
-
-        // Reset selections
-        setExpandedId(null);
-        setActiveShapes({});
-        setZRotations({});
-        setScales({});
-        setYOffsets({});
-
-        const ring = AVAILABLE_RINGS[index];
-        const newModel = await plugin.loadModel(ring.url, `jewelry_model_${index}`);
-        viewer.getPlugin(OrbitControlsPlugin)?.resetView();
-        if (newModel) {
-          modelGroup.add(newModel);
-          viewerStore.setActiveModelName(`jewelry_model_${index}`);
-        }
+      const ring = AVAILABLE_RINGS[index];
+      await plugin.loadModel(ring.url, `jewelry_model_${index}`);
+      viewer.getPlugin(OrbitControlsPlugin)?.resetView();
+      const diamondPlugin = viewer.getPlugin(DiamondPlugin) as any;
+      if (diamondPlugin && typeof diamondPlugin.applyDiamondMaterial === 'function') {
+        diamondPlugin.applyDiamondMaterial();
       }
     } catch (e) {
       console.error('Error switching rings:', e);
-    } finally {
-      viewerStore.setIsModelLoading(false);
     }
   };
 
@@ -107,12 +93,12 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     if (!viewer) return;
 
     const timeoutId = setTimeout(() => {
-      const modelGroup = viewer.scene.getObjectByName('ModelGroup');
-      if (!modelGroup) return;
+      const targetModel = viewerStore.currentModel || viewer.runtimeRoot.children[0]?.nativeObject || viewer.scene;
+      if (!targetModel) return;
 
       const uniqueMats = new Map<string, { id: string, name: string, color: string, mat: THREE.Material | import('three/webgpu').NodeMaterial, mesh: THREE.Object3D, isDiamond: boolean }>();
 
-      modelGroup.traverse((child: THREE.Object3D) => {
+      targetModel.traverse((child: THREE.Object3D) => {
         if (child.isMesh || child.isInstancedMesh) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
 
@@ -132,7 +118,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
           mats.forEach((mat) => {
             if (!mat) return;
             let displayName = child.name;
-            if (child.parent && child.parent.name && child.parent.name !== 'Scene' && child.parent.name !== 'ModelGroup') {
+            if (child.parent && child.parent.name && child.parent.name !== 'Scene') {
               displayName = child.parent.name;
             }
             if (!displayName) displayName = mat.name || 'Unnamed Material';
