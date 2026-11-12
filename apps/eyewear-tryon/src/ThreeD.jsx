@@ -2,6 +2,7 @@
 import _React, { useEffect, useRef } from 'react';
 import { autorun } from 'mobx';
 import * as THREE from 'three/webgpu';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import store from "./Store";
 import { ThreeViewer, viewerStore, GLTFPlugin, StatsPlugin } from '@trikomi/core';
@@ -123,8 +124,12 @@ const ThreeD = () => {
             // Ensure transparent background so video underneath is visible
             viewerStore.setBackgroundColor('transparent');
 
-            // Occluder Materials: Invisible Depth Masking vs Cyan Wireframe Debug
-            const softOcclusionMaterial = FaceMocapPlugin.createSoftOccluderMaterial();
+            // Occluder Materials:
+            // Standard 3D Try-On Depth Masking: writes to depth buffer before glasses render, zero color write
+            const headOcclusionMaterial = new THREE.MeshBasicMaterial({
+                colorWrite: false,
+                depthWrite: true,
+            });
             const wireframeDebugMaterial = new THREE.MeshBasicMaterial({
                 wireframe: true,
                 color: 0x00ffcc,
@@ -132,23 +137,59 @@ const ThreeD = () => {
                 opacity: 0.85,
                 depthWrite: true,
             });
+            const referenceWireframeMaterial = new THREE.MeshBasicMaterial({
+                wireframe: true,
+                color: 0x666688,
+                transparent: true,
+                opacity: 0.35,
+                depthWrite: false,
+            });
 
-            // Create procedural rounded cranial occluder (sphere/ellipsoid for natural skull contour)
-            // Tuned to anatomical cranial volume: width 13.8cm, height 14.8cm, depth 16.5cm
-            const cranialGeo = new THREE.SphereGeometry(6.9, 32, 24);
-            cranialGeo.scale(1.0, 1.07, 1.2); // Anatomical skull proportions
+            // Procedural Faceted Head Occluder (Fitted strictly inside temples with exact 5mm gap)
+            // Eyewear temples sit at X = +-7.15 cm; occluder width of 13.3 cm (X = +-6.65 cm) gives exact 5mm gap
+            const headShape = new THREE.Shape();
+            const halfWidth = 6.45;   // with 0.2cm bevel reaches max X = +-6.65 cm (exact 5mm gap to temples)
+            const zBack = -11.0;      // Back of head/cranium
+            const zSide = 0.5;        // Side corner where temples run past cheeks towards ears
+            const zPeak = 4.8;        // Front nose/face apex (sits snugly behind glasses frame front at 6.4 cm)
+
+            headShape.moveTo(-halfWidth, zBack);
+            headShape.lineTo(halfWidth, zBack);
+            headShape.lineTo(halfWidth, zSide);
+            headShape.lineTo(0, zPeak);
+            headShape.lineTo(-halfWidth, zSide);
+            headShape.closePath();
+
+            const extrudeSettings = {
+                depth: 17.0,          // Vertical cranial height spanning chin to crown
+                bevelEnabled: true,
+                bevelSegments: 4,
+                steps: 1,
+                bevelSize: 0.2,
+                bevelThickness: 0.2
+            };
+
+            const cranialGeo = new THREE.ExtrudeGeometry(headShape, extrudeSettings);
+            cranialGeo.rotateX(Math.PI / 2); // Orient vertical extrusion along Y
+            cranialGeo.computeBoundingBox();
+            const cbb = cranialGeo.boundingBox;
+            // Center X at 0, align Y center at -0.55 cm (matches MediaPipe face landmark center)
+            cranialGeo.translate(-(cbb.max.x + cbb.min.x) / 2, -0.55 - (cbb.max.y + cbb.min.y) / 2, 0);
+            cranialGeo.computeVertexNormals();
+
             const cranialOccluderMesh = new THREE.Mesh(
                 cranialGeo,
-                store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial
+                store.showOccluderWireframe ? wireframeDebugMaterial : headOcclusionMaterial
             );
             cranialOccluderMesh.name = 'CranialVolumeOccluder';
-            cranialOccluderMesh.position.set(0, -0.6, -5.2); // Sits at cranial core, fully behind temples & nasal plane
+            cranialOccluderMesh.position.set(0, 0, 0); // Position already centered and aligned in geometry
             cranialOccluderMesh.renderOrder = -1;
 
-            // Load face occluder via the plugin (468 vertices with live facial landmark morphing)
+            // Load face occluder STRICTLY for visual reference only (does not occlude)
             mocapPlugin.loadOccluder(headOccluderUrl).then(mesh => {
                 if (mesh) {
-                    mesh.material = store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial;
+                    mesh.material = referenceWireframeMaterial;
+                    mesh.renderOrder = 0;
                 }
             });
 
@@ -231,15 +272,14 @@ const ThreeD = () => {
                 if (store.lipstickOpacity !== undefined) mocapPlugin.lipstickOpacity = store.lipstickOpacity;
                 mocapPlugin.activeModelId = 'glasses';
 
-                // Occluder always stays visible and active; toggle swaps between debug wireframe and soft depth occlusion
-                mocapPlugin.occluderVisible = true;
-                const targetMat = store.showOccluderWireframe ? wireframeDebugMaterial : softOcclusionMaterial;
+                // Occlusion: cranialOccluderMesh is the SOLE active occluder
+                // faceOccluderMesh is reference only (visible strictly when showOccluderWireframe is on)
+                mocapPlugin.occluderVisible = !!store.showOccluderWireframe;
+                const targetMat = store.showOccluderWireframe ? wireframeDebugMaterial : headOcclusionMaterial;
 
                 if (mocapPlugin.faceOccluderMesh) {
-                    mocapPlugin.faceOccluderMesh.visible = true;
-                    if (mocapPlugin.faceOccluderMesh.material !== targetMat) {
-                        mocapPlugin.faceOccluderMesh.material = targetMat;
-                    }
+                    mocapPlugin.faceOccluderMesh.visible = !!store.showOccluderWireframe;
+                    mocapPlugin.faceOccluderMesh.material = referenceWireframeMaterial;
                 }
 
                 if (cranialOccluderMesh.material !== targetMat) {
