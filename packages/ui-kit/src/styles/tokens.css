@@ -1,0 +1,143 @@
+.vs-ui-root {
+  --vs-bg-start: #F4F1FC;
+  --vs-bg-end: #EAE3FA;
+
+  --vs-glass-bg: rgba(255, 255, 255, 0.78);
+  --vs-glass-strong: rgba(255, 255, 255, 0.90);
+  --vs-glass-subtle: rgba(255, 255, 255, 0.52);
+  --vs-glass-border: rgba(255, 255, 255, 0.95);
+  --vs-dashed-border: #D2C3FA;
+
+  --vs-primary: #6E2CF2;
+  --vs-primary-light: #8B46FF;
+  --vs-primary-dark: #5419D4;
+  --vs-primary-gradient: linear-gradient(135deg, #6E2CF2 0%, #8B46FF 100%);
+  --vs-primary-gradient-hover: linear-gradient(135deg, #5D1EE2 0%, #7C35F5 100%);
+  --vs-tonal-lavender: #EFE9FE;
+  --vs-tonal-hover: #E3D8FD;
+  --vs-shadow-primary: 0 8px 24px rgba(110, 44, 242, 0.34);
+
+  --vs-ink: #1A162B;
+  --vs-ink-muted: #5E5873;
+  --vs-ink-subtle: #8C85A3;
+
+  --vs-emerald: #10B981;
+  --vs-crimson: #EF4444;
+  --vs-amber: #F59E0B;
+  --vs-dark-pill: #231F34;
+
+  --vs-shadow-ambient: 0 12px 32px rgba(110, 44, 242, 0.09), 0 2px 8px rgba(26, 22, 43, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --vs-shadow-float: 0 20px 46px rgba(110, 44, 242, 0.16), 0 4px 14px rgba(26, 22, 43, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  --vs-radius-pill: 9999px;
+  --vs-radius-card: 26px;
+  --vs-blur: blur(20px);
+
+  --vs-font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --vs-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --vs-font-mono: 'JetBrains Mono', monospace;
+  --vs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --vs-secondary: var(--vs-tonal-lavender);
+  --vs-accent: var(--vs-primary);
+  --vs-success: var(--vs-emerald);
+  --vs-warning: var(--vs-amber);
+  --vs-error: var(--vs-crimson);
+  --vs-info: var(--vs-primary);
+  --vs-border: var(--vs-glass-border);
+
+  --vs-control-border: rgba(110, 44, 242, 0.18);
+  --vs-outline-border: rgba(110, 44, 242, 0.45);
+  --vs-divider: rgba(26, 22, 43, 0.08);
+  --vs-focus-ring: 0 0 0 4px rgba(110, 44, 242, 0.12);
+  --vs-disabled-bg: #F1F5F9;
+  --vs-disabled-border: #CBD5E1;
+  --vs-disabled-text: #9D96B2;
+
+  --vs-space-0: 0;
+  --vs-space-1: 0.25rem;
+  --vs-space-2: 0.5rem;
+  --vs-space-3: 0.75rem;
+  --vs-space-4: 1rem;
+  --vs-space-5: 1.25rem;
+  --vs-space-6: 1.5rem;
+  --vs-space-7: 1.75rem;
+  --vs-space-8: 2rem;
+  --vs-space-9: 2.25rem;
+  --vs-space-10: 2.5rem;
+  --vs-space-12: 3rem;
+
+  --vs-font-size-2xs: 0.625rem;
+  --vs-font-size-xs: 0.6875rem;
+  --vs-font-size-sm: 0.75rem;
+  --vs-font-size-md: 0.875rem;
+  --vs-font-size-base: 1rem;
+  --vs-font-size-lg: 1.125rem;
+  --vs-font-size-xl: 1.25rem;
+  --vs-font-size-2xl: 1.5rem;
+  --vs-font-size-3xl: 1.875rem;
+  --vs-font-size-label: 0.7rem;
+  --vs-font-size-button: 0.82rem;
+
+  --vs-font-weight-regular: 400;
+  --vs-font-weight-medium: 500;
+  --vs-font-weight-semibold: 600;
+  --vs-font-weight-bold: 700;
+  --vs-font-weight-extrabold: 800;
+
+  --vs-radius-kbd: 6px;
+  --vs-radius-control: 13px;
+  --vs-radius-swatch: 16px;
+  --vs-radius-stage: 20px;
+  --vs-radius-menu: 22px;
+  --vs-radius-rail: 30px;
+
+  --vs-blur-subtle: blur(12px);
+  --vs-blur-float: blur(24px);
+
+  --vs-btn-padding-block: 0.65rem;
+  --vs-btn-padding-inline: 1.35rem;
+  --vs-btn-font-size: var(--vs-font-size-button);
+  --vs-orbital-size: 60px;
+  --vs-circle-icon-size: 40px;
+  --vs-switch-width: 44px;
+  --vs-switch-height: 24px;
+  --vs-check-size: 19px;
+  --vs-swatch-orb-size: 34px;
+
+  --vs-shadow-primary-hover: 0 12px 28px rgba(110, 44, 242, 0.42);
+  --vs-shadow-primary-active: 0 0 0 4px rgba(110, 44, 242, 0.22);
+  --vs-shadow-button-glass: 0 6px 18px rgba(26, 22, 43, 0.06);
+  --vs-shadow-button-glass-hover: 0 10px 24px rgba(110, 44, 242, 0.16);
+
+  --vs-transition-fast: 0.16s ease;
+  --vs-transition-control: 0.2s var(--vs-ease);
+  --vs-transition-panel: 0.25s var(--vs-ease);
+  --vs-transition-overlay: 0.22s ease;
+  --vs-transition-drawer: 0.3s var(--vs-ease);
+  --vs-transition-code: 0.32s var(--vs-ease);
+  --vs-duration-spinner: 0.85s;
+  --vs-duration-shimmer: 1.6s;
+  --vs-duration-pulse: 1.8s;
+}
+
+.vs-ui-root[data-accent='indigo'] {
+  --vs-primary: #4338CA;
+  --vs-primary-light: #6366F1;
+  --vs-primary-dark: #312E81;
+  --vs-primary-gradient: linear-gradient(135deg, #4338CA 0%, #6366F1 100%);
+  --vs-primary-gradient-hover: linear-gradient(135deg, #3730A3 0%, #4F46E5 100%);
+  --vs-tonal-lavender: #EEF2FF;
+  --vs-tonal-hover: #E0E7FF;
+  --vs-shadow-primary: 0 8px 24px rgba(67, 56, 202, 0.34);
+}
+
+.vs-ui-root[data-accent='orchid'] {
+  --vs-primary: #A21CAF;
+  --vs-primary-light: #D946EF;
+  --vs-primary-dark: #86198F;
+  --vs-primary-gradient: linear-gradient(135deg, #A21CAF 0%, #D946EF 100%);
+  --vs-primary-gradient-hover: linear-gradient(135deg, #86198F 0%, #C026D3 100%);
+  --vs-tonal-lavender: #FDF4FF;
+  --vs-tonal-hover: #FAE8FF;
+  --vs-shadow-primary: 0 8px 24px rgba(162, 28, 175, 0.32);
+}

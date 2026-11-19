@@ -1,0 +1,977 @@
+.vs-ui-root .vs-floating-dock {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border: 1px solid var(--vs-glass-border);
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-glass-strong);
+  box-shadow: var(--vs-shadow-float);
+  backdrop-filter: var(--vs-blur);
+  -webkit-backdrop-filter: var(--vs-blur);
+}
+
+.vs-ui-root .vs-dock-item {
+  min-width: 0;
+}
+
+.vs-ui-root .vs-dock-metal-swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.vs-ui-root .vs-dock-divider {
+  width: 1px;
+  height: 22px;
+  flex: 0 0 auto;
+  margin: 0 0.2rem;
+  background: rgba(26, 22, 43, 0.1);
+}
+
+.vs-ui-root .vs-material-picker {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--vs-space-3);
+}
+
+.vs-ui-root .vs-material-picker__header {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vs-space-3);
+}
+
+.vs-ui-root .vs-material-picker__title,
+.vs-ui-root .vs-material-picker__active {
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-sm);
+  font-weight: var(--vs-font-weight-bold);
+}
+
+.vs-ui-root .vs-material-picker__title {
+  color: var(--vs-ink);
+}
+
+.vs-ui-root .vs-material-picker__active {
+  color: var(--vs-primary);
+  text-align: right;
+}
+
+.vs-ui-root .vs-material-swatch-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.625rem;
+}
+
+.vs-ui-root .vs-swatch-card {
+  display: flex;
+  min-width: 74px;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.75rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--vs-radius-swatch);
+  background: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  transition: all 0.2s var(--vs-ease);
+}
+
+.vs-ui-root .vs-swatch-card:hover {
+  background: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+.vs-ui-root .vs-swatch-card.is-selected {
+  border-color: var(--vs-primary);
+  background: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(110, 44, 242, 0.18);
+}
+
+.vs-ui-root .vs-swatch-card.is-selected .vs-swatch-name {
+  color: var(--vs-primary);
+  font-weight: var(--vs-font-weight-bold);
+}
+
+.vs-ui-root .vs-orb {
+  width: var(--vs-swatch-orb-size);
+  height: var(--vs-swatch-orb-size);
+  flex: 0 0 auto;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 -4px 8px rgba(0, 0, 0, 0.22),
+    inset 0 4px 6px rgba(255, 255, 255, 0.78),
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.vs-ui-root .vs-swatch-name {
+  color: var(--vs-ink);
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-xs);
+  font-weight: var(--vs-font-weight-semibold);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.vs-ui-root .vs-swatch-card:focus-visible,
+.vs-ui-root .vs-hotspot-ring:focus-visible,
+.vs-ui-root .vs-tour-scene-switcher__arrow:focus-visible {
+  outline: 2px solid var(--vs-primary);
+  outline-offset: 3px;
+}
+
+.vs-ui-root .vs-hotspot-ring {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 4px 16px rgba(110, 44, 242, 0.34);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.vs-ui-root .vs-hotspot-ring::before {
+  width: 16px;
+  height: 16px;
+  border: 3.5px solid var(--vs-primary);
+  border-radius: 50%;
+  background: #FFFFFF;
+  content: "";
+}
+
+.vs-ui-root .vs-hotspot-ring:hover {
+  transform: scale(1.14);
+}
+
+.vs-ui-root .vs-tour-scene-switcher {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vs-ui-root .vs-tour-scene-switcher__arrow {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+}
+
+.vs-ui-root .vs-tour-scene-switcher__scenes {
+  gap: 0.375rem;
+}
+
+.vs-ui-root .vs-tour-scene-switcher__scenes .vs-tab-pill:not(.is-active) {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+@media (min-width: 640px) {
+  .vs-ui-root .vs-material-swatch-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   TASK 31: SHARED CONFIGURATOR UI SUITE
+   AppHeaderBar, FloatingControlDock, GlassInspectorDrawer,
+   CanvasControlToolbar, FrostedModalDialog
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. AppHeaderBar
+   -------------------------------------------------------------------------- */
+.vs-app-header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  z-index: 200;
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur, blur(20px));
+  -webkit-backdrop-filter: var(--vs-glass-blur, blur(20px));
+  border-bottom: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  box-shadow: 0 4px 20px rgba(110, 44, 242, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--vs-space-6, 24px);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  color: var(--vs-ink, #160A30);
+  pointer-events: auto;
+}
+
+.vs-app-header-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--vs-space-4, 16px);
+}
+
+.vs-app-header-bar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-4, 16px);
+}
+
+.vs-app-header-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--vs-glass-bg, rgba(255, 255, 255, 0.78));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-pill, 9999px);
+  color: var(--vs-ink, #160A30);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--vs-shadow-ambient, 0 18px 45px rgba(22, 10, 48, 0.08));
+}
+
+.vs-app-header-back-btn:hover {
+  background: #ffffff;
+  border-color: var(--vs-accent, #6E2CF2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(110, 44, 242, 0.15);
+}
+
+.vs-app-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--vs-font-display, 'Plus Jakarta Sans', sans-serif);
+}
+
+.vs-app-header-brand__logo {
+  display: flex;
+  align-items: center;
+}
+
+.vs-app-header-brand__title {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vs-ink, #160A30);
+}
+
+.vs-app-header-brand__divider {
+  color: var(--vs-accent, #6E2CF2);
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.vs-app-header-brand__subtitle {
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--vs-accent, #6E2CF2);
+}
+
+.vs-app-header-bar__center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--vs-font-mono, 'JetBrains Mono', monospace);
+}
+
+.vs-app-header-bar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-3, 12px);
+}
+
+.vs-app-header-theme-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--vs-glass-bg, rgba(255, 255, 255, 0.78));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-pill, 9999px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.vs-theme-accent-btn {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.vs-theme-accent-btn:hover {
+  transform: scale(1.2);
+}
+
+.vs-theme-accent-btn.is-active {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--vs-ink, #160A30);
+  transform: scale(1.15);
+}
+
+.vs-theme-accent-btn--violet { background-color: #6E2CF2; }
+.vs-theme-accent-btn--indigo { background-color: #4338CA; }
+.vs-theme-accent-btn--orchid { background-color: #A21CAF; }
+
+.vs-app-header-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   2. FloatingControlDock
+   -------------------------------------------------------------------------- */
+.vs-floating-control-dock-wrapper {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.vs-floating-control-dock-wrapper--bottom {
+  bottom: 24px;
+}
+
+.vs-floating-control-dock-wrapper--top {
+  top: 84px;
+}
+
+.vs-floating-dock-popover-bubble {
+  pointer-events: auto;
+  margin-bottom: 12px;
+  min-width: 320px;
+  max-width: 520px;
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  -webkit-backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-card, 26px);
+  box-shadow: var(--vs-shadow-float, 0 28px 70px rgba(110, 44, 242, 0.16));
+  padding: 16px 20px;
+  animation: vsDockBubbleEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes vsDockBubbleEntrance {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.vs-floating-dock-popover-bubble__header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.vs-floating-dock-popover-bubble__close-btn {
+  background: transparent;
+  border: none;
+  color: var(--vs-ink-muted, #726A8A);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.vs-floating-dock-popover-bubble__close-btn:hover {
+  color: var(--vs-ink, #160A30);
+  background: rgba(110, 44, 242, 0.08);
+}
+
+.vs-floating-control-dock {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur, blur(20px));
+  -webkit-backdrop-filter: var(--vs-glass-blur, blur(20px));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-pill, 9999px);
+  box-shadow: var(--vs-shadow-float, 0 28px 70px rgba(110, 44, 242, 0.16));
+}
+
+.vs-floating-control-dock--elevation-ambient {
+  box-shadow: var(--vs-shadow-ambient, 0 18px 45px rgba(22, 10, 48, 0.08));
+}
+
+.vs-floating-dock__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--vs-radius-pill, 9999px);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--vs-ink-muted, #726A8A);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-floating-dock__tab:hover:not(:disabled) {
+  color: var(--vs-ink, #160A30);
+  background: rgba(110, 44, 242, 0.06);
+}
+
+.vs-floating-dock__tab.is-active {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+  border-color: var(--vs-accent, #6E2CF2);
+  box-shadow: 0 4px 16px rgba(110, 44, 242, 0.18);
+}
+
+.vs-floating-dock__tab:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.vs-floating-dock__tab-badge {
+  background: var(--vs-accent, #6E2CF2);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--vs-radius-pill, 9999px);
+}
+
+/* --------------------------------------------------------------------------
+   3. GlassInspectorDrawer
+   -------------------------------------------------------------------------- */
+.vs-glass-inspector-drawer {
+  position: fixed;
+  top: 84px;
+  bottom: 24px;
+  z-index: 100;
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  -webkit-backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-card, 26px);
+  box-shadow: var(--vs-shadow-float, 0 28px 70px rgba(110, 44, 242, 0.16));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  color: var(--vs-ink, #160A30);
+  pointer-events: auto;
+}
+
+.vs-glass-inspector-drawer--right {
+  right: 24px;
+}
+
+.vs-glass-inspector-drawer--right.is-collapsed {
+  transform: translateX(calc(100% + 30px));
+}
+
+.vs-glass-inspector-drawer--left {
+  left: 24px;
+}
+
+.vs-glass-inspector-drawer--left.is-collapsed {
+  transform: translateX(calc(-100% - 30px));
+}
+
+.vs-inspector-drawer__mobile-handle {
+  display: none;
+}
+
+.vs-inspector-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(110, 44, 242, 0.08);
+}
+
+.vs-inspector-drawer__title {
+  margin: 0;
+  font-family: var(--vs-font-display, 'Plus Jakarta Sans', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--vs-ink, #160A30);
+}
+
+.vs-inspector-drawer__subtitle {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--vs-ink-muted, #726A8A);
+}
+
+.vs-inspector-drawer__collapse-btn {
+  background: transparent;
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: 50%;
+  color: var(--vs-ink-muted, #726A8A);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-inspector-drawer__collapse-btn:hover {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+  border-color: var(--vs-accent, #6E2CF2);
+}
+
+.vs-inspector-drawer__tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(110, 44, 242, 0.08);
+  padding: 6px 12px;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.vs-inspector-drawer__tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--vs-radius-pill, 9999px);
+  border: none;
+  background: transparent;
+  color: var(--vs-ink-muted, #726A8A);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-inspector-drawer__tab:hover {
+  color: var(--vs-ink, #160A30);
+}
+
+.vs-inspector-drawer__tab.is-active {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+  box-shadow: 0 2px 8px rgba(110, 44, 242, 0.12);
+}
+
+.vs-inspector-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.vs-inspector-drawer__footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(110, 44, 242, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   4. CanvasControlToolbar
+   -------------------------------------------------------------------------- */
+.vs-canvas-control-toolbar {
+  position: fixed;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur, blur(20px));
+  -webkit-backdrop-filter: var(--vs-glass-blur, blur(20px));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-pill, 9999px);
+  box-shadow: var(--vs-shadow-float, 0 28px 70px rgba(110, 44, 242, 0.16));
+  pointer-events: auto;
+}
+
+.vs-canvas-control-toolbar--bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+
+.vs-canvas-control-toolbar--bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+
+.vs-canvas-control-toolbar--top-right {
+  top: 84px;
+  right: 24px;
+}
+
+.vs-canvas-control-toolbar--bottom-center {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.vs-canvas-control-toolbar--vertical {
+  flex-direction: column;
+}
+
+.vs-canvas-toolbar__btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--vs-ink-muted, #726A8A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.vs-canvas-toolbar__btn:hover {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+  border-color: var(--vs-accent, #6E2CF2);
+  box-shadow: 0 2px 8px rgba(110, 44, 242, 0.15);
+}
+
+.vs-canvas-toolbar__btn.is-active {
+  background: var(--vs-accent, #6E2CF2);
+  color: #ffffff;
+}
+
+.vs-canvas-toolbar__divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(110, 44, 242, 0.15);
+  margin: 0 4px;
+}
+
+.vs-canvas-control-toolbar--vertical .vs-canvas-toolbar__divider {
+  width: 18px;
+  height: 1px;
+  margin: 4px 0;
+}
+
+.vs-canvas-toolbar__presets {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vs-canvas-toolbar__preset-btn {
+  padding: 4px 10px;
+  border-radius: var(--vs-radius-pill, 9999px);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--vs-ink-muted, #726A8A);
+  font-family: var(--vs-font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-canvas-toolbar__preset-btn:hover {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+}
+
+.vs-canvas-toolbar__preset-btn.is-active {
+  background: #ffffff;
+  border-color: var(--vs-accent, #6E2CF2);
+  color: var(--vs-accent, #6E2CF2);
+}
+
+/* --------------------------------------------------------------------------
+   5. FrostedModalDialog
+   -------------------------------------------------------------------------- */
+.vs-frosted-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 10, 30, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: vsModalFadeIn 0.2s ease;
+  overflow-y: auto;
+}
+
+@keyframes vsModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vs-frosted-modal-dialog {
+  background: var(--vs-glass-strong, rgba(255, 255, 255, 0.90));
+  backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  -webkit-backdrop-filter: var(--vs-glass-blur-lg, blur(24px));
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: var(--vs-radius-card, 26px);
+  box-shadow: var(--vs-shadow-float, 0 28px 70px rgba(110, 44, 242, 0.16));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: calc(100vh - 48px);
+  width: 100%;
+  animation: vsModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--vs-font-body, 'Inter', sans-serif);
+  color: var(--vs-ink, #160A30);
+}
+
+@keyframes vsModalSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.vs-frosted-modal-dialog--sm { max-width: 420px; }
+.vs-frosted-modal-dialog--md { max-width: 580px; }
+.vs-frosted-modal-dialog--lg { max-width: 760px; }
+.vs-frosted-modal-dialog--xl { max-width: 960px; }
+.vs-frosted-modal-dialog--fullscreen { max-width: calc(100vw - 48px); height: calc(100vh - 48px); }
+
+.vs-frosted-modal-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(110, 44, 242, 0.08);
+}
+
+.vs-frosted-modal-dialog__title {
+  margin: 0;
+  font-family: var(--vs-font-display, 'Plus Jakarta Sans', sans-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--vs-ink, #160A30);
+}
+
+.vs-frosted-modal-dialog__subtitle {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: var(--vs-ink-muted, #726A8A);
+}
+
+.vs-frosted-modal-dialog__close-btn {
+  background: transparent;
+  border: 1px solid var(--vs-glass-border, rgba(255, 255, 255, 0.95));
+  border-radius: 50%;
+  color: var(--vs-ink-muted, #726A8A);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-frosted-modal-dialog__close-btn:hover {
+  background: #ffffff;
+  color: var(--vs-accent, #6E2CF2);
+  border-color: var(--vs-accent, #6E2CF2);
+}
+
+.vs-frosted-modal-dialog__body {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.vs-frosted-modal-dialog__footer {
+  padding: 16px 28px;
+  border-top: 1px solid rgba(110, 44, 242, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUTS: TABLET (769px - 992px) & MOBILE (<= 768px)
+   ========================================================================== */
+
+/* Tablet Breakpoint (769px to 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+  .vs-app-header-bar {
+    padding: 0 var(--vs-space-4, 16px);
+  }
+
+  .vs-app-header-back-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .vs-glass-inspector-drawer {
+    width: 320px !important;
+    right: 16px;
+    left: auto;
+  }
+
+  .vs-floating-control-dock {
+    gap: 6px;
+    padding: 6px 10px;
+  }
+
+  .vs-floating-dock__tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .vs-frosted-modal-dialog {
+    max-width: calc(100vw - 48px);
+  }
+}
+
+/* Mobile Breakpoint (<= 768px) */
+@media (max-width: 768px) {
+  .vs-app-header-bar {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .vs-app-header-back-btn__label {
+    display: none;
+  }
+
+  .vs-app-header-back-btn {
+    padding: 6px 10px;
+  }
+
+  .vs-app-header-brand__title {
+    font-size: 14px;
+  }
+
+  .vs-app-header-brand__subtitle {
+    font-size: 11px;
+    display: none;
+  }
+
+  .vs-app-header-brand__divider {
+    display: none;
+  }
+
+  .vs-app-header-bar__center {
+    display: none;
+  }
+
+  /* Floating Dock on Mobile */
+  .vs-floating-control-dock-wrapper--bottom {
+    bottom: 16px;
+    width: calc(100% - 24px);
+  }
+
+  .vs-floating-control-dock {
+    width: 100%;
+    justify-content: space-around;
+    padding: 6px 8px;
+    gap: 4px;
+  }
+
+  .vs-floating-dock__tab {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .vs-floating-dock-popover-bubble {
+    width: 100%;
+    min-width: unset;
+    border-radius: var(--vs-radius-card, 26px);
+  }
+
+  /* Glass Inspector Drawer transforms to Mobile Bottom Sheet */
+  .vs-glass-inspector-drawer {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    max-height: 65vh;
+    border-radius: 26px 26px 0 0;
+    transform: translateY(0);
+  }
+
+  .vs-glass-inspector-drawer.is-collapsed {
+    transform: translateY(100%) !important;
+  }
+
+  .vs-inspector-drawer__mobile-handle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(110, 44, 242, 0.2);
+    border-radius: 2px;
+    margin: 10px auto 4px auto;
+    cursor: pointer;
+  }
+
+  /* Canvas Toolbar on Mobile */
+  .vs-canvas-control-toolbar {
+    bottom: 80px;
+    right: 12px;
+    padding: 4px 8px;
+  }
+
+  .vs-canvas-toolbar__btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Frosted Modal on Mobile */
+  .vs-frosted-modal-backdrop {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .vs-frosted-modal-dialog {
+    max-width: 100% !important;
+    border-radius: 26px 26px 0 0;
+    max-height: 85vh;
+  }
+
+  .vs-frosted-modal-dialog__header,
+  .vs-frosted-modal-dialog__body,
+  .vs-frosted-modal-dialog__footer {
+    padding: 16px 20px;
+  }
+}
+

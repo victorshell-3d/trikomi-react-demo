@@ -1,0 +1,151 @@
+.vs-ui-root .vs-layout-container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--vs-layout-container-gutter-base, var(--vs-space-4));
+}
+
+.vs-ui-root .vs-layout-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(var(--vs-layout-grid-columns-base, 1), minmax(0, 1fr));
+  gap: var(--vs-layout-grid-gap-base, var(--vs-space-6));
+}
+
+.vs-ui-root .vs-layout-grid-item {
+  min-width: 0;
+  grid-column: var(--vs-layout-grid-item-span-base, auto);
+}
+
+.vs-ui-root .vs-layout-flex {
+  display: flex;
+  min-width: 0;
+  flex-direction: var(--vs-layout-flex-direction-base, row);
+  gap: var(--vs-layout-flex-gap-base, var(--vs-space-4));
+}
+
+.vs-ui-root .vs-layout-spacer {
+  display: block;
+  pointer-events: none;
+}
+
+.vs-ui-root .vs-layout-spacer--horizontal {
+  min-width: 0;
+}
+
+.vs-ui-root .vs-layout-spacer--vertical {
+  min-height: 0;
+}
+
+.vs-ui-root .vs-surface-panel {
+  min-width: 0;
+}
+
+.vs-ui-root .vs-surface-panel--strong {
+  background: var(--vs-glass-strong);
+}
+
+.vs-ui-root .vs-glass-panel.vs-surface-panel--stage {
+  border: 1.5px dashed var(--vs-dashed-border);
+  border-radius: var(--vs-radius-stage);
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.vs-ui-root .vs-glass-panel.vs-surface-panel--plain {
+  border-color: var(--vs-glass-border);
+  background: var(--vs-glass-strong);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.vs-ui-root .vs-glass-panel.vs-panel-elevation--float {
+  box-shadow: var(--vs-shadow-float);
+}
+
+.vs-ui-root .vs-glass-panel.vs-panel-elevation--none,
+.vs-ui-root .vs-glass-panel.vs-panel-elevation--none:hover {
+  box-shadow: none;
+}
+
+@media (min-width: 640px) {
+  .vs-ui-root .vs-layout-container {
+    padding-inline: var(--vs-layout-container-gutter-sm, var(--vs-layout-container-gutter-base, var(--vs-space-4)));
+  }
+
+  .vs-ui-root .vs-layout-grid {
+    grid-template-columns: repeat(var(--vs-layout-grid-columns-sm, var(--vs-layout-grid-columns-base, 1)), minmax(0, 1fr));
+    gap: var(--vs-layout-grid-gap-sm, var(--vs-layout-grid-gap-base, var(--vs-space-6)));
+  }
+
+  .vs-ui-root .vs-layout-grid-item {
+    grid-column: var(--vs-layout-grid-item-span-sm, var(--vs-layout-grid-item-span-base, auto));
+  }
+
+  .vs-ui-root .vs-layout-flex {
+    flex-direction: var(--vs-layout-flex-direction-sm, var(--vs-layout-flex-direction-base, row));
+    gap: var(--vs-layout-flex-gap-sm, var(--vs-layout-flex-gap-base, var(--vs-space-4)));
+  }
+}
+
+@media (min-width: 768px) {
+  .vs-ui-root .vs-layout-container {
+    padding-inline: var(--vs-layout-container-gutter-md, var(--vs-layout-container-gutter-sm, var(--vs-layout-container-gutter-base, var(--vs-space-4))));
+  }
+
+  .vs-ui-root .vs-layout-grid {
+    grid-template-columns: repeat(var(--vs-layout-grid-columns-md, var(--vs-layout-grid-columns-sm, var(--vs-layout-grid-columns-base, 1))), minmax(0, 1fr));
+    gap: var(--vs-layout-grid-gap-md, var(--vs-layout-grid-gap-sm, var(--vs-layout-grid-gap-base, var(--vs-space-6))));
+  }
+
+  .vs-ui-root .vs-layout-grid-item {
+    grid-column: var(--vs-layout-grid-item-span-md, var(--vs-layout-grid-item-span-sm, var(--vs-layout-grid-item-span-base, auto)));
+  }
+
+  .vs-ui-root .vs-layout-flex {
+    flex-direction: var(--vs-layout-flex-direction-md, var(--vs-layout-flex-direction-sm, var(--vs-layout-flex-direction-base, row)));
+    gap: var(--vs-layout-flex-gap-md, var(--vs-layout-flex-gap-sm, var(--vs-layout-flex-gap-base, var(--vs-space-4))));
+  }
+}
+
+@media (min-width: 1024px) {
+  .vs-ui-root .vs-layout-container {
+    padding-inline: var(--vs-layout-container-gutter-lg, var(--vs-layout-container-gutter-md, var(--vs-layout-container-gutter-sm, var(--vs-layout-container-gutter-base, var(--vs-space-4)))));
+  }
+
+  .vs-ui-root .vs-layout-grid {
+    grid-template-columns: repeat(var(--vs-layout-grid-columns-lg, var(--vs-layout-grid-columns-md, var(--vs-layout-grid-columns-sm, var(--vs-layout-grid-columns-base, 1)))), minmax(0, 1fr));
+    gap: var(--vs-layout-grid-gap-lg, var(--vs-layout-grid-gap-md, var(--vs-layout-grid-gap-sm, var(--vs-layout-grid-gap-base, var(--vs-space-6)))));
+  }
+
+  .vs-ui-root .vs-layout-grid-item {
+    grid-column: var(--vs-layout-grid-item-span-lg, var(--vs-layout-grid-item-span-md, var(--vs-layout-grid-item-span-sm, var(--vs-layout-grid-item-span-base, auto))));
+  }
+
+  .vs-ui-root .vs-layout-flex {
+    flex-direction: var(--vs-layout-flex-direction-lg, var(--vs-layout-flex-direction-md, var(--vs-layout-flex-direction-sm, var(--vs-layout-flex-direction-base, row))));
+    gap: var(--vs-layout-flex-gap-lg, var(--vs-layout-flex-gap-md, var(--vs-layout-flex-gap-sm, var(--vs-layout-flex-gap-base, var(--vs-space-4)))));
+  }
+}
+
+@media (min-width: 1280px) {
+  .vs-ui-root .vs-layout-container {
+    padding-inline: var(--vs-layout-container-gutter-xl, var(--vs-layout-container-gutter-lg, var(--vs-layout-container-gutter-md, var(--vs-layout-container-gutter-sm, var(--vs-layout-container-gutter-base, var(--vs-space-4))))));
+  }
+
+  .vs-ui-root .vs-layout-grid {
+    grid-template-columns: repeat(var(--vs-layout-grid-columns-xl, var(--vs-layout-grid-columns-lg, var(--vs-layout-grid-columns-md, var(--vs-layout-grid-columns-sm, var(--vs-layout-grid-columns-base, 1))))), minmax(0, 1fr));
+    gap: var(--vs-layout-grid-gap-xl, var(--vs-layout-grid-gap-lg, var(--vs-layout-grid-gap-md, var(--vs-layout-grid-gap-sm, var(--vs-layout-grid-gap-base, var(--vs-space-6))))));
+  }
+
+  .vs-ui-root .vs-layout-grid-item {
+    grid-column: var(--vs-layout-grid-item-span-xl, var(--vs-layout-grid-item-span-lg, var(--vs-layout-grid-item-span-md, var(--vs-layout-grid-item-span-sm, var(--vs-layout-grid-item-span-base, auto)))));
+  }
+
+  .vs-ui-root .vs-layout-flex {
+    flex-direction: var(--vs-layout-flex-direction-xl, var(--vs-layout-flex-direction-lg, var(--vs-layout-flex-direction-md, var(--vs-layout-flex-direction-sm, var(--vs-layout-flex-direction-base, row)))));
+    gap: var(--vs-layout-flex-gap-xl, var(--vs-layout-flex-gap-lg, var(--vs-layout-flex-gap-md, var(--vs-layout-flex-gap-sm, var(--vs-layout-flex-gap-base, var(--vs-space-4))))));
+  }
+}

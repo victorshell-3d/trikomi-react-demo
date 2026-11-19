@@ -92,7 +92,11 @@ export default defineConfig(({ command }) => {
     },
     
     resolve: {
-      alias: dynamicAlias
+      alias: {
+        ...dynamicAlias,
+        '@trikomi/ui-kit/styles.css': path.resolve(__dirname, '../../packages/ui-kit/src/styles/index.css'),
+        '@trikomi/ui-kit': path.resolve(__dirname, '../../packages/ui-kit/src/index.ts')
+      }
     },
     plugins: [
       react(),
