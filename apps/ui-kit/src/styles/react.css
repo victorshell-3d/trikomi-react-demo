@@ -1,0 +1,286 @@
+.topnav a {
+  text-decoration: none;
+}
+.react-review-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+.react-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(460px, 92vw);
+  max-height: 88svh;
+  overflow: auto;
+  border-radius: 22px;
+  padding: 24px;
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  background: rgba(16, 7, 32, 0.98);
+}
+.react-dialog::backdrop {
+  background: #03000aaa;
+  backdrop-filter: blur(3px);
+}
+.react-dialog:not([open]) {
+  display: none;
+}
+.react-drawer {
+  inset: 0 0 0 auto;
+  width: min(400px, 94vw);
+  height: 100svh;
+  max-height: 100svh;
+  margin: 0;
+  border-radius: 22px 0 0 22px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.react-drawer .drawer-body {
+  padding: 20px 0;
+  flex: 1;
+}
+.react-dialog .modal-head {
+  margin-bottom: 18px;
+}
+.react-dialog .modal-head h3 {
+  font-size: 17px;
+}
+.react-dialog .wk-segments {
+  margin-bottom: 14px;
+}
+.react-dialog .share-apps {
+  flex-wrap: wrap;
+}
+.react-dialog .copy-row input {
+  min-width: 0;
+}
+.search-react-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #090610;
+  color: var(--text);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  padding: 11px;
+}
+.react-dialog .search-item {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 13px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.react-dialog .search-results {
+  max-height: 50svh;
+  overflow: auto;
+}
+.react-dialog .drawer-foot {
+  padding: 15px 0 0;
+}
+.hotspot-card {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  transform: translateX(-50%);
+  z-index: 40;
+}
+.hotspot-card button {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--p-300);
+}
+.wk-stage-link {
+  text-decoration: none;
+}
+.react-stage[data-lighting="studio"] .stage-arcs i {
+  opacity: 0.45;
+  border-color: #ffffff59;
+  filter: none;
+}
+.react-stage[data-lighting="soft"] .stage-arcs i {
+  opacity: 0.3;
+}
+.react-stage[data-lighting="dramatic"] .stage-arcs i {
+  opacity: 0.9;
+  border-width: 3px;
+}
+.react-stage[data-material="matte"] .obj-core {
+  box-shadow:
+    0 0 18px hsl(var(--h) 60% 40%/0.3),
+    inset -10px -12px 30px #0006;
+  background: radial-gradient(
+    circle at 35% 30%,
+    hsl(var(--h) 40% 60%),
+    hsl(var(--h) 35% 38%) 60%,
+    hsl(var(--h) 30% 18%)
+  );
+}
+.react-stage[data-material="glass"] .obj-core {
+  background: radial-gradient(
+    circle at 30% 25%,
+    hsl(var(--h) 100% 90%/0.9),
+    hsl(var(--h) 80% 60%/0.35) 45%,
+    hsl(var(--h) 90% 30%/0.15) 80%
+  );
+  box-shadow:
+    0 0 40px hsl(var(--h) 90% 65%/0.35),
+    inset 0 0 40px hsl(var(--h) 100% 80%/0.25);
+}
+.react-stage[data-material="satin"] .obj-core {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--h) 80% 70%),
+    hsl(var(--h) 70% 45%) 45%,
+    hsl(var(--h) 85% 62%) 55%,
+    hsl(var(--h) 70% 30%)
+  );
+  box-shadow:
+    0 0 30px hsl(var(--h) 85% 55%/0.4),
+    inset -14px -18px 36px #0007;
+}
+@font-face {
+  font-family: Manrope;
+  src: url("./fonts/manrope.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+.api-notes {
+  padding: 24px 0;
+  color: var(--text-2);
+  font-size: 13px;
+}
+.api-notes p {
+  margin: 16px 0;
+}
+.api-notes pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.wk-field {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.wk-field-label {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.wk-input {
+  padding: 10px;
+  background: #090610;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  max-width: 100%;
+}
+.wk-range-row {
+  display: flex;
+  gap: 10px;
+}
+.wk-range-row input {
+  min-width: 0;
+  flex: 1;
+}
+.wk-segments {
+  display: flex;
+  gap: 6px;
+}
+.wk-segments button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+.wk-segments button.selected {
+  background: var(--p-600);
+}
+.wk-color-row {
+  display: flex;
+  gap: 10px;
+}
+.wk-color-chip {
+  background: var(--sample) !important;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.wk-color-chip.selected {
+  outline: 2px solid var(--p-400);
+  outline-offset: 3px;
+}
+.wk-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 14px 0;
+  font-size: 12px;
+}
+.wk-switch button {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: #51455f;
+}
+.wk-switch button.is-on {
+  background: var(--p-500);
+}
+.wk-switch button i {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  transform: translateX(3px);
+}
+.wk-switch button.is-on i {
+  transform: translateX(19px);
+}
+
+.wk-color-row button {
+  background: var(--sample);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.wk-color-row button.selected {
+  outline: 2px solid var(--p-400);
+  outline-offset: 3px;
+}
+.drawer-body {
+  overflow: auto;
+}
+.react-drawer .wk-range-row input {
+  width: 100%;
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+.topnav.topnav-static{display:flex;flex-wrap:wrap}
+
+/* Keep the shared toolbar primary action at the original full size. */
+.toolbar .toolbar-customize{padding:13px 26px;font-size:14.5px}
+.topnav a:focus-visible{outline:2px solid var(--p-400);outline-offset:2px}
+
+/* Native dialog lifecycle with original kit spacing and controls. */
+.react-drawer{padding:0;border-radius:24px 0 0 24px;border-right:0;background:var(--glass-strong)}
+.react-drawer .drawer-head{margin:0;padding:20px 22px 14px}
+.react-dialog .modal-head h3{font-size:19px;font-weight:800}
+.react-drawer .drawer-body{padding:20px 22px}
+.react-drawer .drawer-foot{padding:16px 22px}
+.react-drawer .wk-segments{margin:0 22px;padding:5px}
+.react-drawer .wk-segments button{border:0;padding:9px 6px}
+.react-drawer .wk-segments button.selected{background:var(--grad)}
+.react-drawer .wk-color-row{display:grid;gap:10px}
+.react-drawer .wk-color-row button{width:auto;height:auto;border:2px solid transparent;background:var(--dot)!important}
+.react-drawer .wk-color-row button.selected{outline:0;border-color:white;box-shadow:0 0 0 3px var(--p-500),var(--glow-sm)}
+.react-drawer .wk-field{display:block;margin:16px 0}
+.react-drawer .wk-field>span:first-child{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin:16px 0 10px}
+.react-drawer .drawer-action{padding:13px 26px;font-size:14.5px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.react-drawer{max-width:94vw}

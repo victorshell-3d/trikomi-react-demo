@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useViewerStore, DiamondPlugin, GLTFPlugin, OrbitControlsPlugin } from '@trikomi/core';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { MobilePanelControls, ResponsivePanel, PanelHeading, ScrollList, SelectableColorRow, AdjustmentGroup, ValueRange, ThumbnailGrid, EmptyPanel, ModelPicker } from '../../../ui-kit/src/index';
 
 const AVAILABLE_RINGS = [
   { name: 'Classic Solitaire', url: `${import.meta.env.BASE_URL}models/ring.glb`, thumb: `${import.meta.env.BASE_URL}thumbs/ring1.png` },
@@ -263,317 +264,32 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     }
   }, [materials, expandedId]);
 
+  const [mobilePanel, setMobilePanel] = useState("Materials");
+  const [panelOpen, setPanelOpen] = useState(false);
+
   if (materials.length === 0) return null;
 
   const activeMat = materials.find(m => m.id === expandedId) || materials[0];
 
   return (
     <>
-      <style>{`
-        .mc-scroll::-webkit-scrollbar { height: 4px; width: 4px; }
-        .mc-scroll::-webkit-scrollbar-track { background: transparent; }
-        .mc-scroll::-webkit-scrollbar-thumb { background: rgba(0, 242, 254, 0.3); border-radius: 10px; }
-        .mc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 242, 254, 0.6); }
-        .mc-range {
-          -webkit-appearance: none;
-          width: 100%;
-          height: 3px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 2px;
-          outline: none;
-        }
-        .mc-range::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 14px;
-          height: 14px;
-          border-radius: 50%;
-          background: #00f2fe;
-          cursor: pointer;
-          box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
-        }
-      `}</style>
-
-      {/* Left Panel: Materials & Colors */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        width: 'calc(100% - 40px)',
-        maxWidth: '220px',
-        maxHeight: 'calc(100dvh - 40px)',
-        overflowY: 'auto',
-        background: 'rgba(10, 12, 28, 0.70)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '16px',
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        zIndex: 10,
-        boxShadow: '0 24px 50px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 242, 254, 0.05)',
-        color: '#f8fafc'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-          <img src={`${import.meta.env.BASE_URL}logos/jewel.png`} alt="Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, background: 'linear-gradient(135deg, #ffffff 40%, #00f2fe 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Trikomi Jewelry
-            </h2>
-            <span style={{ fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
-              Configurator
-            </span>
-          </div>
-        </div>
-
-        <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
-
-        <div className="mc-scroll" style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', paddingRight: '4px' }}>
-          {materials.map((m, i) => {
-            const isActive = expandedId === m.id;
-            return (
-              <div
-                key={m.id}
-                onClick={() => setExpandedId(m.id)}
-                style={{
-
-                  background: isActive ? 'rgba(0, 242, 254, 0.1)' : 'rgba(255, 255, 255, 0.02)',
-                  border: isActive ? '1px solid rgba(0, 242, 254, 0.4)' : '1px solid rgba(255, 255, 255, 0.05)',
-                  borderRadius: '12px',
-                  padding: '8px 12px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-                }}
-              >
-                <span style={{ fontSize: '0.85rem', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 600, color: isActive ? '#fff' : '#cbd5e1', textTransform: 'capitalize' }}>
-                  {m.name.replace(/_/g, ' ')}
-                </span>
-
-                {/* Embedded Color Picker */}
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    width: '24px', height: '24px',
-                    flexShrink: 0,
-                    borderRadius: '50%',
-
-                    background: m.color,
-                    boxShadow: 'inset 0 0 4px rgba(0,0,0,0.5), 0 0 8px rgba(255,255,255,0.2)',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <input
-                    type="color"
-                    value={m.color}
-                    onChange={(e) => handleColorChange(i, e.target.value)}
-                    style={{
-                      position: 'absolute', top: -5, left: -5, width: '34px', height: '34px',
-                      opacity: 0, cursor: 'pointer'
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Relocated Scale and Rotation Sliders */}
-          {activeMat && activeMat.isDiamond && (
-            <>
-              <div style={{ height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '8px 0' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '8px 4px' }}>
-                {/* Z Rotation Slider */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Angle Offset</span>
-                    <span style={{ fontSize: '0.7rem', color: '#cbd5e1', fontFamily: 'monospace' }}>
-                      {zRotations[activeMat.id] || 0}°
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="mc-range"
-                    min="0" max="360" step="1"
-                    value={zRotations[activeMat.id] || 0}
-                    onChange={(e) => handleRotationChange(activeMat.id, activeMat.mesh, parseInt(e.target.value), false)}
-                    onMouseUp={(e) => handleRotationChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                    onTouchEnd={(e) => handleRotationChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                  />
-                </div>
-
-                {/* Scale Slider */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Scale Offset</span>
-                    <span style={{ fontSize: '0.7rem', color: '#cbd5e1', fontFamily: 'monospace' }}>
-                      {scales[activeMat.id] !== undefined ? scales[activeMat.id] : 100}%
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="mc-range"
-                    min="50" max="200" step="1"
-                    value={scales[activeMat.id] !== undefined ? scales[activeMat.id] : 100}
-                    onChange={(e) => handleScaleChange(activeMat.id, activeMat.mesh, parseInt(e.target.value), false)}
-                    onMouseUp={(e) => handleScaleChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                    onTouchEnd={(e) => handleScaleChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                  />
-                </div>
-
-                {/* Y Offset Slider */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>Height Offset</span>
-                    <span style={{ fontSize: '0.7rem', color: '#cbd5e1', fontFamily: 'monospace' }}>
-                      {yOffsets[activeMat.id] || 0}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="mc-range"
-                    min="-50" max="50" step="1"
-                    value={yOffsets[activeMat.id] || 0}
-                    onChange={(e) => handleYOffsetChange(activeMat.id, activeMat.mesh, parseInt(e.target.value), false)}
-                    onMouseUp={(e) => handleYOffsetChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                    onTouchEnd={(e) => handleYOffsetChange(activeMat.id, activeMat.mesh, parseInt((e.target as HTMLInputElement).value), true)}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Right Panel: Diamond Shapes */}
-      {activeMat && activeMat.isDiamond && Object.keys(diamondThumbs).length > 0 && (
-        <div style={{
-          position: 'absolute',
-          top: '80px',
-          right: '20px',
-          width: '80px',
-          maxHeight: 'calc(100dvh - 120px)',
-          background: 'rgba(10, 12, 28, 0.70)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '16px',
-          padding: '12px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '12px',
-          zIndex: 10,
-          boxShadow: '0 24px 50px rgba(0, 0, 0, 0.4)'
-        }}>
-          <span style={{ fontSize: '0.65rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>
-            Shapes
-          </span>
-          <div className="mc-scroll" style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', width: '100%', alignItems: 'center', paddingRight: '2px' }}>
-            {Object.entries(diamondThumbs).map(([shapeName, path]) => {
-              const isActive = activeShapes[activeMat.id] === shapeName;
-              return (
-                <div
-                  key={shapeName}
-                  onClick={() => handleShapeChange(activeMat.id, activeMat.mesh, shapeName)}
-                  title={shapeName}
-                  style={{
-                    flex: '0 0 auto',
-                    width: '48px', height: '48px',
-                    background: isActive ? 'rgba(0, 242, 254, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                    border: isActive ? '1px solid #00f2fe' : '1px solid rgba(255, 255, 255, 0.05)',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    padding: '6px',
-                    transition: 'all 0.2s',
-                    boxShadow: isActive ? '0 0 10px rgba(0, 242, 254, 0.2)' : 'none'
-                  }}
-                >
-                  <img src={`${import.meta.env.BASE_URL}${(path as string).startsWith('/') ? (path as string).slice(1) : path}`} alt={shapeName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Bottom Center Panel: Ring Carousel */}
-      <div style={{
-        position: 'absolute',
-        bottom: '30px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 'auto',
-        maxWidth: '90vw',
-        background: 'rgba(10, 12, 28, 0.70)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '16px',
-        padding: '12px 20px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        zIndex: 10,
-        boxShadow: '0 24px 50px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 242, 254, 0.05)',
-        overflowX: 'auto',
-        whiteSpace: 'nowrap'
-      }} className="mc-scroll">
-
-        <button
-          style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-          onClick={() => {
-            const len = AVAILABLE_RINGS.length;
-            handleRingChange((activeRingIndex - 1 + len) % len);
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-
-        <div style={{ display: 'flex', gap: '16px', overflow: 'hidden', padding: '4px 0' }}>
-          {AVAILABLE_RINGS.map((ring, idx) => (
-            <div
-              key={ring.name + idx}
-              onClick={() => handleRingChange(idx)}
-              style={{
-                width: '64px', height: '64px',
-                borderRadius: '12px',
-                background: activeRingIndex === idx ? 'rgba(0, 242, 254, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                border: activeRingIndex === idx ? '2px solid #00f2fe' : '1px solid rgba(255, 255, 255, 0.05)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                transition: 'all 0.2s',
-                boxShadow: activeRingIndex === idx ? '0 0 12px rgba(0, 242, 254, 0.3)' : 'none',
-                opacity: viewerStore.isModelLoading && activeRingIndex !== idx ? 0.5 : 1
-              }}
-              title={ring.name}
-            >
-              <img src={ring.thumb} alt={ring.name} style={{ width: '32px', height: '32px', objectFit: 'contain', opacity: 0.8 }} />
-              <span style={{ fontSize: '0.5rem', color: '#e2e8f0', marginTop: '4px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%', textAlign: 'center', padding: '0 4px' }}>
-                {ring.name.split(' ')[0]}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <button
-          style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-          onClick={() => {
-            const len = AVAILABLE_RINGS.length;
-            handleRingChange((activeRingIndex + 1) % len);
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-
-      </div>
+      <MobilePanelControls label="Jewelry control panel" options={["Materials", "Diamonds"]} value={mobilePanel} open={panelOpen} onSelect={value => { setMobilePanel(value); setPanelOpen(true); }} onToggle={() => setPanelOpen(!panelOpen)} />
+      <ResponsivePanel side="left" open={panelOpen && mobilePanel === "Materials"} label="Materials and colors">
+        <PanelHeading eyebrow="CUSTOMIZE" title="Materials & colors" count={materials.length}/>
+        <ScrollList>
+          {materials.map((m, index) => <SelectableColorRow key={m.id} selected={expandedId === m.id} label={`Select material ${index + 1}: ${m.name.replace(/_/g, ' ')}`} title={m.name.replace(/_/g, ' ')} detail={`${m.isDiamond ? "Diamond" : "Material"} ${index + 1}`} icon={m.isDiamond ? "gem" : "layers"} color={m.color} colorLabel={`Color for material ${index + 1}: ${m.name.replace(/_/g, ' ')}`} onSelect={() => setExpandedId(m.id)} onColor={value => handleColorChange(index, value)} />)}
+        </ScrollList>
+        {activeMat?.isDiamond && <AdjustmentGroup title="Diamond adjustments">
+          <ValueRange label="Angle offset" value={zRotations[activeMat.id] || 0} unit="°" min={0} max={360} step={1} onChange={value => handleRotationChange(activeMat.id, activeMat.mesh, value, false)} onCommit={value => handleRotationChange(activeMat.id, activeMat.mesh, value, true)} />
+          <ValueRange label="Scale offset" value={scales[activeMat.id] !== undefined ? scales[activeMat.id] : 100} unit="%" min={50} max={200} step={1} onChange={value => handleScaleChange(activeMat.id, activeMat.mesh, value, false)} onCommit={value => handleScaleChange(activeMat.id, activeMat.mesh, value, true)} />
+          <ValueRange label="Height offset" value={yOffsets[activeMat.id] || 0} min={-50} max={50} step={1} onChange={value => handleYOffsetChange(activeMat.id, activeMat.mesh, value, false)} onCommit={value => handleYOffsetChange(activeMat.id, activeMat.mesh, value, true)} />
+        </AdjustmentGroup>}
+      </ResponsivePanel>
+      {activeMat?.isDiamond && Object.keys(diamondThumbs).length > 0 ? <ResponsivePanel side="right" open={panelOpen && mobilePanel === "Diamonds"} label="Diamond shapes">
+        <PanelHeading eyebrow="DIAMOND" title="Shapes" count={Object.keys(diamondThumbs).length}/>
+        <ThumbnailGrid items={Object.entries(diamondThumbs).map(([shapeName, path]) => ({ id: shapeName, label: shapeName.replace("shape", "Cut ") || "Original", accessibleLabel: `Diamond ${shapeName}`, image: `${import.meta.env.BASE_URL}${path.startsWith('/') ? path.slice(1) : path}` }))} value={activeShapes[activeMat.id]} onChange={shapeName => handleShapeChange(activeMat.id, activeMat.mesh, shapeName)}/>
+      </ResponsivePanel> : <ResponsivePanel side="right" empty open={panelOpen && mobilePanel === "Diamonds"} label="Diamond shapes"><EmptyPanel title="Diamond shapes" description="Select a diamond material in Materials to see its shapes and adjustments." action="Materials" onAction={() => setMobilePanel("Materials")}/></ResponsivePanel>}
+      <ModelPicker label="Ring models" previousLabel="Previous ring" nextLabel="Next ring" items={AVAILABLE_RINGS.map((ring,index) => ({ id: String(index), label: ring.name, image: ring.thumb }))} value={String(activeRingIndex)} loading={viewerStore.isModelLoading} onChange={id => handleRingChange(Number(id))} onPrevious={() => handleRingChange((activeRingIndex - 1 + AVAILABLE_RINGS.length) % AVAILABLE_RINGS.length)} onNext={() => handleRingChange((activeRingIndex + 1) % AVAILABLE_RINGS.length)}/>
     </>
   );
 });

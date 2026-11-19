@@ -20,6 +20,7 @@ import {
 } from '@trikomi/core';
 import { MaterialControls } from './MaterialControls';
 import { FloatingActions } from './FloatingActions';
+import { LoadingOverlay } from '../../../ui-kit/src/index';
 
 
 export const Playground = observer(() => {
@@ -104,12 +105,7 @@ export const Playground = observer(() => {
       />
 
       {/* Loading Overlay */}
-      {viewerStore.isModelLoading && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 100, background: 'rgba(10, 12, 28, 0.8)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', color: '#00f2fe' }}>
-          <img src={`${import.meta.env.BASE_URL}svgs/spinner.svg`} width={60} alt="Loading..." style={{ marginBottom: '15px' }} />
-          <div style={{ letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 600 }}>LOADING MODEL...</div>
-        </div>
-      )}
+      {viewerStore.isModelLoading && <LoadingOverlay text="LOADING MODEL..." image={`${import.meta.env.BASE_URL}svgs/spinner.svg`} />}
 
       <FloatingActions viewerRef={viewerRef} />
       {/* Material Color Controls */}
