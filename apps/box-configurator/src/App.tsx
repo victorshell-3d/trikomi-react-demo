@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { ShapeEditorModal } from './components/ShapeEditorModal';
 import { Playground } from './components/Playground';
-import { LandingPage } from './components/LandingPage';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';
 import { configStore } from './store/ConfigStore';
+import { BoxLandingPage, VictorShellThemeProvider } from '@trikomi/ui-kit';
+import '@trikomi/ui-kit/styles.css';
 import './index.css';
 
 /** Options passed in by the widget host (e.g. a CMS embed or iframe parent). */
@@ -15,35 +16,81 @@ export interface WidgetOptions {
 }
 
 export const App = observer(({ widgetOptions }: { widgetOptions?: WidgetOptions }) => {
-  const [currentRoute, setCurrentRoute] = useState(window.location.hash || '#/');
+  const [currentRoute, setCurrentRoute] = useState(() => window.location.hash || '#/');
 
   useEffect(() => {
     const handleHashChange = () => {
       setCurrentRoute(window.location.hash || '#/');
     };
     window.addEventListener('hashchange', handleHashChange);
-    
+
     // Check for data-config provided by widget
     if (widgetOptions?.config) {
       configStore.fetchRemoteConfig(widgetOptions.config);
     }
 
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [widgetOptions]);
 
-  if (currentRoute === '#/playground') {
+  const isDemo = currentRoute.includes('demo') || currentRoute.includes('playground');
+
+  if (currentRoute === '#/playground' || currentRoute === '#playground') {
     return <Playground onBack={() => { window.location.hash = '#/'; }} />;
   }
 
-  if (configStore.landingPageOpen) {
-    return <LandingPage />;
-  }
-
   return (
-    <div className="app-container">
-      <Sidebar />
-      <MainContent />
-      {configStore.editingTemplateId && <ShapeEditorModal />}
-    </div>
+    <VictorShellThemeProvider initialAccent="violet">
+      {!isDemo ? (
+        <BoxLandingPage
+          onExploreDemo={() => {
+            window.location.hash = '#demo';
+          }}
+          exploreDemoHref="#demo"
+          theme="violet"
+        />
+      ) : (
+        <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+          {/* Back to landing page navigation pill */}
+          <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 9999 }}>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.hash = '#/';
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 16px',
+                borderRadius: '9999px',
+                background: 'rgba(255, 255, 255, 0.85)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.9)',
+                color: '#1A162B',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(110, 44, 242, 0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              <span>Back to Overview</span>
+            </button>
+          </div>
+
+          <div className="app-container">
+            <Sidebar />
+            <MainContent />
+            {configStore.editingTemplateId && <ShapeEditorModal />}
+          </div>
+        </div>
+      )}
+    </VictorShellThemeProvider>
   );
 });
+
+export default App;

@@ -1,0 +1,172 @@
+.vs-ui-root .vs-upload-dropzone {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: var(--vs-space-3);
+  padding: 1rem;
+  border: 2px dashed var(--vs-dashed-border);
+  border-radius: var(--vs-radius-swatch);
+  background: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  transition: all var(--vs-transition-control);
+}
+
+.vs-ui-root .vs-upload-dropzone:hover,
+.vs-ui-root .vs-upload-dropzone.is-dragging,
+.vs-ui-root .vs-upload-dropzone:focus-within {
+  border-color: var(--vs-primary);
+  background: #FFFFFF;
+}
+
+.vs-ui-root .vs-upload-dropzone.is-dragging,
+.vs-ui-root .vs-upload-dropzone:focus-within {
+  box-shadow: var(--vs-focus-ring);
+}
+
+.vs-ui-root .vs-upload-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+.vs-ui-root .vs-upload-file-input:focus-visible + .vs-upload-dropzone__trigger {
+  border-radius: var(--vs-radius-control);
+  box-shadow: var(--vs-focus-ring);
+}
+
+.vs-ui-root .vs-upload-dropzone__trigger {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem;
+  border: 0;
+  background: transparent;
+  color: var(--vs-ink);
+  cursor: pointer;
+  font-family: var(--vs-font-sans);
+  text-align: center;
+}
+
+.vs-ui-root .vs-upload-dropzone__icon {
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+}
+
+.vs-ui-root .vs-upload-dropzone__title {
+  max-width: 100%;
+  color: var(--vs-ink);
+  font-size: var(--vs-font-size-xs);
+  font-weight: var(--vs-font-weight-bold);
+  overflow-wrap: anywhere;
+}
+
+.vs-ui-root .vs-upload-dropzone__description {
+  max-width: 100%;
+  color: var(--vs-ink-muted);
+  font-size: var(--vs-font-size-2xs);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.vs-ui-root .vs-upload-file-info {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vs-space-2);
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--vs-glass-border);
+  border-radius: var(--vs-radius-control);
+  background: var(--vs-glass-strong);
+  text-align: left;
+}
+
+.vs-ui-root .vs-upload-file-info__details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  color: var(--vs-ink-muted);
+  font-size: var(--vs-font-size-2xs);
+}
+
+.vs-ui-root .vs-upload-file-info__name {
+  color: var(--vs-ink);
+  font-weight: var(--vs-font-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.vs-ui-root .vs-upload-file-info__remove {
+  flex: 0 0 auto;
+  padding: 0.375rem 0.625rem;
+  border: 0;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+  cursor: pointer;
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-2xs);
+  font-weight: var(--vs-font-weight-bold);
+  transition: background var(--vs-transition-fast);
+}
+
+.vs-ui-root .vs-upload-file-info__remove:hover {
+  background: var(--vs-tonal-hover);
+}
+
+.vs-ui-root .vs-upload-file-info__remove:focus-visible {
+  outline: none;
+  box-shadow: var(--vs-focus-ring);
+}
+
+.vs-ui-root .vs-upload-file-info__remove:disabled {
+  background: var(--vs-disabled-bg);
+  color: var(--vs-disabled-text);
+  cursor: not-allowed;
+}
+
+.vs-ui-root .vs-upload-dropzone__error {
+  margin: 0;
+  color: var(--vs-crimson);
+  font-size: var(--vs-font-size-2xs);
+  font-weight: var(--vs-font-weight-semibold);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.vs-ui-root .vs-upload-dropzone.is-error-state {
+  border-color: var(--vs-crimson);
+  background: #FEF2F2;
+}
+
+.vs-ui-root .vs-upload-dropzone.is-disabled {
+  border-color: var(--vs-disabled-border);
+  background: var(--vs-disabled-bg);
+  cursor: not-allowed;
+}
+
+.vs-ui-root .vs-upload-dropzone.is-disabled .vs-upload-dropzone__trigger {
+  color: var(--vs-disabled-text);
+  cursor: not-allowed;
+}
+
+.vs-ui-root .vs-upload-dropzone.is-disabled .vs-upload-dropzone__icon {
+  background: var(--vs-disabled-bg);
+  color: var(--vs-disabled-text);
+}

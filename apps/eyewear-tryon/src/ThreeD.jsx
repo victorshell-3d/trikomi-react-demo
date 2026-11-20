@@ -75,6 +75,7 @@ const ThreeD = () => {
     const viewerRef = useRef(null);
 
     useEffect(() => {
+        let isMounted = true;
         let syncInterval;
         let videoAutorun;
         let modelIndexAutorun;
@@ -86,6 +87,7 @@ const ThreeD = () => {
             // 1. Initialize ThreeViewer from @trikomi/core
             const viewer = new ThreeViewer(mountRef.current, viewerStore, {
                 onAuthorized: () => {
+                    if (!isMounted) return;
                     // 3. Setup Core FaceMocapPlugin
                     viewer.addPlugin(mocapPlugin);
                 }
@@ -106,9 +108,46 @@ const ThreeD = () => {
                 viewerStore.setShowStats(true);
             }
 
+            // Safe dummy viewer stub preventing 'runtimeRoot' on undefined when unmounting mid-flight
+            const safeEyewearStub = {
+                runtimeRoot: {
+                    clear: () => {},
+                    add: () => {},
+                    remove: () => {},
+                    traverse: () => {},
+                    children: [],
+                    findNodeByObject: () => null,
+                    selectNode: () => {},
+                },
+                store: {
+                    setActiveModelName: () => {},
+                    setCurrentModel: () => {},
+                    setIsModelLoading: () => {},
+                    setModelError: () => {},
+                },
+                enableOnDemandRendering: false,
+                requestRender: () => {},
+            };
+
+            const originalEyewearDetach = eyewearPlugin.onDetach ? eyewearPlugin.onDetach.bind(eyewearPlugin) : null;
+            eyewearPlugin.onDetach = () => {
+                if (originalEyewearDetach) originalEyewearDetach();
+                eyewearPlugin.viewer = safeEyewearStub;
+            };
+
+            const gltfPlugin = viewer.getPlugin(GLTFPlugin);
+            if (gltfPlugin) {
+                const originalGltfDetach = gltfPlugin.onDetach ? gltfPlugin.onDetach.bind(gltfPlugin) : null;
+                gltfPlugin.onDetach = () => {
+                    if (originalGltfDetach) originalGltfDetach();
+                    gltfPlugin.viewer = safeEyewearStub;
+                };
+            }
+
             // Preload Synthetic Map for the core plugin to use
             const texLoader = new THREE.TextureLoader();
             texLoader.load(envMapUrl, (tex) => {
+                if (!isMounted) return;
                 tex.mapping = THREE.EquirectangularReflectionMapping;
                 mocapPlugin.setSyntheticEnvMap(tex);
             });
@@ -187,11 +226,12 @@ const ThreeD = () => {
 
             // Load face occluder STRICTLY for visual reference only (does not occlude)
             mocapPlugin.loadOccluder(headOccluderUrl).then(mesh => {
+                if (!isMounted) return;
                 if (mesh) {
                     mesh.material = referenceWireframeMaterial;
                     mesh.renderOrder = 0;
                 }
-            });
+            }).catch(() => {});
 
             // 4. Create dummy procedural glasses (locked as reference, hidden by default)
             const dummyGlasses = new THREE.Group();
@@ -319,7 +359,7 @@ const ThreeD = () => {
 
                 try {
                     const glassesNode = await eyewearPlugin.loadModel(modelDef.url);
-                    if (loadId !== activeLoadId) return;
+                    if (!isMounted || loadId !== activeLoadId || !viewerRef.current) return;
 
                     if (configAutorun) {
                         configAutorun();
@@ -369,8 +409,11 @@ const ThreeD = () => {
                     }
                     store.materialProps = newProps;
 
+                    if (!isMounted || loadId !== activeLoadId || !viewerRef.current) return;
+
                     // Bind reactive updates via EyewearPlugin APIs
                     configAutorun = autorun(() => {
+                        if (!isMounted) return;
                         // Visibility sync
                         meshNodes.forEach(meshNode => {
                             if (store.meshVisibility[meshNode.name] !== undefined) {
@@ -399,6 +442,8 @@ const ThreeD = () => {
                         }
                     });
 
+                    if (!isMounted || loadId !== activeLoadId || !viewerRef.current) return;
+
                     // Register with mocap plugin using native Object3D root
                     glassesNode.nativeObject.add(dummyGlasses);
                     glassesNode.nativeObject.add(cranialOccluderMesh);
@@ -412,29 +457,40 @@ const ThreeD = () => {
 
                     store.avatar = 'glasses';
                 } catch (e) {
-                    console.error("Failed to load glasses model:", e);
+                    if (isMounted) {
+                        console.error("Failed to load glasses model:", e);
+                    }
                 }
             };
 
             modelIndexAutorun = autorun(() => {
+                if (!isMounted) return;
                 loadModel(store.modelIndex);
             });
 
             const resizeObserver = new ResizeObserver(() => {
-                if (viewerRef.current && viewerRef.current.handleResize) {
+                if (isMounted && viewerRef.current && viewerRef.current.handleResize) {
                     viewerRef.current.handleResize();
                 }
             });
             resizeObserver.observe(mountRef.current);
 
             return () => {
+                isMounted = false;
+                activeLoadId++;
                 if (syncInterval) clearInterval(syncInterval);
                 if (videoAutorun) videoAutorun();
                 if (modelIndexAutorun) modelIndexAutorun();
                 if (configAutorun) configAutorun();
                 resizeObserver.disconnect();
                 if (viewerRef.current) {
-                    viewerRef.current.dispose();
+                    const v = viewerRef.current;
+                    viewerRef.current = null;
+                    try {
+                        v.dispose();
+                    } catch (e) {
+                        // Safe disposal
+                    }
                 }
             };
 

@@ -1,0 +1,544 @@
+{
+  "testDate": "2026-11-20T09:01:39.312Z",
+  "totalApps": 7,
+  "results": [
+    {
+      "id": "jewelry-configurator",
+      "name": "Jewelry Configurator",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": true,
+          "imgCount": 1,
+          "visibleImgs": 1,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 594
+      },
+      "screenshots": {
+        "desktop1920": "jewelry-configurator-1920.png",
+        "mobile390": "jewelry-configurator-mobile-390.png"
+      }
+    },
+    {
+      "id": "eyewear-tryon",
+      "name": "Eyewear Virtual Try-On",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": true,
+          "imgCount": 1,
+          "visibleImgs": 0,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 497
+      },
+      "screenshots": {
+        "desktop1920": "eyewear-tryon-1920.png",
+        "mobile390": "eyewear-tryon-mobile-390.png"
+      }
+    },
+    {
+      "id": "sportswear-configurator",
+      "name": "Sportswear Configurator",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": false,
+          "imgCount": 1,
+          "visibleImgs": 0,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 809
+      },
+      "screenshots": {
+        "desktop1920": "sportswear-configurator-1920.png",
+        "mobile390": "sportswear-configurator-mobile-390.png"
+      }
+    },
+    {
+      "id": "box-configurator",
+      "name": "Box / Packaging Configurator",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": true,
+          "imgCount": 1,
+          "visibleImgs": 1,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 1032
+      },
+      "screenshots": {
+        "desktop1920": "box-configurator-1920.png",
+        "mobile390": "box-configurator-mobile-390.png"
+      }
+    },
+    {
+      "id": "face-mocap",
+      "name": "Face Motion Capture",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": true,
+          "imgCount": 1,
+          "visibleImgs": 0,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 511
+      },
+      "screenshots": {
+        "desktop1920": "face-mocap-1920.png",
+        "mobile390": "face-mocap-mobile-390.png"
+      }
+    },
+    {
+      "id": "360tour",
+      "name": "360° Virtual Tour",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": false,
+          "imgCount": 1,
+          "visibleImgs": 1,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": false,
+        "navLinks": []
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 358
+      },
+      "screenshots": {
+        "desktop1920": "360tour-1920.png",
+        "mobile390": "360tour-mobile-390.png"
+      }
+    },
+    {
+      "id": "viewer",
+      "name": "3D Product Viewer",
+      "status": "PASS",
+      "uiVisualChecks": {
+        "headerNavbarPresent": true,
+        "heroSectionPresent": true,
+        "featuresGridPresent": true,
+        "showcasePresent": true,
+        "benefitsPresent": true,
+        "footerPresent": true,
+        "themeColors": {
+          "primary": "#7628d9",
+          "bg": "#f9f9ff",
+          "fontDisplay": "\"Plus Jakarta Sans\", \"Inter\", sans-serif"
+        },
+        "paletteCompliant": true,
+        "showcaseImageCheck": {
+          "found": true,
+          "hasVisualCard": true,
+          "imgCount": 1,
+          "visibleImgs": 1,
+          "hasVisualWrapper": true
+        },
+        "featuresGrid": {
+          "count": 6,
+          "widths": [
+            437,
+            437,
+            437,
+            437,
+            437,
+            437
+          ]
+        }
+      },
+      "functionalChecks": {
+        "darkModeSwitch": true,
+        "navLinks": [],
+        "launchDemo": true
+      },
+      "responsiveChecks": {
+        "desktop-1920": {
+          "viewport": "1920x1080",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1920,
+          "clientWidth": 1920
+        },
+        "desktop-1366": {
+          "viewport": "1366x768",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 1366,
+          "clientWidth": 1366
+        },
+        "tablet-768": {
+          "viewport": "768x1024",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 768,
+          "clientWidth": 768
+        },
+        "mobile-390": {
+          "viewport": "390x844",
+          "hasHorizontalScroll": false,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        }
+      },
+      "technicalChecks": {
+        "consoleErrors": [],
+        "failedRequests": [],
+        "loadTimeMs": 1014
+      },
+      "screenshots": {
+        "desktop1920": "viewer-1920.png",
+        "mobile390": "viewer-mobile-390.png"
+      }
+    }
+  ]
+}

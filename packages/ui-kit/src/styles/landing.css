@@ -1,0 +1,1097 @@
+/* ==========================================================================
+   VictorShell UI Kit — Shared Landing Page Components (Header, Footer, Nav)
+   Frosted Glass UI Kit with Triple Theme Support (Violet, Indigo, Orchid)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Page Container & Ambient Background
+   -------------------------------------------------------------------------- */
+.vs-product-landing-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--vs-ink, #17152F);
+  font-family: var(--vs-font-sans);
+  background: var(--vs-bg-page, #F9F9FF);
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+[data-theme="dark"] .vs-product-landing-page {
+  background: linear-gradient(180deg, var(--vs-bg-start, #0B0813) 0%, var(--vs-bg-end, #140E26) 100%);
+}
+
+.vs-landing-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.vs-landing-ambient__orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all var(--vs-transition-panel);
+}
+
+.vs-landing-ambient__orb--ice-blue {
+  width: 720px;
+  height: 720px;
+  top: -120px;
+  right: 8%;
+  background: radial-gradient(circle, #EAF1FF 0%, rgba(234, 241, 255, 0.45) 55%, transparent 75%);
+  filter: blur(70px);
+  opacity: 0.9;
+}
+
+.vs-landing-ambient__orb--lavender {
+  width: 680px;
+  height: 680px;
+  top: 40px;
+  left: -80px;
+  background: radial-gradient(circle, #EDE5FF 0%, rgba(237, 229, 255, 0.5) 55%, transparent 75%);
+  filter: blur(80px);
+  opacity: 0.85;
+}
+
+.vs-landing-ambient__orb--hero-glow {
+  width: 560px;
+  height: 560px;
+  top: 80px;
+  right: 18%;
+  background: radial-gradient(circle, rgba(178, 61, 235, 0.16) 0%, rgba(100, 32, 200, 0.07) 50%, transparent 75%);
+  filter: blur(55px);
+  opacity: 0.95;
+}
+
+/* Fallback backward compatibility for legacy primary / secondary orbs */
+.vs-landing-ambient__orb--primary {
+  width: 550px;
+  height: 550px;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #EAF1FF;
+  filter: blur(90px);
+  opacity: 0.75;
+}
+
+.vs-landing-ambient__orb--secondary {
+  width: 480px;
+  height: 480px;
+  bottom: 80px;
+  right: -100px;
+  background: #EDE5FF;
+  filter: blur(90px);
+  opacity: 0.75;
+}
+
+.vs-landing-ambient__grid {
+  display: none;
+}
+
+/* Translucent 3D Iridescent Glass Spheres Matching Reference Image */
+.vs-landing-ambient__bubble {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 255, 0.45) 45%, rgba(220, 210, 250, 0.2) 75%, rgba(200, 185, 245, 0.35) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 
+    inset 0 0 45px rgba(255, 255, 255, 0.65),
+    inset -10px -10px 30px rgba(178, 61, 235, 0.12),
+    0 24px 60px rgba(118, 40, 217, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.vs-landing-ambient__bubble--hero-right {
+  width: 380px;
+  height: 380px;
+  top: 75px;
+  right: 28%;
+  opacity: 0.85;
+}
+
+.vs-landing-ambient__bubble--hero-left {
+  width: 170px;
+  height: 170px;
+  top: 360px;
+  right: 48%;
+  opacity: 0.8;
+}
+
+.vs-landing-ambient__bubble--bottom-right {
+  width: 320px;
+  height: 320px;
+  bottom: -60px;
+  right: -40px;
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .vs-landing-ambient__bubble {
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.15) 0%, rgba(118, 40, 217, 0.18) 60%, rgba(30, 20, 60, 0.4) 100%);
+  border-color: rgba(178, 61, 235, 0.25);
+  box-shadow: 
+    inset 0 0 35px rgba(255, 255, 255, 0.12),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .vs-landing-ambient__orb--ice-blue {
+  background: radial-gradient(circle, rgba(67, 56, 202, 0.22) 0%, transparent 70%);
+  filter: blur(90px);
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .vs-landing-ambient__orb--lavender {
+  background: radial-gradient(circle, rgba(118, 40, 217, 0.20) 0%, transparent 70%);
+  filter: blur(90px);
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .vs-landing-ambient__orb--hero-glow {
+  background: radial-gradient(circle, rgba(178, 61, 235, 0.26) 0%, rgba(100, 32, 200, 0.12) 50%, transparent 75%);
+  filter: blur(70px);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .vs-landing-ambient__grid {
+  display: none;
+}
+
+.vs-landing-main {
+  position: relative;
+  z-index: 1;
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Frosted Glass Landing Header
+   -------------------------------------------------------------------------- */
+.vs-landing-header {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  max-width: 100vw;
+  height: 64px;
+  min-height: 64px;
+  max-height: 64px;
+  box-sizing: border-box;
+  background: var(--vs-glass-bg);
+  backdrop-filter: var(--vs-blur-float);
+  -webkit-backdrop-filter: var(--vs-blur-float);
+  border-bottom: 1px solid var(--vs-glass-border);
+  box-shadow: 0 4px 20px rgba(26, 22, 43, 0.04);
+  transition: all var(--vs-transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.vs-landing-header--sticky {
+  position: sticky;
+  top: 0;
+}
+
+.vs-landing-header__container {
+  max-width: 1360px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Brand & Product Group */
+.vs-landing-header__brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.vs-landing-header__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+  transition: opacity var(--vs-transition-fast);
+}
+
+.vs-landing-header__brand-link:hover {
+  opacity: 0.9;
+}
+
+.vs-landing-header__brand-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: var(--vs-primary-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--vs-shadow-primary);
+  flex-shrink: 0;
+}
+
+.vs-landing-header__brand-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--vs-font-display);
+  flex-shrink: 0;
+}
+
+.vs-landing-header__brand-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--vs-ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.vs-landing-header__brand-divider {
+  display: none;
+}
+
+.vs-landing-header__product-title {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.75rem;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-tonal-lavender);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  color: var(--vs-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+  box-shadow: 0 1px 4px rgba(110, 44, 242, 0.06);
+}
+
+[data-theme="dark"] .vs-landing-header__product-title {
+  background: rgba(45, 27, 78, 0.65);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #E9D5FF;
+}
+
+.vs-landing-header__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  font-size: var(--vs-font-size-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+  border: 1px solid var(--vs-control-border);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0.25rem;
+}
+
+/* Desktop Navigation */
+.vs-landing-header__nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 0.5rem;
+}
+
+.vs-landing-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.vs-landing-nav--horizontal .vs-landing-nav__list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+.vs-landing-nav--vertical .vs-landing-nav__list {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--vs-space-2);
+}
+
+.vs-landing-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--vs-radius-pill);
+  text-decoration: none;
+  font-size: var(--vs-font-size-md);
+  font-weight: 500;
+  color: var(--vs-ink-muted);
+  transition: all var(--vs-transition-fast);
+}
+
+.vs-landing-nav__link:hover {
+  color: var(--vs-ink);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.vs-landing-nav__link.is-active {
+  color: var(--vs-primary);
+  font-weight: 600;
+  background: var(--vs-tonal-lavender);
+}
+
+.vs-landing-nav__badge {
+  font-size: 0.625rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-primary-light);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.vs-landing-nav__indicator {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 2px;
+  background: var(--vs-primary);
+  border-radius: 2px;
+}
+
+/* Header Actions */
+.vs-landing-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+}
+
+/* Theme Mode Toggle Button (Light / Dark) */
+.vs-landing-header__theme-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-glass-subtle);
+  border: 1px solid var(--vs-glass-border);
+  color: var(--vs-ink);
+  cursor: pointer;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: all var(--vs-transition-fast);
+  box-shadow: 0 1px 4px rgba(26, 22, 43, 0.04);
+}
+
+.vs-landing-header__theme-mode-btn:hover {
+  background: var(--vs-glass-strong);
+  color: var(--vs-primary);
+  transform: scale(1.05);
+  box-shadow: var(--vs-shadow-primary);
+}
+
+.vs-landing-header__theme-mode-btn:active {
+  transform: scale(0.96);
+}
+
+.vs-landing-header__theme-mode-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--vs-focus-ring);
+}
+
+.vs-landing-header__theme-mode-icon {
+  transition: transform var(--vs-transition-control), color var(--vs-transition-fast);
+}
+
+.vs-landing-header__theme-mode-btn:hover .vs-landing-header__theme-mode-icon--sun {
+  transform: rotate(30deg);
+}
+
+.vs-landing-header__theme-mode-btn:hover .vs-landing-header__theme-mode-icon--moon {
+  transform: rotate(-15deg);
+}
+
+.vs-landing-header__theme-mode-btn--mobile {
+  width: auto;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--vs-radius-pill);
+}
+
+/* Theme Switcher */
+.vs-landing-header__theme-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  height: 36px;
+  box-sizing: border-box;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-glass-subtle);
+  border: 1px solid var(--vs-glass-border);
+  box-shadow: 0 1px 4px rgba(26, 22, 43, 0.04);
+  flex-shrink: 0;
+}
+
+.vs-landing-header__theme-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform var(--vs-transition-fast), border-color var(--vs-transition-fast);
+}
+
+.vs-landing-header__theme-btn:hover {
+  transform: scale(1.15);
+}
+
+.vs-landing-header__theme-btn.is-active {
+  border-color: var(--theme-swatch-color);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 8px var(--theme-swatch-color);
+}
+
+.vs-landing-header__theme-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--theme-swatch-color);
+}
+
+/* Mandatory Explore Demo CTA Button */
+.vs-landing-header__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0 1.15rem;
+  box-sizing: border-box;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-primary-gradient);
+  color: #ffffff;
+  font-family: var(--vs-font-display);
+  font-size: var(--vs-font-size-button);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--vs-shadow-primary);
+  transition: all var(--vs-transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+.vs-landing-header__cta-btn:hover {
+  background: var(--vs-primary-gradient-hover);
+  box-shadow: var(--vs-shadow-primary-hover);
+  transform: translateY(-1px);
+}
+
+.vs-landing-header__cta-btn:active {
+  transform: translateY(0);
+}
+
+.vs-landing-header__cta-text--short {
+  display: none;
+}
+
+.vs-landing-header__cta-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Mobile Menu Toggle */
+.vs-landing-header__mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  box-sizing: border-box;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-glass-bg);
+  border: 1px solid var(--vs-glass-border);
+  color: var(--vs-ink);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all var(--vs-transition-fast);
+}
+
+.vs-landing-header__mobile-toggle:hover {
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+}
+
+/* Mobile Drawer Overlay */
+.vs-landing-header__mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vs-landing-header__mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 22, 43, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.vs-landing-header__mobile-panel {
+  position: relative;
+  z-index: 1001;
+  width: 82%;
+  max-width: 340px;
+  height: 100%;
+  background: var(--vs-glass-strong);
+  backdrop-filter: var(--vs-blur-float);
+  -webkit-backdrop-filter: var(--vs-blur-float);
+  border-left: 1px solid var(--vs-glass-border);
+  box-shadow: var(--vs-shadow-float);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: vsDrawerSlideIn 0.26s var(--vs-ease);
+}
+
+@keyframes vsDrawerSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.vs-landing-header__mobile-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--vs-divider);
+  margin-bottom: 1.25rem;
+}
+
+.vs-landing-header__mobile-brand-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.vs-landing-header__mobile-brand {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vs-ink-muted);
+}
+
+.vs-landing-header__mobile-title {
+  font-family: var(--vs-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--vs-primary);
+}
+
+.vs-landing-header__badge--mobile {
+  display: inline-flex !important;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  margin-left: 0 !important;
+  font-size: 0.62rem;
+}
+
+.vs-landing-header__mobile-close {
+  background: transparent;
+  border: none;
+  color: var(--vs-ink-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.vs-landing-header__mobile-close:hover {
+  color: var(--vs-ink);
+  background: var(--vs-tonal-lavender);
+}
+
+.vs-landing-header__mobile-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--vs-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vs-landing-header__mobile-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.vs-landing-header__mobile-theme-label {
+  font-size: var(--vs-font-size-sm);
+  font-weight: 600;
+  color: var(--vs-ink-muted);
+}
+
+.vs-landing-header__mobile-cta {
+  width: 100%;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Futuristic Frosted Glass Landing Footer
+   -------------------------------------------------------------------------- */
+.vs-landing-footer {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  margin-top: auto;
+  background: var(--vs-glass-bg);
+  backdrop-filter: var(--vs-blur-float);
+  -webkit-backdrop-filter: var(--vs-blur-float);
+  border-top: 1px solid var(--vs-glass-border);
+  box-shadow: 0 -4px 24px rgba(26, 22, 43, 0.04);
+}
+
+.vs-landing-footer__glow {
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--vs-primary-light), transparent);
+  opacity: 0.6;
+}
+
+.vs-landing-footer__container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 2.25rem 1.5rem 1.25rem;
+}
+
+.vs-landing-footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.6fr;
+  gap: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Footer Brand Column */
+.vs-landing-footer__brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.vs-landing-footer__brand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vs-landing-footer__brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--vs-primary-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--vs-shadow-primary);
+}
+
+.vs-landing-footer__brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.vs-landing-footer__brand-name {
+  font-family: var(--vs-font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--vs-ink);
+}
+
+.vs-landing-footer__product-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--vs-primary);
+}
+
+.vs-landing-footer__tagline {
+  font-size: var(--vs-font-size-md);
+  color: var(--vs-ink-muted);
+  line-height: 1.5;
+  max-width: 380px;
+  margin: 0;
+}
+
+.vs-landing-footer__cta-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--vs-radius-pill);
+  font-family: var(--vs-font-display);
+  font-size: var(--vs-font-size-button);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--vs-shadow-primary);
+  transition: all var(--vs-transition-fast);
+}
+
+.vs-landing-footer__status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-tonal-lavender);
+  border: 1px solid var(--vs-control-border);
+  align-self: flex-start;
+}
+
+.vs-landing-footer__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--vs-emerald);
+  box-shadow: 0 0 8px var(--vs-emerald);
+  animation: vsPulse 2s infinite;
+}
+
+@keyframes vsPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.75;
+  }
+}
+
+.vs-landing-footer__status-text {
+  font-size: var(--vs-font-size-xs);
+  font-weight: 600;
+  color: var(--vs-ink-muted);
+  font-family: var(--vs-font-mono);
+}
+
+/* Footer Link Columns */
+.vs-landing-footer__links-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem;
+}
+
+.vs-landing-footer__col-title {
+  font-family: var(--vs-font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vs-ink);
+  margin: 0 0 0.65rem 0;
+}
+
+.vs-landing-footer__link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.vs-landing-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--vs-font-size-sm);
+  color: var(--vs-ink-muted);
+  text-decoration: none;
+  transition: color var(--vs-transition-fast), transform var(--vs-transition-fast);
+}
+
+.vs-landing-footer__link:hover {
+  color: var(--vs-primary);
+  transform: translateX(2px);
+}
+
+.vs-landing-footer__link-badge {
+  font-size: 0.625rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+  font-weight: 600;
+}
+
+.vs-landing-footer__external-icon {
+  opacity: 0.6;
+}
+
+/* Footer Bottom Bar */
+.vs-landing-footer__bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--vs-divider);
+  gap: 1rem;
+}
+
+.vs-landing-footer__copyright {
+  font-size: var(--vs-font-size-xs);
+  color: var(--vs-ink-subtle);
+  margin: 0;
+}
+
+.vs-landing-footer__back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--vs-glass-subtle);
+  border: 1px solid var(--vs-glass-border);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--vs-radius-pill);
+  font-size: var(--vs-font-size-xs);
+  font-weight: 600;
+  color: var(--vs-ink-muted);
+  cursor: pointer;
+  transition: all var(--vs-transition-fast);
+}
+
+.vs-landing-footer__back-to-top:hover {
+  color: var(--vs-primary);
+  background: var(--vs-tonal-lavender);
+  border-color: var(--vs-control-border);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+
+/* Breakpoint 0: 1480px — Hide secondary category badge to guarantee full brand name & nav links visibility */
+@media (max-width: 1480px) {
+  .vs-landing-header__badge {
+    display: none;
+  }
+}
+
+/* Intermediate compact desktop (1141px - 1260px): Keep brand name VictorShell clean with full desktop nav */
+@media (min-width: 1141px) and (max-width: 1260px) {
+  .vs-landing-header__brand-divider,
+  .vs-landing-header__product-title {
+    display: none;
+  }
+}
+
+/* Breakpoint 1: 1140px (Desktop Navigation -> Collapsible Hamburger Toggle) */
+@media (max-width: 1140px) {
+  .vs-landing-header__nav-wrapper {
+    display: none;
+  }
+
+  .vs-landing-header__mobile-toggle {
+    display: inline-flex;
+  }
+
+  .vs-landing-header__badge {
+    display: none;
+  }
+}
+
+/* Breakpoint 2: 992px (Footer grid adjustment) */
+@media (max-width: 992px) {
+  .vs-landing-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .vs-landing-footer__links-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* Breakpoint 3: 860px (Tablet compact header) */
+@media (max-width: 860px) {
+  .vs-landing-header__container {
+    padding: 0 1.25rem;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-landing-header__theme-switcher {
+    display: none; /* Accessible inside mobile drawer */
+  }
+
+  .vs-landing-header__product-title {
+    max-width: 220px;
+  }
+}
+
+/* Breakpoint 4: 640px (Small tablet / Large phone) */
+@media (max-width: 640px) {
+  .vs-landing-header__container {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  .vs-landing-header__cta-btn {
+    padding: 0 0.85rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+  }
+
+  .vs-landing-footer__container {
+    padding: 1.75rem 1rem 1rem;
+  }
+
+  .vs-landing-footer__links-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.15rem;
+  }
+
+  .vs-landing-footer__bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+}
+
+/* Breakpoint 5: 520px (Standard mobile: 375px - 414px — Keep VictorShell brand fully visible) */
+@media (max-width: 520px) {
+  .vs-landing-header__container {
+    padding: 0 0.75rem;
+    gap: 0.35rem;
+  }
+
+  .vs-landing-header__brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .vs-landing-header__brand-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .vs-landing-header__brand-divider {
+    display: none;
+  }
+
+  .vs-landing-header__product-title {
+    display: none;
+  }
+
+  .vs-landing-header__brand-title {
+    display: inline-block !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .vs-landing-header__cta-btn {
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+    gap: 0.3rem;
+  }
+
+  .vs-landing-header__cta-text--full {
+    display: none;
+  }
+
+  .vs-landing-header__cta-text--short {
+    display: inline;
+  }
+
+  .vs-landing-header__mobile-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Breakpoint 6: 360px (Ultra-narrow mobile) */
+@media (max-width: 360px) {
+  .vs-landing-header__container {
+    padding: 0 0.45rem;
+    gap: 0.25rem;
+  }
+
+  .vs-landing-header__brand-title {
+    font-size: 0.88rem;
+  }
+
+  .vs-landing-header__cta-btn {
+    height: 32px;
+    padding: 0 0.55rem;
+  }
+
+  .vs-landing-header__mobile-toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .vs-landing-footer__links-group {
+    grid-template-columns: 1fr;
+  }
+}
