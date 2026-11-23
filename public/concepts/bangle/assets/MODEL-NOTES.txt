@@ -1,0 +1,3 @@
+bangle.glb: user-supplied 934064-byte GLB, wide floral gold band with 715 meshes. No embedded materials or license metadata.
+bangle-alternate.glb: user-supplied 292880-byte GLB, 62 detail meshes, preserved as alternate asset. No embedded license metadata.
+The earlier adapted CC0 SCAD wave bangle is no longer the active model.

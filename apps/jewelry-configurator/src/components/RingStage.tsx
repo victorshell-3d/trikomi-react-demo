@@ -3,8 +3,8 @@ import * as THREE from 'three/webgpu';
 import { ThreeViewer, ViewerStore, OrbitControlsPlugin, EnvironmentPlugin, GLTFPlugin, CenterModelPlugin, ExportPlugin, DiamondPlugin } from '@trikomi/core';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-export type RingDesign = { metal: string; size: string; stone: string; carat: string; finish: string; engraving: string };
-export type RingController = { setView: (view: string) => void; rotate: () => void; changeRing: (index: number) => Promise<void>; exportModel: () => void; importModel: (file: File) => Promise<void>; setHd: (enabled: boolean) => void; celebrate: () => void; sparkle: () => void; replay: () => void; inspect: () => object };
+export type RingDesign = { metal: string; size: string; stone: string; carat: string; finish: string; stoneColor: string; engraving: string };
+export type RingController = { setView: (view: string) => void; resetView: () => void; snapshot: () => string; inspectStone: () => void; rotate: () => void; changeRing: (index: number) => Promise<void>; exportModel: () => void; importModel: (file: File) => Promise<void>; setHd: (enabled: boolean) => void; celebrate: () => void; sparkle: () => void; replay: () => void; inspect: () => object };
 type Props = { design: RingDesign; step?: number; onReady: (controller: RingController) => void; onStatus: (status: string) => void };
 // Own the plugin lifecycle in the app so asynchronous model/cut changes cannot race.
 class StudioDiamondPlugin extends DiamondPlugin { onUpdate() {} }
@@ -29,11 +29,66 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   const store = new ViewerStore();
   store.setSsgiEnabled(false); store.setSSREnabled(false); store.setProgressiveShadowEnabled(false); store.setBloomEnabled(false); store.setBackgroundColor('transparent'); store.setFloorTransparent(true); store.setUseEnvAsBackground(false); store.setShowEnvironment(true); store.setEnvIntensity(1.3); store.setLightIntensity(3); store.showStats = false;
   const viewer = new ThreeViewer(host.current, store, { enableOnDemandRendering: true }); viewerRef.current = viewer;
+  const fill=new THREE.HemisphereLight(0xffe7bd,0xb29767,.7);viewer.scene.add(fill);for(const p of [[4,3,5],[-4,1,3],[0,2,-5]]){const l=new THREE.DirectionalLight(0xffedce,.85);l.position.set(...p as [number,number,number]);viewer.scene.add(l);}
   viewer.addPlugin(new EnvironmentPlugin()); viewer.addPlugin(new OrbitControlsPlugin()); viewer.addPlugin(new GLTFPlugin()); viewer.addPlugin(new CenterModelPlugin());
   viewer.camera.position.set(0,2.5,4.5); viewer.camera.lookAt(0,0,0);
   viewer.renderer.setPixelRatio(1); // intro runs at base resolution; finish() upgrades sharp machines after the probe
   const loader = new GLTFLoader(); const draco = new DRACOLoader(); draco.setDecoderPath(`${import.meta.env.BASE_URL}draco/gltf/`); loader.setDRACOLoader(draco);
-  loader.load(`${import.meta.env.BASE_URL}models/diamonds.glb`, gltf => { if(disposed)return; gltf.scene.traverse(node => { if((node as THREE.Mesh).isMesh) shapeRef.current[node.name]=(node as THREE.Mesh).geometry; }); applyRef.current(); }, undefined, () => onStatus('Stone library could not load. Original stones are still available.'));
+  loader.load(`${import.meta.env.BASE_URL}models/diamonds.glb`, gltf => { if(disposed)return; gltf.scene.traverse(node => { if((node as THREE.Mesh).isMesh) if(!shapeRef.current[node.name])shapeRef.current[node.name]=(node as THREE.Mesh).geometry; }); applyRef.current(); }, undefined, () => onStatus('Stone library could not load. Original stones are still available.'));
+  (host.current as HTMLDivElement & {studioProbe?:()=>unknown}).studioProbe=()=>({camera:viewer.camera.position.toArray(),rotation:modelRef.current?.rotation.y,bandScale:metalsRef.current[0]?.scale.toArray(),bounds:metalsRef.current[0]?new THREE.Box3().setFromObject(metalsRef.current[0]):null,rotate:(a:number)=>{if(modelRef.current)modelRef.current.rotation.y=a;viewer.needsRender=true;viewer.play();}});
+  const marbleLoader = new THREE.TextureLoader();
+  const texture=(kind:string)=>{const t=marbleLoader.load(`${import.meta.env.BASE_URL}studio/marble-pbr-${kind}.jpg`,()=>{viewer.needsRender=true;viewer.play();});t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=8;return t;};
+  const marbleTop=texture('color');marbleTop.colorSpace=THREE.SRGBColorSpace;
+  const marbleNormal=texture('normalgl');const marbleRoughness=texture('roughness');
+  const marbleEdge=texture('color');marbleEdge.colorSpace=THREE.SRGBColorSpace;marbleEdge.repeat.set(3.2,.20);
+  const normalEdge=texture('normalgl');normalEdge.repeat.copy(marbleEdge.repeat);
+  const roughEdge=texture('roughness');roughEdge.repeat.copy(marbleEdge.repeat);
+  const baseTop = new THREE.MeshPhysicalMaterial({map:marbleTop,normalMap:marbleNormal,normalScale:new THREE.Vector2(.10,.10),roughness:.7,metalness:0,color:'#8c8170',clearcoat:0,clearcoatRoughness:.4,envMapIntensity:.22});
+  const baseEdge = new THREE.MeshPhysicalMaterial({map:marbleEdge,normalMap:normalEdge,normalScale:new THREE.Vector2(.10,.10),roughness:.74,metalness:0,color:'#8c8170',clearcoat:0,clearcoatRoughness:.4,envMapIntensity:.2});
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(1,1,.20,128),[baseEdge,baseTop,baseTop]);
+  base.name='Jewelry display base';viewer.scene.add(base);base.visible=false;
+  import(/* @vite-ignore */ `${import.meta.env.BASE_URL}studio/pedestal.js`).then(({createPedestal,lightPedestal,framePedestal})=>{if(disposed)return;sharedFrame=framePedestal;lightPedestal(THREE,viewer.scene,viewer.camera);base.layers.set(2);const shared=createPedestal(THREE,`${import.meta.env.BASE_URL}studio/`,()=>{viewer.needsRender=true;viewer.play();});base.geometry=shared.geometry;base.material=shared.material;(Array.isArray(base.material)?base.material:[base.material]).forEach((material,index)=>{material.emissiveIntensity=index===1?.30:.33;if(index===1)material.emissive.set('#e7f0ff');});for(const child of [...shared.children])base.add(child);base.visible=true;viewer.needsRender=true;viewer.play();});
+  const photoTexture=marbleLoader.load(`${import.meta.env.BASE_URL}studio/pedestal-photo.png`,()=>{viewer.needsRender=true;viewer.play();});photoTexture.colorSpace=THREE.SRGBColorSpace;
+  const photoBase=new THREE.Sprite(new THREE.SpriteMaterial({map:photoTexture,transparent:true,depthWrite:false,depthTest:true,toneMapped:false}));photoBase.renderOrder=-1;photoBase.name='Original photographed marble platform';photoBase.visible=false;viewer.scene.add(photoBase);
+  let sharedFrame:any=null;
+  let inspectionPose:{position:THREE.Vector3;target:THREE.Vector3;minDistance:number}|null=null;
+  const mainGem=()=>gemsRef.current.find(mesh=>mesh.parent?.name==='Main')||gemsRef.current.reduce<GemMesh|undefined>((best,mesh)=>{const volume=(m:GemMesh)=>{const size=m.userData.originalSize as THREE.Vector3|undefined;return size?size.x*size.y*size.z:0;};return !best||volume(mesh)>volume(best)?mesh:best;},undefined);
+  let baseRadius=1;let pedestalAnchored=false;
+  const contactCanvas=document.createElement('canvas');contactCanvas.width=contactCanvas.height=256;
+  const contactContext=contactCanvas.getContext('2d')!;const contactGradient=contactContext.createRadialGradient(128,128,10,128,128,125);contactGradient.addColorStop(0,'rgba(0,0,0,.78)');contactGradient.addColorStop(.4,'rgba(0,0,0,.35)');contactGradient.addColorStop(1,'rgba(0,0,0,0)');contactContext.fillStyle=contactGradient;contactContext.fillRect(0,0,256,256);
+  const contact=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(contactCanvas),transparent:true,depthWrite:false,opacity:.7}));contact.rotation.x=-Math.PI/2;viewer.scene.add(contact);
+
+  // Retain the original arches photograph. Orbit pans its crop without
+  // fabricating unseen room geometry or substituting a different interior.
+  const placeBase=()=>{
+   modelRef.current?.traverse(node=>{node.matrixAutoUpdate=true;node.matrixWorldAutoUpdate=true;node.updateMatrix();node.matrixWorldNeedsUpdate=true;});
+   const metal=metalsRef.current[0];if(!metal)return;
+   metal.updateWorldMatrix(true,false);
+   const box=new THREE.Box3().setFromObject(metal);
+   const width=Math.max(box.max.x-box.min.x,box.max.y-box.min.y);
+   if(pedestalAnchored){const delta=base.position.y+baseRadius*.1-box.min.y;if(modelRef.current&&Math.abs(delta)>.0001){modelRef.current.position.y+=delta;modelRef.current.updateMatrixWorld(true);}return;}baseRadius=width*.78;pedestalAnchored=true;
+   base.scale.set(baseRadius,baseRadius,baseRadius);photoBase.scale.set(baseRadius*2.03,baseRadius*2.03*173/606,1);
+   base.position.set((box.min.x+box.max.x)/2,box.min.y-.10*baseRadius,(box.min.z+box.max.z)/2);const baseAway=base.position.clone().sub(viewer.camera.position);baseAway.y=0;baseAway.normalize().multiplyScalar(baseRadius*.85);photoBase.position.copy(base.position).add(baseAway);photoBase.position.y-=baseRadius*.25;photoBase.scale.multiplyScalar(1.12);contact.position.set(base.position.x,box.min.y+.002*baseRadius,base.position.z);contact.scale.set(baseRadius*.85,baseRadius*.5,1);
+  };
+  const fitView=()=>{
+   inspectionPose=null;
+   if(!modelRef.current)return;
+   placeBase();
+   const box=new THREE.Box3().setFromObject(modelRef.current).union(new THREE.Box3().setFromObject(base));
+   const target=box.getCenter(new THREE.Vector3());
+   const size=box.getSize(new THREE.Vector3());
+   const camera=viewer.camera;
+   const halfFov=THREE.MathUtils.degToRad(camera.fov/2);
+   const distance=Math.max(size.y/2/Math.tan(halfFov),size.x/2/(Math.tan(halfFov)*camera.aspect))*1.18+size.z/2;
+   const controls=viewer.getPlugin(OrbitControlsPlugin)?.controls;
+   const direction=new THREE.Vector3(.22,.01,1).normalize();
+   camera.position.copy(target).addScaledVector(direction,distance);camera.lookAt(target);
+   if(controls){controls.target.copy(target);controls.minDistance=baseRadius*1.6;controls.maxDistance=distance*2.2;controls.maxPolarAngle=Math.PI*.49;controls.enablePan=false;controls.update();}
+   if(sharedFrame){sharedFrame(THREE,camera,controls,base);target.copy(controls?.target ?? target);}
+   homeTarget.copy(target);homeSph=new THREE.Spherical().setFromVector3(camera.position.clone().sub(target));
+   viewer.needsRender=true;viewer.play();
+  };
+  loader.load(`${import.meta.env.BASE_URL}studio/faceted-stones.glb`,gltf=>{if(disposed)return;gltf.scene.traverse(node=>{if((node as THREE.Mesh).isMesh)shapeRef.current[node.name]=(node as THREE.Mesh).geometry;});applyRef.current();},undefined,()=>onStatus('Enhanced stone shapes unavailable. Original library remains available.'));
   function effectState(state:string) { if(disposed)return;setDiamondState(state);if(host.current)host.current.dataset.diamondEffect=state; }
   function restoreDiamonds() { if(diamond)diamondLifecycle(diamond).restoreOriginalMaterials(); }
   function refreshDiamonds(changedMesh?: GemMesh) {
@@ -62,9 +117,9 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
      viewer.pause();
      await renderer.compileAsync(viewer.scene,viewer.camera);
      renderer.render(viewer.scene,viewer.camera);
-     if(shaderFailed)throw new Error('Diamond shader compilation failed');
+     if(shaderFailed)throw new Error('Diamond shader compilation failed');applyRef.current();
      if(disposed||version!==effectGeneration){restoreDiamonds();return;}
-     effectState('enabled');
+     effectState('enabled');applyRef.current();
     }catch(error){
      diamondFailed=true;restoreDiamonds();effectState('fallback');
      console.warn('Studio diamond effect unavailable on this renderer. Original materials restored.',error);
@@ -72,11 +127,11 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
    });},120);
   }
   function scan(model:THREE.Object3D) {
-   modelRef.current=model; gemsRef.current=[]; metalsRef.current=[];
+   pedestalAnchored=false;modelRef.current=model; gemsRef.current=[]; metalsRef.current=[];
    model.traverse(node => { const mesh=node as GemMesh; if(!mesh.isMesh)return;
     const mats=Array.isArray(mesh.material)?mesh.material:[mesh.material];
     const gem=mats.some(mat=>/diamond|crystal|gem/i.test(mat.name));
-    if(gem){mesh.userData.studioScale=mesh.scale.clone();mesh.userData.restPos=mesh.position.clone();mesh.userData.basePos=mesh.position.clone();mesh.userData.originalGeometry=mesh.geometry;mesh.geometry.computeBoundingBox();mesh.userData.originalSize=mesh.geometry.boundingBox?.getSize(new THREE.Vector3());gemsRef.current.push(mesh);}
+    if(gem){if(!mesh.userData.originalGeometry){mesh.userData.studioCut='Original';mesh.material=Array.isArray(mesh.material)?mesh.material.map(mat=>mat.clone()):mesh.material.clone();mesh.userData.studioScale=mesh.scale.clone();mesh.userData.restPos=mesh.position.clone();mesh.userData.basePos=mesh.position.clone();mesh.userData.originalGeometry=mesh.geometry;mesh.geometry.computeBoundingBox();mesh.userData.originalSize=mesh.geometry.boundingBox?.getSize(new THREE.Vector3());}gemsRef.current.push(mesh);}
     else metalsRef.current.push(mesh);
    });
    seatGems(sizeFactor[latest.current.size] ?? 1);
@@ -128,7 +183,7 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   const fxParam=new URLSearchParams(window.location.search).get('fx');
   let lite=fxParam==='lite'?true:fxParam==='full'?false:window.matchMedia('(max-width: 720px)').matches;
   const metalColors:Record<string,string>={'Yellow gold':'#dca84d','Rose gold':'#ce8b6d','Platinum':'#dce1e8','White gold':'#e9e4d2'};
-  const sizeFactor:Record<string,number>={'6':.94,'7':.97,'8':1,'9':1.03,'10':1.06};
+  const sizeFactor:Record<string,number>={'6':.86,'7':.93,'8':1,'9':1.07,'10':1.14};
   const caratFactor=(carat:string)=>carat==='90%'?.9:carat==='110%'?1.1:1;
   // Prongs grow with the stone, scaled around the stone centre so they keep their seat. Home and pivot are recorded while the ring is assembled.
   const gripProngs=(mesh:THREE.Mesh,f:number)=>{
@@ -151,13 +206,13 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
    const prongs=metalsRef.current[2];
    if(mainGem&&prongs?.userData.gripPoint){prongs.parent!.updateWorldMatrix(true,false);prongs.userData.gripPoint=prongs.parent!.worldToLocal(new THREE.Box3().setFromObject(mainGem).getCenter(new THREE.Vector3()));}
   };
-  type Fx={kind:'metal'|'scale'|'sweep'|'cam'|'spin';t0:number;dur:number;from?:THREE.Color;to?:THREE.Color;r0?:number;r1?:number;c0?:number;c1?:number;overshoot?:number;light?:THREE.PointLight;p0?:THREE.Vector3;p1?:THREE.Vector3;s0?:THREE.Spherical;s1?:THREE.Spherical;tgt?:THREE.Vector3;node?:THREE.Object3D;a0?:number;peak?:number;gems?:{mesh:THREE.Object3D;to:THREE.Vector3;delay:number}[];dir?:'in'|'out';onDone?:()=>void};
+  type Fx={kind:'metal'|'scale'|'sweep'|'cam'|'spin'|'cascade';t0:number;dur:number;from?:THREE.Color;to?:THREE.Color;r0?:number;r1?:number;c0?:number;c1?:number;overshoot?:number;light?:THREE.PointLight;p0?:THREE.Vector3;p1?:THREE.Vector3;s0?:THREE.Spherical;s1?:THREE.Spherical;tgt?:THREE.Vector3;node?:THREE.Object3D;a0?:number;peak?:number;gems?:{mesh:THREE.Object3D;to:THREE.Vector3;delay:number}[];dir?:'in'|'out';onDone?:()=>void};
   let homeSph:THREE.Spherical|null=null;let homeTarget=new THREE.Vector3();let stepInit=false;
   const fxList:Fx[]=[];const scaleState={ring:1,carat:1};const lastApplied={...latest.current};let fxRaf=0;let loadingModel=false;
   function playAssembleIntro(){
    const metal=metalsRef.current.length===1?metalsRef.current[0]:null;
    const stone=gemsRef.current.find(mesh=>mesh.parent?.name==='Main');
-   if(!metal||!stone)return;
+   if(!metal||!stone||lite)return;
    stone.updateWorldMatrix(true,false);
    const stoneBox=new THREE.Box3().setFromObject(stone);
    const stoneC=stoneBox.getCenter(new THREE.Vector3());
@@ -243,12 +298,28 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
     if(flash)flash.intensity=0;
     if(glow)glow.intensity=0;
     stageLights=[];
-    if(!lite)viewer.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
-    viewer.needsRender=true;
-    setTimeout(()=>{if(!disposed)viewer.pause();},300);
+    // Ease the assembly camera into its fitted resting view instead of snapping.
+    const fromPosition=cam.position.clone();
+    const orbit=viewer.getPlugin(OrbitControlsPlugin)?.controls;
+    const fromTarget=orbit?.target.clone() ?? camTarget.clone();
+    fitView();
+    const toPosition=cam.position.clone();const toTarget=orbit?.target.clone() ?? camTarget.clone();
+    const restingMin=orbit?.minDistance ?? 0;if(orbit)orbit.minDistance=0;cam.position.copy(fromPosition);if(orbit){orbit.target.copy(fromTarget);orbit.update();}cam.lookAt(fromTarget);
+    introActive=true;if(host.current)host.current.dataset.introPhase='settling';let settleElapsed=0;let settlePrevious=performance.now();
+    const settle=()=>{
+     if(disposed||myGeneration!==generation)return;
+     const now=performance.now();settleElapsed+=Math.min(50,now-settlePrevious);settlePrevious=now;const t=Math.min(1,settleElapsed/950);const e=t*t*(3-2*t);
+     cam.position.lerpVectors(fromPosition,toPosition,e);
+     const target=new THREE.Vector3().lerpVectors(fromTarget,toTarget,e);
+     if(orbit){orbit.target.copy(target);orbit.update();}cam.lookAt(target);
+     viewer.needsRender=true;viewer.play();
+     if(t<1)introRaf=requestAnimationFrame(settle);
+     else{introActive=false;if(orbit)orbit.minDistance=restingMin;if(host.current)host.current.dataset.introPhase='ready';if(!lite)viewer.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));setTimeout(()=>{if(!disposed)viewer.pause();},300);}
+    };
+    introRaf=requestAnimationFrame(settle);
    };
    const myGeneration=generation;const start=performance.now()+250;
-   introActive=true;
+   introActive=true;if(host.current)host.current.dataset.introPhase='assembly';
    viewer.play();
    let probeN=0;const probeT0=performance.now();let probeDone=fxParam!==null;
    const tick=()=>{
@@ -384,11 +455,11 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
     for(const mesh of metalsRef.current)for(const mat of (Array.isArray(mesh.material)?mesh.material:[mesh.material])){(mat as THREE.MeshStandardMaterial).color?.lerpColors(fx.from,fx.to,e);}
    }else if(fx.kind==='scale'){
     const c=fx.overshoot ?? 1.4;const e=raw>=1?1:1+(c+1)*Math.pow(raw-1,3)+c*Math.pow(raw-1,2);
-    const ring=fx.r0!+(fx.r1!-fx.r0!)*e,carat=fx.c0!+(fx.c1!-fx.c0!)*e;
-    scaleState.ring=ring;scaleState.carat=carat;
+    const requestedRing=fx.r0!+(fx.r1!-fx.r0!)*e;const model=modelRef.current;if(model){if(!model.userData.studioRootScale)model.userData.studioRootScale=model.scale.clone();model.scale.copy(model.userData.studioRootScale).multiplyScalar(requestedRing);}const ring=1,carat=fx.c0!+(fx.c1!-fx.c0!)*e;
+    scaleState.ring=requestedRing;scaleState.carat=carat;
     for(const mesh of metalsRef.current){const base=mesh.userData.studioScale;if(!base)continue;const prF=mesh===metalsRef.current[2]?1+(carat-1)*0.85:1;mesh.scale.set(base.x*ring*prF,base.y*ring*prF,base.z*ring*prF);if(mesh===metalsRef.current[2]&&!introActive&&!cutAnimating)gripProngs(mesh,prF);}
-    for(const mesh of gemsRef.current){const base=mesh.userData.studioScale;if(base)mesh.scale.copy(base).multiplyScalar(ring*carat);}
-    if(!fxList.some(f=>f.kind==='cascade'))seatGems(ring);
+   for(const mesh of gemsRef.current){const base=mesh.userData.studioScale;if(base)mesh.scale.copy(base).multiplyScalar(ring*carat);}
+    if(!fxList.some(f=>f.kind==='cascade'))seatGems(ring);placeBase();
    }else if(fx.kind==='sweep'&&fx.light&&fx.p0&&fx.p1){
     const e=raw*raw*(3-2*raw);
     fx.light.position.lerpVectors(fx.p0,fx.p1,e);
@@ -415,9 +486,9 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
    const now=performance.now();
    for(let i=fxList.length-1;i>=0;i--){const fx=fxList[i];poseFx(fx,now);if(now-fx.t0>=fx.dur*1000){if(fx.kind==='scale'){scaleState.ring=fx.r1!;scaleState.carat=fx.c1!;}if(fx.kind==='spin'&&fx.node)fx.node.rotation.y=fx.a0 ?? 0;if(fx.light)fx.light.intensity=0;fx.onDone?.();fxList.splice(i,1);}}
    updateShadow();
-   viewer.needsRender=true;
+   viewer.needsRender=true;viewer.play();
    if(fxList.length)fxRaf=requestAnimationFrame(pumpFx);
-   else{applyRef.current();setTimeout(()=>{if(!disposed&&!idleActive&&!introActive&&!cutAnimating)viewer.pause();},300);}
+   else{applyRef.current();for(const delay of [60,180,420,800])setTimeout(()=>{if(!disposed){modelRef.current?.updateMatrixWorld(true);viewer.needsRender=true;viewer.play();}},delay);setTimeout(()=>{if(!disposed&&!idleActive&&!introActive&&!cutAnimating&&!fxList.length)viewer.pause();},1200);}
   };
   let replayBoost=1;
   const startFx=(fx:Fx)=>{
@@ -429,11 +500,12 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   };
 
   // The user grabbing the ring wins over a running camera move.
-  host.current?.addEventListener('pointerdown',()=>{for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);});
+  host.current?.addEventListener('pointerdown',()=>{for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);idleLast=performance.now();for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);});
   // Each design step gets its own camera angle; the stone step leans over the top so the stone stays in view.
   stepFxRef.current=(next:number)=>{
    if(!stepInit){stepInit=true;return;}
    if(!homeSph||introActive||cutAnimating||loadingModel)return;
+   if(performance.now()-idleLast<1500)return;
    const cam=viewer.camera;
    const cur=new THREE.Spherical().setFromVector3(cam.position.clone().sub(homeTarget));
    let to:THREE.Spherical;
@@ -474,8 +546,8 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   // After a quiet spell the ring turns slowly and a gem glints now and then; any touch or option change stops it.
   let idleRaf=0;let idleActive=false;let idleLast=performance.now();let nextGlint=0;
   const stopIdle=()=>{if(!idleActive)return;idleActive=false;cancelAnimationFrame(idleRaf);setTimeout(()=>{if(!disposed&&!idleActive&&!fxList.length&&!introActive&&!cutAnimating)viewer.pause();},250);};
-  host.current?.addEventListener('pointerdown',()=>{idleLast=performance.now();stopIdle();});
-  host.current?.addEventListener('wheel',()=>{idleLast=performance.now();stopIdle();},{passive:true});
+  host.current?.addEventListener('pointerdown',()=>{for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);idleLast=performance.now();stopIdle();});
+  host.current?.addEventListener('wheel',()=>{for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);idleLast=performance.now();stopIdle();},{passive:true});
   const idleTimer=setInterval(()=>{
    if(disposed||idleActive||lite||loadingModel||fxList.length||introActive||cutAnimating||!modelRef.current)return;
    if(performance.now()-idleLast<7000)return;
@@ -487,6 +559,7 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   // Orbit only moves the camera; a paused viewer would never paint the drag. Wake for the gesture, then settle back to on-demand.
   const orbit=viewer.getPlugin(OrbitControlsPlugin) as unknown as {controls?:{addEventListener:(type:string,cb:()=>void)=>void}}|undefined;
   let interactPause: ReturnType<typeof setTimeout> | undefined;
+  orbit?.controls?.addEventListener('change',()=>{const away=base.position.clone().sub(viewer.camera.position);away.y=0;away.normalize().multiplyScalar(baseRadius*.85);photoBase.position.copy(base.position).add(away);photoBase.position.y=base.position.y-baseRadius*.25;const controls=viewer.getPlugin(OrbitControlsPlugin)?.controls;if(!controls)return;const angle=Math.atan2(viewer.camera.position.x-controls.target.x,viewer.camera.position.z-controls.target.z);const photo=host.current?.closest('.studio')?.querySelector<HTMLElement>('.studio-photograph');if(photo)photo.style.backgroundPositionX=`${50+Math.sin(angle-.213)*14}%`;});
   orbit?.controls?.addEventListener('start',()=>{clearTimeout(interactPause);viewer.play();});
   orbit?.controls?.addEventListener('end',()=>{clearTimeout(interactPause);interactPause=setTimeout(()=>{if(!disposed&&!idleActive&&!fxList.length&&!introActive&&!cutAnimating)viewer.pause();},300);});
   // Our own soft contact shadow under the ring (the SDK floor stays transparent). It spreads and fades as stones lift, and scales with ring size.
@@ -527,7 +600,7 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
      if(!lite){const hostObj=metalsRef.current[0]?.parent;if(hostObj){hostObj.updateWorldMatrix(true,false);const glint=borrowFxLight(0xfff2d0);if(glint){glint.position.copy(hostObj.worldToLocal(new THREE.Vector3(-1.5,2.6,0.9)));startFx({kind:'sweep',t0:performance.now(),dur:0.85,light:glint,p0:hostObj.worldToLocal(new THREE.Vector3(-1.5,2.6,0.9)),p1:hostObj.worldToLocal(new THREE.Vector3(1.5,2.6,0.9)),peak:1.5});}}}
     }
     if(lastApplied.size!==current.size||lastApplied.carat!==current.carat){
-     startFx({kind:'scale',t0:performance.now(),dur:lite?0.4:0.55,r0:scaleState.ring,r1:sizeFactor[current.size] ?? 1,c0:scaleState.carat,c1:caratFactor(current.carat),overshoot:lastApplied.carat!==current.carat?2.4:1.3});
+     startFx({kind:'scale',t0:performance.now(),dur:lite?0.65:0.75,r0:scaleState.ring,r1:sizeFactor[current.size] ?? 1,c0:scaleState.carat,c1:caratFactor(current.carat),overshoot:lastApplied.carat!==current.carat?2.4:1.3});
     }
     if(lastApplied.finish!==current.finish&&!lite){
      const hostObj=metalsRef.current[0]?.parent;
@@ -538,25 +611,35 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
    const metalFxOn=fxList.some(fx=>fx.kind==='metal');
    const scaleFxOn=fxList.some(fx=>fx.kind==='scale');
    const cascadeFxOn=fxList.some(fx=>fx.kind==='cascade');
-   for(const mesh of metalsRef.current){for(const mat of (Array.isArray(mesh.material)?mesh.material:[mesh.material])){const metal=mat as THREE.MeshStandardMaterial;if(!metalFxOn)metal.color?.set(metalColors[current.metal] || '#dca84d');metal.metalness=1;metal.roughness=current.finish==='Satin'?.38:current.finish==='Brushed'?.58:.12;metal.needsUpdate=true;}}
+   for(const mesh of metalsRef.current){for(const mat of (Array.isArray(mesh.material)?mesh.material:[mesh.material])){const metal=mat as THREE.MeshStandardMaterial;if(!metalFxOn)metal.color?.set(metalColors[current.metal] || '#dca84d');metal.metalness=.97;metal.roughness=current.finish==='Satin'?.38:current.finish==='Brushed'?.58:.19;metal.envMapIntensity=1.5;metal.emissive.copy(metal.color);metal.emissiveIntensity=.11;metal.needsUpdate=true;}}
    // These are explicit visual scales, not physical ring sizes or carat claims.
-   const ringSize=sizeFactor[current.size] ?? 1;
-   if(!scaleFxOn){scaleState.ring=ringSize;scaleState.carat=caratFactor(current.carat);}
+   const selectedRingSize=sizeFactor[current.size] ?? 1;const root=modelRef.current;if(root&&!scaleFxOn){if(!root.userData.studioRootScale)root.userData.studioRootScale=root.scale.clone();root.scale.copy(root.userData.studioRootScale).multiplyScalar(selectedRingSize);}const ringSize=1;
+   if(!scaleFxOn){scaleState.ring=selectedRingSize;scaleState.carat=caratFactor(current.carat);}
    for(const mesh of metalsRef.current){ if(!mesh.userData.studioScale)mesh.userData.studioScale=mesh.scale.clone();const base=mesh.userData.studioScale;const prF=mesh===metalsRef.current[2]?1+(caratFactor(current.carat)-1)*0.85:1;if(!scaleFxOn){mesh.scale.set(base.x*ringSize*prF,base.y*ringSize*prF,base.z*ringSize*prF);if(mesh===metalsRef.current[2]&&!introActive&&!cutAnimating)gripProngs(mesh,prF);} }
+   for(const mesh of gemsRef.current.filter(mesh=>mesh===mainGem())){for(const material of(Array.isArray(mesh.material)?mesh.material:[mesh.material])){const color=(material as unknown as {color?:THREE.Color|{value?:THREE.Color}}).color;if(color&&'set' in color)color.set(current.stoneColor);else if(color&&'value' in color)color.value?.set(current.stoneColor);}}
    for(const mesh of gemsRef.current){const base=mesh.userData.studioScale;if(base&&!scaleFxOn&&!cascadeFxOn)mesh.scale.copy(base).multiplyScalar(ringSize*caratFactor(current.carat));}
    if(!scaleFxOn&&!cascadeFxOn)seatGems(ringSize);
    // Apply selected cuts to the main stone only. Side stones retain their original fit.
-   const main=gemsRef.current.find(mesh=>mesh.parent?.name==='Main') || gemsRef.current[0];
+   const main=mainGem();
    let cutChanged=false;
    if(main&&main.userData.studioCut===undefined)main.userData.studioCut=current.stone;
-   if(main&&main.userData.studioCut!==current.stone){if(cutAnimating){/* the running swap picks up the latest cut at its swap step */}else if(metalsRef.current.length===3&&!introActive&&!loadingModel&&!cascadeFxOn){playCutSwap(main);}else{viewer.pause();cutChanged=true;main.userData.studioCut=current.stone;const source=current.stone==='Original'?main.userData.originalGeometry:shapeRef.current[current.stone];if(source&&main.userData.originalGeometry){if(main.geometry!==main.userData.originalGeometry)main.geometry.dispose();if(current.stone==='Original')main.geometry=source;else{const geometry=source.clone();geometry.computeBoundingBox();const size=geometry.boundingBox?.getSize(new THREE.Vector3());const target=main.userData.originalSize;if(size&&target){const ratio=Math.max(target.x,target.z)/Math.max(size.x,size.z);geometry.scale(ratio,ratio,ratio);}main.geometry=geometry;}}}}
+   if(main&&main.userData.studioCut!==current.stone){if(cutAnimating){/* the running swap picks up the latest cut at its swap step */}else if(!lite&&metalsRef.current.length===3&&!introActive&&!loadingModel&&!cascadeFxOn){playCutSwap(main);}else{viewer.pause();cutChanged=true;main.userData.studioCut=current.stone;const source=current.stone==='Original'?main.userData.originalGeometry:shapeRef.current[current.stone];if(source&&main.userData.originalGeometry){if(main.geometry!==main.userData.originalGeometry)main.geometry.dispose();if(current.stone==='Original')main.geometry=source;else{const geometry=source.clone();geometry.computeBoundingBox();const size=geometry.boundingBox?.getSize(new THREE.Vector3());const target=main.userData.originalSize;if(size&&target){const ratio=Math.max(target.x,target.z)/Math.max(size.x,size.z);geometry.scale(ratio,ratio,ratio);}main.geometry=geometry;}}}}
    if(cutChanged)refreshDiamonds(main);
+   if(!introActive&&!cutAnimating)placeBase();
    updateShadow();
-   viewer.needsRender=true;
-   if(host.current) host.current.dataset.ringState=JSON.stringify({metal:current.metal,finish:current.finish,metals:metalsRef.current.length,gems:gemsRef.current.length,shapes:Object.keys(shapeRef.current),color:((metalsRef.current[0]?.material as THREE.MeshStandardMaterial)?.color)?.getHexString(),roughness:(metalsRef.current[0]?.material as THREE.MeshStandardMaterial)?.roughness,stone:current.stone,auth:viewer.authStatus,mainVertices:main?.geometry.attributes.position?.count,gemScale:main?.scale.toArray(),ringSize:current.size,bandScale:metalsRef.current[0]?.scale.toArray()});
+   viewer.needsRender=true;viewer.play();
+   if(host.current) host.current.dataset.ringState=JSON.stringify({metal:current.metal,finish:current.finish,metals:metalsRef.current.length,gems:gemsRef.current.length,shapes:Object.keys(shapeRef.current),color:((metalsRef.current[0]?.material as THREE.MeshStandardMaterial)?.color)?.getHexString(),roughness:(metalsRef.current[0]?.material as THREE.MeshStandardMaterial)?.roughness,stone:current.stone,auth:viewer.authStatus,mainVertices:main?.geometry.attributes.position?.count,gemScale:main?.scale.toArray(),contactBottom:new THREE.Box3().setFromObject(metalsRef.current[0]).min.y,pedestalTop:base.position.y+baseRadius*.1,ringSize:current.size,bandScale:metalsRef.current[0]?.scale.toArray()});
   };
-  async function load(url:string,name:string){ const myGeneration=++generation; onStatus('Loading VictorShell ring…');loadingModel=true;if(modelRef.current&&gemsRef.current.length)await playGemCascade('out');if(disposed||myGeneration!==generation)return; ++effectGeneration;clearTimeout(effectTimer);await effectQueue;viewer.pause();restoreDiamonds(); try{const model=await viewer.getPlugin(GLTFPlugin)!.loadModel(url,name);if(disposed||myGeneration!==generation)return;scan(model);fxLights=[];{const lightHost=metalsRef.current[0]?.parent??model;for(let i=0;i<6;i++){const pl=new THREE.PointLight(0xffe9c4,0,0,1.6);lightHost.add(pl);fxLights.push(pl);}}shadow=null;ensureShadow();if(!introPlayed&&name==='Classic Solitaire')playAssembleIntro();applyRef.current();refreshDiamonds();viewer.getPlugin(OrbitControlsPlugin)?.resetView();loadingModel=false;{const controls=viewer.getPlugin(OrbitControlsPlugin) as unknown as {controls?:{target?:THREE.Vector3}}|undefined;homeTarget=controls?.controls?.target?.clone() ?? new THREE.Vector3();homeSph=new THREE.Spherical().setFromVector3(viewer.camera.position.clone().sub(homeTarget));}if(!introActive&&gemsRef.current.length)void playGemCascade('in');else updateShadow();viewer.needsRender=true;onStatus('');}catch(error){loadingModel=false;if(!disposed)onStatus(`Ring could not load: ${error instanceof Error?error.message:'unknown error'}`);} }
+  async function load(url:string,name:string){ const myGeneration=++generation;const oldModel=modelRef.current; onStatus(modelRef.current?'':'Loading VictorShell ring…');loadingModel=true;if(disposed||myGeneration!==generation)return; ++effectGeneration;clearTimeout(effectTimer);await effectQueue;viewer.play();restoreDiamonds(); try{const model=await viewer.getPlugin(GLTFPlugin)!.loadModel(url,name);if(disposed||myGeneration!==generation)return;scan(model);fxLights=[];{const lightHost=metalsRef.current[0]?.parent??model;for(let i=0;i<6;i++){const pl=new THREE.PointLight(0xffe9c4,0,0,1.6);lightHost.add(pl);fxLights.push(pl);}}shadow=null;ensureShadow();placeBase();if(!introPlayed&&name==='Classic Solitaire')playAssembleIntro();applyRef.current();refreshDiamonds();viewer.getPlugin(OrbitControlsPlugin)?.resetView();loadingModel=false;if(!introActive)fitView();{const controls=viewer.getPlugin(OrbitControlsPlugin) as unknown as {controls?:{target?:THREE.Vector3}}|undefined;homeTarget=controls?.controls?.target?.clone() ?? new THREE.Vector3();homeSph=new THREE.Spherical().setFromVector3(viewer.camera.position.clone().sub(homeTarget));}if(!introActive&&gemsRef.current.length)void playGemCascade('in');else updateShadow();viewer.needsRender=true;onStatus('');}catch(error){loadingModel=false;if(oldModel){scan(oldModel);applyRef.current();viewer.needsRender=true;viewer.play();}if(!disposed)onStatus('');throw error;} }
   onReady({
+   snapshot(){try{viewer.renderer.render(viewer.scene,viewer.camera);return viewer.renderer.domElement.toDataURL('image/png');}catch{return '';}},
+   inspectStone(){
+    const controls=viewer.getPlugin(OrbitControlsPlugin)?.controls;const main=mainGem();if(!controls||!main||introActive||cutAnimating)return;
+    if(inspectionPose){viewer.camera.position.copy(inspectionPose.position);controls.target.copy(inspectionPose.target);controls.minDistance=inspectionPose.minDistance;inspectionPose=null;}
+    else{inspectionPose={position:viewer.camera.position.clone(),target:controls.target.clone(),minDistance:controls.minDistance};const box=new THREE.Box3().setFromObject(main);const target=box.getCenter(new THREE.Vector3());const distance=box.getSize(new THREE.Vector3()).length()*2;controls.target.copy(target);controls.minDistance=distance*.6;viewer.camera.position.copy(target).add(new THREE.Vector3(.2,.6,1).normalize().multiplyScalar(distance));}
+    controls.update();viewer.needsRender=true;viewer.play();
+   },
+   resetView(){if(!introActive&&!cutAnimating){for(let i=fxList.length-1;i>=0;i--)if(fxList[i].kind==='cam')fxList.splice(i,1);fitView();}},
    setView(view){
     const controls=viewer.getPlugin(OrbitControlsPlugin) as unknown as {controls?:{target?:THREE.Vector3};setView:(axis:string)=>void;resetView:()=>void}|undefined;
     const tgt=controls?.controls?.target?.clone() ?? homeTarget.clone();
@@ -583,14 +666,14 @@ export function RingStage({ design, step = 0, onReady, onStatus }: Props) {
   // aspect, but a paused (on-demand) viewer never paints the resized frame, so
   // wake it while the stage is moving and settle back to paused afterwards.
   let resizeSettle: ReturnType<typeof setTimeout> | undefined;
-  const resizeObserver=new ResizeObserver(()=>{viewer.needsRender=true;viewer.play();clearTimeout(resizeSettle);resizeSettle=setTimeout(()=>{if(!introActive&&!cutAnimating&&!fxList.length&&!idleActive)viewer.pause();},650);});
+  const resizeObserver=new ResizeObserver(()=>{viewer.needsRender=true;viewer.play();clearTimeout(resizeSettle);resizeSettle=setTimeout(()=>{if(!introActive&&!cutAnimating){fitView();viewer.needsRender=true;}if(!introActive&&!cutAnimating&&!fxList.length&&!idleActive)setTimeout(()=>viewer.pause(),250);},650);});
   resizeObserver.observe(host.current!);
   const authTimer=setInterval(()=>{if(host.current){host.current.dataset.authStatus=viewer.authStatus;if(viewer.authStatus==='AUTHORIZED'&&host.current.dataset.diamondEffect==='awaiting-auth')refreshDiamonds();}},1000);
   // Preserve the vendor authentication flow. No domain or licensing override.
-  void load(`${import.meta.env.BASE_URL}models/ring.glb`,'Classic Solitaire');
-  return ()=>{disposed=true;generation++;effectGeneration++;cancelAnimationFrame(introRaf);cancelAnimationFrame(cutRaf);cancelAnimationFrame(fxRaf);cancelAnimationFrame(idleRaf);clearInterval(idleTimer);cutGeneration++;resizeObserver.disconnect();clearTimeout(resizeSettle);clearTimeout(interactPause);clearTimeout(effectTimer);restoreDiamonds();clearInterval(authTimer);viewerRef.current=null;modelRef.current=null;draco.dispose();viewer.dispose();};
+  void load(`${import.meta.env.BASE_URL}models/ring.glb`,'Classic Solitaire').catch(()=>onStatus('Ring could not load. Refresh to retry.'));
+  return ()=>{disposed=true;generation++;effectGeneration++;cancelAnimationFrame(introRaf);cancelAnimationFrame(cutRaf);cancelAnimationFrame(fxRaf);cancelAnimationFrame(idleRaf);clearInterval(idleTimer);cutGeneration++;resizeObserver.disconnect();clearTimeout(resizeSettle);clearTimeout(interactPause);clearTimeout(effectTimer);restoreDiamonds();clearInterval(authTimer);viewerRef.current=null;modelRef.current=null;draco.dispose();base.geometry.dispose();baseTop.dispose();baseEdge.dispose();marbleTop.dispose();marbleEdge.dispose();marbleNormal.dispose();marbleRoughness.dispose();normalEdge.dispose();roughEdge.dispose();viewer.dispose();};
  },[onReady,onStatus]);
- useEffect(()=>{applyRef.current();},[design]);
+ useEffect(()=>{applyRef.current();const viewer=viewerRef.current;if(viewer){viewer.needsRender=true;viewer.play();}},[design]);
  useEffect(()=>{stepFxRef.current(step);},[step]);
  return <><div className="studio-live-canvas" ref={host} aria-label="Interactive VictorShell 3D ring. Drag to rotate and scroll to zoom."/>{diamondState==='fallback'&&<span className="studio-diamond-notice" role="status">Diamond effect unavailable on this renderer. Standard materials shown.</span>}</>;
 }
