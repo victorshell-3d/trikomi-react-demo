@@ -32,6 +32,8 @@ function Icon({ name }: { name: string }) {
 }
 export function Studio() {
   const [panelOpen,setPanelOpen]=useState(true);
+  const [stageReady,setStageReady]=useState(false);
+  const onStageLoaded=useCallback(()=>setStageReady(true),[]);
   const [drawerFull,setDrawerFull]=useState(false);
   const [loading,setLoading]=useState(false);
   const [failedRing,setFailedRing]=useState<number|null>(null);
@@ -115,7 +117,7 @@ export function Studio() {
   }
   const selection = (key: keyof Omit<Design,'ringIndex'>, values: string[], kind = '') => <div className={`studio-options ${kind}`} role="group" aria-label={key}>{values.map(value => <button key={value} type="button" className={design[key] === value ? 'selected' : ''} aria-pressed={design[key] === value} onClick={() => update(key, value)}><img className="studio-option-preview" src={asset(`option-icons/${value.toLowerCase().replace(/ /g, '-')}.svg`)} alt=""/><span>{key === 'stone' ? shapeLabel(value) : value}</span></button>)}</div>;
   const reviewRows: [string, string][] = [['Ring style',ringIndex===0?'Classic':'Halo'], ['Metal', design.metal], ['Ring size', design.size], ['Main stone cut', shapeLabel(design.stone)], ['Stone colour', design.stoneColor], ['Stone size', design.carat], ['Finish', design.finish], ['Design note', design.engraving || 'None']];
-  return <main className={`studio ${panelOpen?'panel-open':'panel-closed'} ${drawerFull?'drawer-full':''} ${inspecting?'inspecting':''}`} aria-label="Jewelry studio configurator">
+  return <main className={`studio ${panelOpen?'panel-open':'panel-closed'} ${stageReady?'studio-ready ground-environment-ready':''} ${drawerFull?'drawer-full':''} ${inspecting?'inspecting':''}`} aria-label="Jewelry studio configurator">
     <div className="studio-photograph" aria-hidden="true"/>
     <header className="studio-header">
       <div className="studio-brand"><img src={asset('victorshell-original.png')} alt="VictorShell"/><span className="studio-brand-pill">Jewelry Configurator</span></div>
@@ -128,7 +130,7 @@ export function Studio() {
 
 
       <div className="studio-spotlight" aria-hidden="true"/>
-      <span className="studio-live-label">LIVE 3D · Drag to rotate</span><RingStage design={design} step={step} onReady={onRingReady} onStatus={onRingStatus}/>
+      <span className="studio-live-label">LIVE 3D · Drag to rotate</span><RingStage design={design} panelOpen={panelOpen} onLoaded={onStageLoaded} step={step} onReady={onRingReady} onStatus={onRingStatus}/>
       {ringStatus && <div className="studio-ring-status" role="status">{ringStatus}</div>}
 
       <div className="studio-tools" aria-label="Jewellery and view tools">
