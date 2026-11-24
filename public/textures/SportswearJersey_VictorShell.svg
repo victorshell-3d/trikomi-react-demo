@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="2048" height="2048" viewBox="0 0 1533.1 1533.1">
+  <defs>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6420C8" />
+      <stop offset="100%" stop-color="#B23DEB" />
+    </linearGradient>
+  </defs>
+
+  <!-- Front Torso Panel (x:137, y:608.6, w:612, h:792) -->
+  <rect x="137" y="608.6" width="612" height="792" fill="#FFFFFF" />
+
+  <!-- Back Torso Panel (x:784.1, y:608.6, w:612, h:792) -->
+  <rect x="784.1" y="608.6" width="612" height="792" fill="#FFFFFF" />
+
+  <!-- Dynamic Graphic Pattern -->
+  
+      <!-- Main Dynamic Diagonal Sash across Front Torso -->
+      <polygon points="137,1350 420,608 550,608 137,1120" fill="#7628D9" />
+      <polygon points="137,1100 560,608 610,608 137,980" fill="#B23DEB" opacity="0.85" />
+      <polygon points="137,960 610,650 640,680 137,860" fill="#581C87" opacity="0.9" />
+      <polygon points="320,1400 680,820 749,880 430,1400" fill="#7628D9" opacity="0.9" />
+      <polygon points="450,1400 710,950 749,990 520,1400" fill="#B23DEB" opacity="0.75" />
+
+      <!-- Matching Sash on Back Torso -->
+      <polygon points="784,1350 1067,608 1197,608 784,1120" fill="#7628D9" opacity="0.95" />
+      <polygon points="784,1100 1207,608 1257,608 784,980" fill="#B23DEB" opacity="0.85" />
+      <polygon points="967,1400 1327,820 1396,880 1077,1400" fill="#7628D9" opacity="0.9" />
+    
+
+  <!-- Left Sleeve (x:76.9, y:55.2, w:513.4, h:334.9) -->
+  <rect x="76.9" y="55.2" width="513.4" height="334.9" fill="#FFFFFF" />
+  <!-- Left Sleeve Dynamic Stripe -->
+  <polygon points="76.9,180 280,55.2 380,55.2 76.9,260" fill="#7628D9" />
+  <!-- Left Sleeve Cuff Trim -->
+  <rect x="76.9" y="394.6" width="513.4" height="117.1" fill="#7628D9" />
+
+  <!-- Right Sleeve (x:603.5, y:55.2, w:513.4, h:334.9) -->
+  <rect x="603.5" y="55.2" width="513.4" height="334.9" fill="#FFFFFF" />
+  <!-- Right Sleeve Dynamic Stripe -->
+  <polygon points="603.5,180 806,55.2 906,55.2 603.5,260" fill="#7628D9" />
+  <!-- Right Sleeve Cuff Trim -->
+  <rect x="603.5" y="394.6" width="513.4" height="117.1" fill="#7628D9" />
+
+  <!-- Collar Bands (x:1132.1, y:26.8 and x:1301.2, y:26.8) -->
+  <rect x="1132.1" y="26.8" width="168.5" height="513.4" fill="#7628D9" />
+  <rect x="1301.2" y="26.8" width="94.2" height="513.4" fill="#B23DEB" />
+
+  <!-- Waist Trims (Bottom) -->
+  <rect x="137" y="1400" width="612" height="60" fill="#7628D9" />
+  <rect x="784.1" y="1400" width="612" height="60" fill="#7628D9" />
+
+  <!-- VictorShell Logo on Chest (Wearer Left / Viewer Right: around x:550, y:720) -->
+  <g transform="translate(520, 690) scale(0.65)">
+    <!-- 3D Cube Icon -->
+    <polygon points="20,5 35,14 20,23 5,14" fill="#B23DEB" />
+    <polygon points="5,14 20,23 20,38 5,29" fill="#7628D9" />
+    <polygon points="35,14 20,23 20,38 35,29" fill="#581C87" />
+    <!-- Brand Text -->
+    <text x="45" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="16" fill="#581C87" letter-spacing="0.5">VictorShell<tspan font-size="9" dy="-6">TM</tspan></text>
+  </g>
+
+  <!-- Number "10" on Center Front Chest (around x:443, y:860) -->
+  <text x="443" y="865" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="900" font-size="115" fill="#581C87" text-anchor="middle" letter-spacing="-2">10</text>
+
+  <!-- Back Player Name & Number -->
+  <text x="1090" y="780" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="42" fill="#581C87" text-anchor="middle" letter-spacing="4">VICTOR</text>
+  <text x="1090" y="930" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="900" font-size="140" fill="#581C87" text-anchor="middle" letter-spacing="-3">10</text>
+</svg>

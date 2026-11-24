@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRIKOMI 3D SDK – Demo Hub</title>
+  <title>VictorShell – 3D Product Configurator & Spatial Studios</title>
   <meta name="description"
-    content="Interactive 3D configurator and viewer demos built with the @trikomi/core SDK and Three.js WebGPU." />
+    content="Next-generation WebGPU 3D configurator studios and spatial viewers built with VictorShell UI Kit v4.0." />
   <link rel="icon" href="./svgs/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *,
     *::before,
@@ -21,249 +21,334 @@
     }
 
     body {
-      background: #07080f;
-      color: #e2e4ef;
+      background: radial-gradient(circle at 50% 0%, #1e1638 0%, #0c0a14 65%, #07060b 100%);
+      color: #f1f2f6;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 3rem 1.5rem;
+      justify-content: flex-start;
+      padding: 4rem 1.5rem 3rem;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    .logo {
+    .ambient-glow {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(110, 44, 242, 0.28) 0%, rgba(99, 102, 241, 0.12) 50%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .header-wrap {
+      position: relative;
+      z-index: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 1rem;
+      text-align: center;
+      max-width: 760px;
+      margin-bottom: 3.5rem;
     }
 
-    .logo-icon {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      border-radius: 12px;
-      display: flex;
+    .badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-
-    .logo-text {
-      font-size: 1.5rem;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(110, 44, 242, 0.16);
+      border: 1px solid rgba(167, 139, 250, 0.35);
+      color: #c4b5fd;
+      font-size: 0.75rem;
       font-weight: 700;
-      background: linear-gradient(to right, #fff, #8b8b9c);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 14px rgba(110, 44, 242, 0.15);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #a78bfa;
+      box-shadow: 0 0 8px #a78bfa;
+    }
+
+    .logo-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 30%, #ddd6fe 70%, #a78bfa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
     }
 
     .subtitle {
-      font-size: 0.9rem;
-      color: #7b7f99;
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .subtitle a {
-      color: #6366f1;
-      text-decoration: none;
-    }
-
-    .subtitle a:hover {
-      text-decoration: underline;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #94a3b8;
+      max-width: 620px;
+      margin-bottom: 1rem;
     }
 
     .grid {
+      position: relative;
+      z-index: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
       width: 100%;
-      max-width: 920px;
-      margin-bottom: 2rem;
+      max-width: 1200px;
+      margin-bottom: 3rem;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
+      background: rgba(26, 22, 43, 0.45);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 1.75rem;
       text-align: left;
       text-decoration: none;
-      color: #e2e4ef;
-      transition: all 0.2s;
+      color: #f1f2f6;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
     .card:hover {
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(99, 102, 241, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      background: rgba(35, 29, 61, 0.65);
+      border-color: rgba(167, 139, 250, 0.45);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(110, 44, 242, 0.18);
     }
 
-    .card-icon {
-      font-size: 1.4rem;
-      margin-bottom: 6px;
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(110, 44, 242, 0.25), rgba(99, 102, 241, 0.25));
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(110, 44, 242, 0.15);
+    }
+
+    .card-icon-img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .card-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(110, 44, 242, 0.15);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      color: #c4b5fd;
     }
 
     .card-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
     }
 
     .card-desc {
-      font-size: 0.78rem;
-      color: #7b7f99;
-      line-height: 1.5;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.55;
+      flex-grow: 1;
     }
 
-    /* Docs card is highlighted */
-    .card-docs {
-      background: rgba(99, 102, 241, 0.08);
-      border-color: rgba(99, 102, 241, 0.3);
-      grid-column: 1 / -1;
-      flex-direction: row;
+    .card-action {
+      display: inline-flex;
       align-items: center;
-      gap: 1rem;
-    }
-
-    .card-docs:hover {
-      background: rgba(99, 102, 241, 0.14);
-      border-color: rgba(99, 102, 241, 0.6);
-    }
-
-    .card-docs .card-icon {
-      margin-bottom: 0;
-      font-size: 1.75rem;
-      flex-shrink: 0;
-    }
-
-    .card-docs .card-name {
-      font-size: 1rem;
-      color: #a5b4fc;
-    }
-
-    .card-docs .card-desc {
-      font-size: 0.82rem;
-      color: #6b7099;
-    }
-
-    .section-title {
-      width: 100%;
-      text-align: left;
-      font-size: 1.2rem;
+      gap: 6px;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: #fff;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid #333;
-      padding-bottom: 0.5rem;
+      color: #a78bfa;
+      margin-top: 8px;
+      transition: gap 0.2s ease, color 0.2s ease;
+    }
+
+    .card:hover .card-action {
+      color: #c4b5fd;
+      gap: 10px;
     }
 
     footer {
-      font-size: 0.72rem;
-      color: #4b5080;
-      margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: auto;
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      width: 100%;
+      max-width: 1200px;
     }
   </style>
 </head>
 
 <body>
-  <div class="logo">
-    <img src="./logos/trikomi.png" style="height: 44px; width: auto; object-fit: contain;" alt="Trikomi Logo" />
-    <div class="logo-text">TRIKOMI 3D SDK</div>
-  </div>
-  <p class="subtitle">
-    Built with <a href="https://threejs.org" target="_blank">Three.js WebGPU</a>,
-    React, MobX &amp; Vite &nbsp;·&nbsp;
-    <a href="./docs/">Developer Docs →</a>
-  </p>
+  <div class="ambient-glow"></div>
 
-  <div class="grid">
+  <header class="header-wrap">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      VictorShell UI Kit v4.0
+    </div>
+    <h1 class="logo-title">VictorShell 3D Studios</h1>
+    <p class="subtitle">
+      Select any of the seven individual landing pages below to experience dedicated 3D product visualization, Light &amp; Dark themes, and real-time interactive configurators.
+    </p>
+  </header>
 
-    <!-- Docs -->
-    <a class="card card-docs" href="./docs/" id="nav-docs">
-      <div class="card-icon">📖</div>
-      <div>
-        <div class="card-name">Developer Documentation</div>
-        <div class="card-desc">SDK reference, plugin API, build pipeline, asset path strategy, and license system.</div>
-      </div>
-    </a>
-  </div>
-
-  <div class="grid">
-    <!-- Apps -->
-    <a class="card" href="/apps/material-library/index.html" id="nav-material-library" style="border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.08);">
-      <div style="font-size: 28px; margin-bottom: 8px;">🔮</div>
-      <div class="card-name" style="color: #a5b4fc;">Material Library</div>
-      <div class="card-desc">Interactive PBR material showroom to inspect metals, curated fabrics, gemstones, glass, and car paints on 3D spheres.</div>
-    </a>
-    <a class="card" href="/apps/viewer/index.html" id="nav-viewer">
-      <img src="./logos/trikomi.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Viewer" />
-      <div class="card-name">3D Viewer</div>
-      <div class="card-desc">Full-featured model viewer with material editor and diamond shader.</div>
-    </a>
-    <a class="card" href="/apps/sportswear-configurator/index.html" id="nav-sportswear">
-      <img src="./logos/jersey.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Sportswear" />
-      <div class="card-name">Sportswear Configurator</div>
-      <div class="card-desc">Custom jersey colors, logos, text, and fabric types.</div>
-    </a>
-    <a class="card" href="/apps/eyewear-tryon/index.html" id="nav-eyewear">
-      <img src="./logos/eyewear.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Eyewear Try-On" />
-      <div class="card-name">Eyewear Try-On (MediaPipe)</div>
-      <div class="card-desc">Real-time browser AR eyewear try-on powered by MediaPipe face tracking.</div>
-    </a>
-    <a class="card" href="/apps/8theye/index.html" id="nav-8theye">
-      <img src="./logos/eyewear.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="8th Wall WebAR Eyewear" />
-      <div class="card-name">8th Wall WebAR Eyewear</div>
-      <div class="card-desc">High-performance open-source 8th Wall AR Face integration for eyewear try-on.</div>
-    </a>
-    <a class="card" href="/apps/face-mocap/index.html" id="nav-face">
-      <img src="./logos/facemocap.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Face Mocap" />
-      <div class="card-name">Face Motion Capture</div>
-      <div class="card-desc">52 ARKit blend shapes streamed to Unreal / Unity via LiveLink.</div>
-    </a>
+  <main class="grid">
+    <!-- 1. Jewelry Configurator -->
     <a class="card" href="/apps/jewelry-configurator/index.html" id="nav-jewelry">
-      <img src="./logos/jewel.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Jewelry" />
-      <div class="card-name">Jewelry Configurator</div>
-      <div class="card-desc">Physically-based ray-traced diamond dispersion and fire.</div>
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/jewel.png" alt="Jewelry Configurator" class="card-icon-img" />
+        </div>
+        <span class="card-badge">Abbe 58.6 Dispersion</span>
+      </div>
+      <h2 class="card-name">Jewelry Configurator</h2>
+      <p class="card-desc">Real-time Cauchy spectral light dispersion, physical diamond caustics, and 18K precious metal customization.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
     </a>
+
+    <!-- 2. Eyewear Virtual Try-On -->
+    <a class="card" href="/apps/eyewear-tryon/index.html" id="nav-eyewear">
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/eyewear.png" alt="Eyewear Try-On" class="card-icon-img" />
+        </div>
+        <span class="card-badge">MediaPipe AR</span>
+      </div>
+      <h2 class="card-name">Eyewear Virtual Try-On</h2>
+      <p class="card-desc">Sub-millimeter 3D facial landmark tracking, automated pupillary distance (PD) calibration, and cranial depth occlusion.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
+    </a>
+
+    <!-- 3. Sportswear Configurator -->
+    <a class="card" href="/apps/sportswear-configurator/index.html" id="nav-sportswear">
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/jersey.png" alt="Sportswear Configurator" class="card-icon-img" />
+        </div>
+        <span class="card-badge">Vector Decals</span>
+      </div>
+      <h2 class="card-name">Sportswear Configurator</h2>
+      <p class="card-desc">Multi-zone athletic teamwear customization, microfacet fabric shaders, and production sublimation dieline export.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
+    </a>
+
+    <!-- 4. Packaging Configurator -->
     <a class="card" href="/apps/box-configurator/index.html" id="nav-box">
-      <img src="./logos/box.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="Box Configurator" />
-      <div class="card-name">Box Configurator</div>
-      <div class="card-desc">Parametric 3D packaging with adjustable dimensions and flap styles.</div>
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/box.png" alt="Box Configurator" class="card-icon-img" />
+        </div>
+        <span class="card-badge">Parametric Kinematics</span>
+      </div>
+      <h2 class="card-name">Packaging Configurator</h2>
+      <p class="card-desc">Real-time parametric folding carton kinematics, millimeter dimension scaling, and certified CAD DXF dieline export.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
     </a>
+
+    <!-- 5. Face Motion Capture -->
+    <a class="card" href="/apps/face-mocap/index.html" id="nav-facemocap">
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/facemocap.png" alt="Face Motion Capture" class="card-icon-img" />
+        </div>
+        <span class="card-badge">52 ARKit Shapes</span>
+      </div>
+      <h2 class="card-name">Face Motion Capture</h2>
+      <p class="card-desc">Webcam facial landmark motion capture streamed at 60 FPS to Unreal Engine LiveLink and Unity with zero cloud latency.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
+    </a>
+
+    <!-- 6. 360° Virtual Tour -->
     <a class="card" href="/apps/360tour/index.html" id="nav-360tour">
-      <img src="./logos/360.png"
-        style="height: 32px; width: auto; object-fit: contain; margin-bottom: 8px; align-self: flex-start;"
-        alt="360 Tour" />
-      <div class="card-name">360 Virtual Tour</div>
-      <div class="card-desc">Interactive 360 degree virtual tour editor and viewer with hotspots.</div>
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/360.png" alt="360 Virtual Tour" class="card-icon-img" />
+        </div>
+        <span class="card-badge">8K Panoramas</span>
+      </div>
+      <h2 class="card-name">360° Virtual Tour</h2>
+      <p class="card-desc">Immersive spherical panoramas with interactive teleportation hotspots, ambisonic 3D audio, and standalone ZIP export.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
     </a>
 
-  </div>
+    <!-- 7. 3D Product Viewer -->
+    <a class="card" href="/apps/viewer/index.html" id="nav-viewer">
+      <div class="card-top">
+        <div class="card-icon-wrap">
+          <img src="/logos/trikomi.png" alt="3D Product Viewer" class="card-icon-img" />
+        </div>
+        <span class="card-badge">WebGPU PBR</span>
+      </div>
+      <h2 class="card-name">3D Product Viewer</h2>
+      <p class="card-desc">Enterprise CAD model inspection with physically based lighting, turntable rotation, and instant transparent 4K PNG snapshots.</p>
+      <span class="card-action">Open Landing Page &rarr;</span>
+    </a>
+  </main>
 
-
-
-  <footer>@trikomi/core · Three.js WebGPU · All rights reserved</footer>
+  <footer>
+    VictorShell UI Kit v4.0 &middot; Built with Three.js WebGPU &middot; All Rights Reserved
+  </footer>
 </body>
 
 </html>

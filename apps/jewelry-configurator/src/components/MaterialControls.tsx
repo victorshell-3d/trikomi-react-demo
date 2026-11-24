@@ -89,11 +89,10 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
   useEffect(() => {
     if (viewerStore.isModelLoading) return;
 
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
     const timeoutId = setTimeout(() => {
-      const targetModel = viewerStore.currentModel || viewer.runtimeRoot.children[0]?.nativeObject || viewer.scene;
+      const viewer = viewerRef.current;
+      if (!viewer || (viewer as any).isDisposed) return;
+      const targetModel = viewerStore.currentModel || viewer.runtimeRoot?.children?.[0]?.nativeObject || viewer.scene;
       if (!targetModel) return;
 
       const uniqueMats = new Map<string, { id: string, name: string, color: string, mat: THREE.Material | import('three/webgpu').NodeMaterial, mesh: THREE.Object3D, isDiamond: boolean }>();

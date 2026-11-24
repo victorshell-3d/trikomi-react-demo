@@ -1,0 +1,267 @@
+[
+  {
+    "id": "jewelry",
+    "name": "Jewelry Configurator",
+    "url": "/apps/jewelry-configurator/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi Jewelry Configurator\"",
+      "Brand identity verified: \"VictorShell / Jewelry Configurator\"",
+      "No empty headings or paragraph placeholders detected",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(6, 8, 20))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [],
+    "visualObservations": [],
+    "functionalBugs": [
+      "Broken image sources: https://localhost:3000/logos/jewel.png"
+    ],
+    "suggestedImprovements": [
+      "Consider adding a quick-preset gemstone cut preview indicator directly in the atelier showcase card for even faster visual scanning."
+    ],
+    "consoleLogs": [
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend."
+    ]
+  },
+  {
+    "id": "eyewear",
+    "name": "Eyewear Virtual Try-On",
+    "url": "/apps/eyewear-tryon/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi Eyewear Try-On\"",
+      "Brand identity verified: \"VictorShell / Eyewear Try-On\"",
+      "All visual image assets rendered with valid naturalWidth",
+      "No empty headings or paragraph placeholders detected",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(10, 10, 15))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [],
+    "visualObservations": [],
+    "functionalBugs": [
+      "Console error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU."
+    ],
+    "suggestedImprovements": [
+      "MediaPipe webcam try-on works immediately in modern browsers; an on-screen permission helper pill could provide subtle guidance for first-time camera access."
+    ],
+    "consoleLogs": [
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend.",
+      "Warn: Camera access denied or unavailable NotAllowedError: Permission denied",
+      "Warn: Webcam not accessible NotAllowedError: Permission denied",
+      "Warn: W1119 10:14:58.182000 2136208 face_landmarker_graph.cc:180] Sets FaceBlendshapesGraph acceleration to xnnpack by default.",
+      "Warn: W1119 10:14:58.247000 2136208 gl_context.cc:1118] OpenGL error checking is disabled"
+    ]
+  },
+  {
+    "id": "sportswear",
+    "name": "Sportswear Configurator",
+    "url": "/apps/sportswear-configurator/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi Sportswear Configurator\"",
+      "Brand identity verified: \"VictorShell / Sportswear Configurator\"",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(241, 245, 249))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [
+      "Found 4 empty text elements"
+    ],
+    "visualObservations": [],
+    "functionalBugs": [
+      "Broken image sources: https://localhost:3000/logos/jersey.png"
+    ],
+    "suggestedImprovements": [
+      "3D jersey normal maps and fabric specular presets can be featured with an interactive zoom tooltip on the 3D canvas."
+    ],
+    "consoleLogs": [
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend."
+    ]
+  },
+  {
+    "id": "box",
+    "name": "Packaging Configurator",
+    "url": "/apps/box-configurator/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi Box Configurator\"",
+      "Brand identity verified: \"VictorShell / Box Configurator\"",
+      "No empty headings or paragraph placeholders detected",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(10, 11, 13))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [],
+    "visualObservations": [],
+    "functionalBugs": [
+      "Broken image sources: https://localhost:3000/logos/box.png"
+    ],
+    "suggestedImprovements": [
+      "Dimension sliders (L × W × D) in the 3D configurator display smooth real-time creasing; a quick-export dieline PDF button could be highlighted in the specs."
+    ],
+    "consoleLogs": [
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: [TrikomiNode] Cannot add ancestor as a child (circular hierarchy loop detected).",
+      "Warn: No available adapters.",
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend."
+    ]
+  },
+  {
+    "id": "facemocap",
+    "name": "Face Mocap",
+    "url": "/apps/face-mocap/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi Face Mocap\"",
+      "Brand identity verified: \"VictorShell / Face Motion Capture\"",
+      "No empty headings or paragraph placeholders detected",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(10, 10, 15))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [],
+    "visualObservations": [],
+    "functionalBugs": [
+      "Broken image sources: https://localhost:3000/logos/facemocap.png",
+      "Console error: Use the `defaultValue` or `value` props on <select> instead of setting `selected` on <option>."
+    ],
+    "suggestedImprovements": [
+      "ARKit 52 blendshapes live visualizer is silky smooth; streaming websocket status can show a glowing pulse indicator."
+    ],
+    "consoleLogs": [
+      "Warn: Camera access denied or unavailable NotAllowedError: Permission denied",
+      "Warn: Camera access denied or unavailable NotAllowedError: Permission denied",
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend.",
+      "Warn: Webcam not accessible NotAllowedError: Permission denied"
+    ]
+  },
+  {
+    "id": "360tour",
+    "name": "360° Virtual Tour",
+    "url": "/apps/360tour/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi 360° Virtual Tour\"",
+      "Brand identity verified: \"VictorShell / 360° Virtual Tour\"",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(13, 17, 23))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #/dashboard)",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [
+      "Found 4 empty text elements"
+    ],
+    "visualObservations": [
+      "3D viewport loaded without standard canvas (checking container)"
+    ],
+    "functionalBugs": [
+      "Broken image sources: https://localhost:3000/logos/360.png"
+    ],
+    "suggestedImprovements": [
+      "Spherical panorama hotspots transition instantaneously; floorplan minimap pill can toggle open on mobile."
+    ],
+    "consoleLogs": []
+  },
+  {
+    "id": "viewer",
+    "name": "3D Product Viewer",
+    "url": "/apps/viewer/index.html",
+    "worksCorrectly": [
+      "Page loaded with title: \"Trikomi 3D Viewer\"",
+      "Brand identity verified: \"VictorShell / 3D Viewer\"",
+      "All visual image assets rendered with valid naturalWidth",
+      "No empty headings or paragraph placeholders detected",
+      "Initial theme mode is 'light'",
+      "Theme toggle switched to Dark Mode (computed root bg: rgb(13, 17, 23))",
+      "Dark mode persisted across page reload",
+      "Successfully toggled back to Light Mode",
+      "Accent switcher applied 'orchid' palette",
+      "Launch Configurator CTA navigated to 3D canvas (hash: #demo)",
+      "3D WebGL/WebGPU canvas rendered successfully",
+      "Back to Overview pill returned smoothly to landing page",
+      "Tablet viewport (768px) responsive with zero horizontal overflow",
+      "Mobile viewport (375px) hamburger drawer opens cleanly",
+      "Mobile viewport has zero horizontal overflow"
+    ],
+    "needsImprovement": [],
+    "visualObservations": [],
+    "functionalBugs": [],
+    "suggestedImprovements": [
+      "Multi-model GLTF drag-and-drop works seamlessly; environment HDRI selector pill is clean and intuitive."
+    ],
+    "consoleLogs": [
+      "Warn: No available adapters.",
+      "Warn: THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend."
+    ]
+  }
+]

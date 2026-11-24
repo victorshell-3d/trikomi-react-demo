@@ -131,11 +131,29 @@ export const Toolbar: React.FC = observer(() => {
 
   const handleScreenshot = () => {
     const viewer = viewerStore.viewer as ThreeViewer;
-    if (viewer) {
+    if (!viewer) return;
+
+    try {
       const exportPlugin = viewer.getPlugin(ExportPlugin);
-      if (exportPlugin) {
+      if (exportPlugin && typeof exportPlugin.takeScreenshot === 'function') {
         exportPlugin.takeScreenshot();
+        return;
       }
+
+      // Direct canvas fallback at current native viewport resolution
+      const renderer = viewer.renderer;
+      if (renderer && viewer.scene && viewer.camera) {
+        renderer.render(viewer.scene, viewer.camera);
+        const dataUrl = renderer.domElement.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = `viewer-snapshot-${Date.now()}.png`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (err) {
+      console.warn('[Viewer] Snapshot capture error:', err);
     }
   };
 
@@ -419,6 +437,20 @@ export const Toolbar: React.FC = observer(() => {
           <path d="M12 2L2 7l10 5 10-5-10-5z" />
           <path d="M2 17l10 5 10-5" />
           <path d="M2 12l10 5 10-5" strokeDasharray="3 3" />
+        </svg>
+      </button>
+
+      {/* Snapshot / Capture Scene PNG Button */}
+      <button
+        onClick={handleScreenshot}
+        className="toolbar-btn"
+        title="Capture Snapshot PNG"
+        aria-label="Capture Snapshot PNG"
+        data-testid="viewer-snapshot-btn"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+          <circle cx="12" cy="13" r="4" />
         </svg>
       </button>
 

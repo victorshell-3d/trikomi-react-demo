@@ -47,6 +47,37 @@ const serveSecurityTxtPlugin = () => ({
   }
 });
 
+const appRouteRewritePlugin = () => ({
+  name: 'app-route-rewrite',
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      const apps = [
+        'jewelry-configurator',
+        'eyewear-tryon',
+        'sportswear-configurator',
+        'box-configurator',
+        'face-mocap',
+        '360tour',
+        'viewer',
+        '8theye',
+        'material-library'
+      ];
+      if (req.url) {
+        for (const app of apps) {
+          if (req.url.startsWith(`/${app}/`)) {
+            req.url = `/apps${req.url}`;
+            break;
+          } else if (req.url === `/${app}` || req.url === `/${app}/`) {
+            req.url = `/apps/${app}/index.html`;
+            break;
+          }
+        }
+      }
+      next();
+    });
+  }
+});
+
 export default defineConfig(({ command }) => {
   // Dev mode always uses local SDK; build mode uses npm package unless explicitly overridden
   const isDev = command === 'serve';
@@ -58,7 +89,7 @@ export default defineConfig(({ command }) => {
     resolve: {
       alias: dynamicAlias
     },
-    plugins: [react(), basicSsl(), ...(useLocalSdk ? [serveSecurityTxtPlugin()] : [])],
+    plugins: [react(), basicSsl(), appRouteRewritePlugin(), ...(useLocalSdk ? [serveSecurityTxtPlugin()] : [])],
     publicDir: './public',
     server: {
       host: '0.0.0.0',

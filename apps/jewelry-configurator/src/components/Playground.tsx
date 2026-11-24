@@ -32,6 +32,7 @@ export const Playground = observer(() => {
 
   useEffect(() => {
     if (!containerRef.current) return;
+    let isMounted = true;
 
     // 1. Configure default rendering flags on the shared global store
     // Background color is handled dynamically below
@@ -44,6 +45,7 @@ export const Playground = observer(() => {
     // 2. Initialize ThreeViewer with plugins
     const viewer = new ThreeViewer(containerRef.current, viewerStore, {
       onAuthorized: () => {
+        if (!isMounted) return;
         viewer.addPlugin(new SSGIPlugin());
         viewer.addPlugin(new SSRPlugin());
         viewer.addPlugin(new ProgressiveShadowPlugin());
@@ -70,22 +72,61 @@ export const Playground = observer(() => {
 
     viewerRef.current = viewer;
 
-    // Load initial ring.glb or custom model from widget options
-    const modelToLoad = viewerStore.options.model || `${import.meta.env.BASE_URL}models/ring.glb`;
+    // Protect GLTFPlugin from post-disposal 'runtimeRoot' access
     const gltfPlugin = viewer.getPlugin(GLTFPlugin);
     if (gltfPlugin) {
+      const safeStub = {
+        runtimeRoot: {
+          clear: () => {},
+          add: () => {},
+          remove: () => {},
+          traverse: () => {},
+          children: [],
+          findNodeByObject: () => null,
+          selectNode: () => {},
+        },
+        store: {
+          setActiveModelName: () => {},
+          setCurrentModel: () => {},
+          setIsModelLoading: () => {},
+          setModelError: () => {},
+        },
+        enableOnDemandRendering: false,
+        requestRender: () => {},
+      };
+
+      const originalOnDetach = gltfPlugin.onDetach ? gltfPlugin.onDetach.bind(gltfPlugin) : null;
+      gltfPlugin.onDetach = () => {
+        if (originalOnDetach) originalOnDetach();
+        // Maintain safe dummy viewer stub on detached plugin so in-flight loadAsync continuation no-ops cleanly
+        (gltfPlugin as any).viewer = safeStub;
+      };
+
+      // Load initial ring.glb or custom model from widget options
+      const modelToLoad = viewerStore.options.model || `${import.meta.env.BASE_URL}models/ring.glb`;
       gltfPlugin.loadModel(modelToLoad, 'jewelry_model').then(() => {
+        if (!isMounted || !viewerRef.current) return;
         viewer.getPlugin(OrbitControlsPlugin)?.resetView();
         const diamondPlugin = viewer.getPlugin(DiamondPlugin) as any;
         if (diamondPlugin && typeof diamondPlugin.applyDiamondMaterial === 'function') {
           diamondPlugin.applyDiamondMaterial();
         }
-      }).catch(err => console.error(`Failed to load ${modelToLoad}`, err));
+      }).catch(err => {
+        if (isMounted) {
+          console.error(`Failed to load ${modelToLoad}`, err);
+        }
+      });
     }
 
     return () => {
+      isMounted = false;
       viewerStore.viewer = null;
-      viewer.dispose();
+      viewerRef.current = null;
+      try {
+        viewer.dispose();
+      } catch (e) {
+        // Safe disposal
+      }
     };
   }, []);
 

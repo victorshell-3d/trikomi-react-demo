@@ -1,0 +1,258 @@
+{
+  "timestamp": "2026-11-19T13:48:46.459Z",
+  "totalApps": 7,
+  "results": [
+    {
+      "id": "jewelry-configurator",
+      "name": "Jewelry Configurator",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6721,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "eyewear-tryon",
+      "name": "Eyewear Try-On",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6911,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "sportswear-configurator",
+      "name": "Sportswear Configurator",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6944,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "box-configurator",
+      "name": "Packaging Configurator",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6789,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "face-mocap",
+      "name": "Face Mocap",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6746,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "360tour",
+      "name": "360° Virtual Tour",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6853,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    },
+    {
+      "id": "viewer",
+      "name": "3D Product Viewer",
+      "checks": {
+        "desktopCanScroll": true,
+        "htmlBodyNotOverflowHidden": true,
+        "desktopNoHorizontalOverflow": true,
+        "desktopScrollDown": true,
+        "desktopScrollToBottom": true,
+        "desktopScrollBackToTop": true,
+        "desktopMouseWheelScroll": true,
+        "tabletCanScroll": true,
+        "tabletScrollDown": true,
+        "tabletScrollBackToTop": true,
+        "tabletNoHorizontalOverflow": true,
+        "mobileCanScroll": true,
+        "mobileScrollDown": true,
+        "mobileScrollBackToTop": true,
+        "mobileNoHorizontalOverflow": true,
+        "hero3DCanvasIntact": true
+      },
+      "metrics": {
+        "desktop": {
+          "htmlOverflowY": "auto",
+          "htmlOverflowX": "hidden",
+          "bodyOverflowY": "auto",
+          "bodyOverflowX": "hidden",
+          "rootOverflowY": "auto",
+          "rootOverflowX": "hidden",
+          "scrollHeight": 6979,
+          "clientHeight": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        }
+      }
+    }
+  ]
+}

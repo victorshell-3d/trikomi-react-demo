@@ -29,10 +29,18 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
   background-color: var(--color-bg);
   font-family: var(--font-body);
   color: var(--color-text-primary);
@@ -41,10 +49,10 @@ body {
 }
 
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Sidebar styling - premium glassmorphism */

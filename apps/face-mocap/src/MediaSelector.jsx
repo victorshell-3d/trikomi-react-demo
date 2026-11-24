@@ -136,6 +136,7 @@ const MediaSelector = observer(() => {
                         <select
                             className="premium-select"
                             style={{ width: '100%' }}
+                            defaultValue=""
                             onChange={e => {
                                 const val = e.target.value;
                                 vidRef.current.setAttribute('src', '');
@@ -150,7 +151,7 @@ const MediaSelector = observer(() => {
                                 }
                             }}
                         >
-                            <option value="" disabled selected>Select Input Camera</option>
+                            <option value="" disabled>Select Input Camera</option>
                             {store.cameras.map(device => (
                                 <option key={device.deviceId} value={device.deviceId}>{device.label || `Camera ${device.deviceId.substring(0, 5)}`}</option>
                             ))}

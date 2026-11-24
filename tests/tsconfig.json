@@ -1,0 +1,10 @@
+{
+  "extends": "../packages/ui-kit/tsconfig.json",
+  "compilerOptions": {
+    "types": ["vite/client"]
+  },
+  "include": [
+    "../apps/box-configurator/tests/ui-kit-consumer.tsx",
+    "../apps/jewelry-configurator/tests/ui-kit-consumer.tsx"
+  ]
+}

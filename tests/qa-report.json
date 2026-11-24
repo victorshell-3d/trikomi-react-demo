@@ -1,0 +1,207 @@
+{
+  "timestamp": "2026-11-19T15:47:20.509Z",
+  "totalApps": 7,
+  "results": [
+    {
+      "id": "jewelry-configurator",
+      "name": "Jewelry Configurator",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "jewelry-configurator-light-desktop.png",
+        "darkDesktop": "jewelry-configurator-dark-desktop.png",
+        "demoView": "jewelry-configurator-demo.png",
+        "tablet": "jewelry-configurator-tablet.png",
+        "mobile": "jewelry-configurator-mobile.png",
+        "mobileDrawer": "jewelry-configurator-mobile-drawer.png"
+      },
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT",
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT"
+      ],
+      "failedRequests": []
+    },
+    {
+      "id": "eyewear-tryon",
+      "name": "Eyewear Try-On",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "eyewear-tryon-light-desktop.png",
+        "darkDesktop": "eyewear-tryon-dark-desktop.png",
+        "demoView": "eyewear-tryon-demo.png",
+        "tablet": "eyewear-tryon-tablet.png",
+        "mobile": "eyewear-tryon-mobile.png",
+        "mobileDrawer": "eyewear-tryon-mobile-drawer.png"
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "id": "sportswear-configurator",
+      "name": "Sportswear Configurator",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "sportswear-configurator-light-desktop.png",
+        "darkDesktop": "sportswear-configurator-dark-desktop.png",
+        "demoView": "sportswear-configurator-demo.png",
+        "tablet": "sportswear-configurator-tablet.png",
+        "mobile": "sportswear-configurator-mobile.png",
+        "mobileDrawer": "sportswear-configurator-mobile-drawer.png"
+      },
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT",
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT"
+      ],
+      "failedRequests": []
+    },
+    {
+      "id": "box-configurator",
+      "name": "Packaging Configurator",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "box-configurator-light-desktop.png",
+        "darkDesktop": "box-configurator-dark-desktop.png",
+        "demoView": "box-configurator-demo.png",
+        "tablet": "box-configurator-tablet.png",
+        "mobile": "box-configurator-mobile.png",
+        "mobileDrawer": "box-configurator-mobile-drawer.png"
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "id": "face-mocap",
+      "name": "Face Mocap",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "face-mocap-light-desktop.png",
+        "darkDesktop": "face-mocap-dark-desktop.png",
+        "demoView": "face-mocap-demo.png",
+        "tablet": "face-mocap-tablet.png",
+        "mobile": "face-mocap-mobile.png",
+        "mobileDrawer": "face-mocap-mobile-drawer.png"
+      },
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT",
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT"
+      ],
+      "failedRequests": []
+    },
+    {
+      "id": "360tour",
+      "name": "360° Virtual Tour",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "360tour-light-desktop.png",
+        "darkDesktop": "360tour-dark-desktop.png",
+        "demoView": "360tour-demo.png",
+        "tablet": "360tour-tablet.png",
+        "mobile": "360tour-mobile.png",
+        "mobileDrawer": "360tour-mobile-drawer.png"
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "id": "viewer",
+      "name": "3D Product Viewer",
+      "checks": {
+        "pageLoads": true,
+        "defaultLightMode": true,
+        "darkModeToggle": true,
+        "themePersistence": true,
+        "accentSwitch": true,
+        "accentPersistence": true,
+        "launchDemoNavigation": true,
+        "backToOverviewNavigation": true,
+        "tabletResponsive": true,
+        "mobileMenuDrawer": true,
+        "noHorizontalOverflow": true
+      },
+      "screenshots": {
+        "lightDesktop": "viewer-light-desktop.png",
+        "darkDesktop": "viewer-dark-desktop.png",
+        "demoView": "viewer-demo.png",
+        "tablet": "viewer-tablet.png",
+        "mobile": "viewer-mobile.png",
+        "mobileDrawer": "viewer-mobile-drawer.png"
+      },
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT",
+        "Failed to load resource: net::ERR_CONNECTION_TIMED_OUT"
+      ],
+      "failedRequests": []
+    }
+  ]
+}

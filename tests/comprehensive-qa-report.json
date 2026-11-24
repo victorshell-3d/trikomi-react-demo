@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-11-19T17:28:15.344Z",
+  "pages": {
+    "jewelry-configurator": {
+      "screenshots": {
+        "lightDesktop": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\jewelry-configurator-light-desktop.png",
+        "darkDesktop": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\jewelry-configurator-dark-desktop.png",
+        "tablet": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\jewelry-configurator-tablet.png",
+        "mobile": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\jewelry-configurator-mobile.png"
+      },
+      "colors": {
+        "bodyBg": "#060814",
+        "heroTitle": {
+          "color": "#17152F",
+          "backgroundColor": "#000000",
+          "borderColor": "#17152F"
+        },
+        "heroLead": null,
+        "ctaPrimary": null,
+        "ctaSecondary": null,
+        "featureCard": null,
+        "customizer": {
+          "color": "#17152F",
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#E6D9FF"
+        }
+      },
+      "interaction": {
+        "tabCount": 3,
+        "finishCount": 4,
+        "shapeCount": 0
+      }
+    },
+    "sportswear-configurator": {
+      "screenshots": {
+        "lightDesktop": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\sportswear-configurator-light-desktop.png",
+        "darkDesktop": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\sportswear-configurator-dark-desktop.png",
+        "tablet": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\sportswear-configurator-tablet.png",
+        "mobile": "D:\\new landing page\\trikomi-react-demo\\public\\qa-screenshots\\sportswear-configurator-mobile.png"
+      },
+      "colors": {
+        "bodyBg": "#F1F5F9",
+        "heroTitle": {
+          "color": "#17152F",
+          "backgroundColor": "#000000",
+          "borderColor": "#17152F"
+        },
+        "heroLead": null,
+        "ctaPrimary": null,
+        "ctaSecondary": null,
+        "featureCard": null,
+        "customizer": {
+          "color": "#17152F",
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#E6D9FF"
+        }
+      },
+      "interaction": {
+        "tabCount": 4,
+        "swatchCount": 5,
+        "patternCount": 5,
+        "fabricCount": 5,
+        "swatchClicked": true
+      }
+    }
+  }
+}
