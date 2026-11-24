@@ -1,0 +1,253 @@
+.vs-ui-root .vs-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.vs-ui-root .vs-text,
+.vs-ui-root .vs-caption {
+  margin: 0;
+  font-family: var(--vs-font-sans);
+}
+
+.vs-ui-root .vs-text--body {
+  font-size: var(--vs-font-size-md);
+  font-weight: var(--vs-font-weight-medium);
+  line-height: 1.625;
+}
+
+.vs-ui-root .vs-text--small {
+  font-size: var(--vs-font-size-sm);
+  font-weight: var(--vs-font-weight-regular);
+  line-height: 1.5;
+}
+
+.vs-ui-root .vs-text--caption,
+.vs-ui-root .vs-caption {
+  font-size: var(--vs-font-size-xs);
+  font-weight: var(--vs-font-weight-regular);
+  line-height: 1.4;
+}
+
+.vs-ui-root .vs-text--label,
+.vs-ui-root .vs-label {
+  font-size: var(--vs-font-size-sm);
+  font-weight: var(--vs-font-weight-bold);
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vs-ui-root .vs-text--mono {
+  font-family: var(--vs-font-mono);
+  font-size: var(--vs-font-size-sm);
+  font-weight: var(--vs-font-weight-medium);
+  line-height: 1.5;
+}
+
+.vs-ui-root .vs-text--tone-default,
+.vs-ui-root .vs-heading--tone-default {
+  color: var(--vs-ink);
+}
+
+.vs-ui-root .vs-text--tone-muted,
+.vs-ui-root .vs-heading--tone-muted,
+.vs-ui-root .vs-caption--tone-muted,
+.vs-ui-root .vs-label--tone-muted {
+  color: var(--vs-ink-muted);
+}
+
+.vs-ui-root .vs-text--tone-subtle,
+.vs-ui-root .vs-heading--tone-subtle,
+.vs-ui-root .vs-caption--tone-subtle,
+.vs-ui-root .vs-label--tone-subtle {
+  color: var(--vs-ink-subtle);
+}
+
+.vs-ui-root .vs-text--tone-accent,
+.vs-ui-root .vs-heading--tone-accent,
+.vs-ui-root .vs-caption--tone-accent,
+.vs-ui-root .vs-label--tone-accent {
+  color: var(--vs-primary);
+}
+
+.vs-ui-root .vs-heading {
+  margin: 0;
+  font-family: var(--vs-font-display);
+  letter-spacing: -0.02em;
+}
+
+.vs-ui-root .vs-heading--display {
+  font-size: var(--vs-font-size-2xl);
+  font-weight: var(--vs-font-weight-extrabold);
+  line-height: 1.25;
+}
+
+.vs-ui-root .vs-heading--page {
+  font-size: var(--vs-font-size-2xl);
+  font-weight: var(--vs-font-weight-extrabold);
+  line-height: 1.25;
+}
+
+.vs-ui-root .vs-heading--section {
+  font-size: var(--vs-font-size-xl);
+  font-weight: var(--vs-font-weight-extrabold);
+  line-height: 1.35;
+}
+
+.vs-ui-root .vs-heading--subheading {
+  font-size: var(--vs-font-size-lg);
+  font-weight: var(--vs-font-weight-bold);
+  line-height: 1.4;
+}
+
+.vs-ui-root .vs-label {
+  display: inline-block;
+  font-family: var(--vs-font-sans);
+  cursor: default;
+}
+
+.vs-ui-root .vs-label--tone-default {
+  color: var(--vs-ink);
+}
+
+.vs-ui-root .vs-caption--tone-default {
+  color: var(--vs-ink);
+}
+
+.vs-ui-root .vs-divider {
+  flex: 0 0 auto;
+  margin: 0;
+  border: 0;
+  background: var(--vs-divider);
+}
+
+.vs-ui-root .vs-divider--horizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.vs-ui-root .vs-divider--vertical {
+  width: 1px;
+  height: 100%;
+  min-height: 1rem;
+}
+
+.vs-ui-root .vs-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--vs-radius-pill);
+  font-family: var(--vs-font-sans);
+  font-weight: var(--vs-font-weight-bold);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.vs-ui-root .vs-badge--small {
+  min-height: 1.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: var(--vs-font-size-2xs);
+}
+
+.vs-ui-root .vs-badge--medium {
+  min-height: 1.5rem;
+  padding: 0.25rem 0.625rem;
+  font-size: var(--vs-font-size-sm);
+}
+
+.vs-ui-root .vs-badge--neutral {
+  border-color: var(--vs-glass-border);
+  background: var(--vs-glass-strong);
+  color: var(--vs-ink-muted);
+}
+
+.vs-ui-root .vs-badge--accent {
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+}
+
+.vs-ui-root .vs-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vs-space-2);
+  min-width: 0;
+  color: var(--vs-ink-muted);
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-sm);
+  line-height: 1.4;
+}
+
+.vs-ui-root .vs-status-indicator__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.vs-ui-root .vs-status-indicator--success .vs-status-indicator__dot {
+  color: var(--vs-success);
+}
+
+.vs-ui-root .vs-status-indicator--warning .vs-status-indicator__dot {
+  color: var(--vs-warning);
+}
+
+.vs-ui-root .vs-status-indicator--error .vs-status-indicator__dot {
+  color: var(--vs-error);
+}
+
+.vs-ui-root .vs-status-indicator--info .vs-status-indicator__dot {
+  color: var(--vs-info);
+}
+
+.vs-ui-root .vs-status-indicator__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vs-ui-root .vs-surface-container {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding-inline: var(--vs-space-4);
+}
+
+.vs-ui-root .vs-surface-container--glass {
+  border: 1px solid var(--vs-glass-border);
+  border-radius: var(--vs-radius-card);
+  background: var(--vs-glass-bg);
+  box-shadow: var(--vs-shadow-ambient);
+  backdrop-filter: var(--vs-blur);
+  -webkit-backdrop-filter: var(--vs-blur);
+}
+
+.vs-ui-root .vs-surface-container--strong {
+  border: 1px solid var(--vs-glass-border);
+  background: var(--vs-glass-strong);
+  box-shadow: var(--vs-shadow-ambient);
+  backdrop-filter: var(--vs-blur);
+  -webkit-backdrop-filter: var(--vs-blur);
+}
+
+.vs-ui-root .vs-surface-container--stage {
+  border: 1.5px dashed var(--vs-dashed-border);
+  border-radius: var(--vs-radius-stage);
+  background: rgba(255, 255, 255, 0.62);
+  padding: var(--vs-space-6);
+}
+
+@media (min-width: 640px) {
+  .vs-ui-root .vs-heading--display,
+  .vs-ui-root .vs-heading--page {
+    font-size: var(--vs-font-size-3xl);
+    line-height: 1.2;
+  }
+
+  .vs-ui-root .vs-heading--section {
+    font-size: var(--vs-font-size-2xl);
+    line-height: 1.35;
+  }
+}

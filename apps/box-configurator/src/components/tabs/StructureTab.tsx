@@ -304,7 +304,7 @@ const CutoutEditorCard = observer(() => {
 
       {layout.node.holes && layout.node.holes.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {layout.node.holes.map((hole: Record<string, unknown> | string | number | boolean, i: number) => (
+          {layout.node.holes.map((hole: any, i: number) => (
             <div key={hole.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '8px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '12px', fontWeight: 600, textTransform: 'capitalize' }}>{hole.type} Hole</span>

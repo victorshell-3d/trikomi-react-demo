@@ -34,26 +34,35 @@
   padding: 0;
 }
 
-body {
+html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100%;
   font-family: var(--font-body);
   color: var(--color-text-primary);
   background-color: var(--color-bg);
   background-image:
     radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05), transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.05), transparent 40%);
-  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+/* 3D Jewelry Studio Stage (Active in Demo mode) */
+.jewelry-studio-stage {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100dvh;
-  position: relative;
   overflow: hidden;
+  user-select: none;
 }
 
 /* Glassmorphism sidebar */

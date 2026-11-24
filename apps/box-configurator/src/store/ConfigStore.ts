@@ -7,7 +7,7 @@ import {
   findBoxNode, findParentNodeAndEdge,
   propagateWidthChange, clampHoleToBounds,
   applyGlobalAnimationTiming, applyGlobalBoxColor,
-  convertToDisplay, convertToInternal, getFormattedValue,
+  convertToDisplay, convertToInternal, getFormattedValue, DESIGN_SCALE
 } from '@trikomi/core/box';
 
 // Re-export package types for convenience — UI components can import from here
@@ -118,9 +118,9 @@ export class ConfigStore {
   }
 
   loadFromJson(data: BoxConfigJson) {
-    if (data.boxWidth) this.boxWidth = data.boxWidth;
-    if (data.boxHeight) this.boxHeight = data.boxHeight;
-    if (data.boxDepth) this.boxDepth = data.boxDepth;
+    if (data.boxWidth) (this as any).boxWidth = data.boxWidth;
+    if (data.boxHeight) (this as any).boxHeight = data.boxHeight;
+    if (data.boxDepth) (this as any).boxDepth = data.boxDepth;
     if (data.activePattern) this.activePattern = data.activePattern;
     if (data.designElements) this.designElements = data.designElements;
     // Apply template if given
@@ -380,7 +380,7 @@ export class ConfigStore {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (err: Error) {
+    } catch (err: any) {
       console.error(err);
       alert(`Export Failed: ${err.message || err}`);
     }

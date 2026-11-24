@@ -63,7 +63,7 @@ export const LandingPage = observer(() => {
               <div className="landing-card-content">
                 <div className="landing-card-category">{category}</div>
                 <div className="landing-card-title">{tpl.name}</div>
-                <div className="landing-card-desc">{tpl.description}</div>
+                <div className="landing-card-desc">{(tpl as any).description}</div>
               </div>
               <button className="primary-btn landing-card-btn">
                 Select Design

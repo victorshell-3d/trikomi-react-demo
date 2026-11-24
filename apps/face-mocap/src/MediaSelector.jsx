@@ -1,22 +1,52 @@
 /* eslint-disable */
-// import Booster from './Booster'
 import store from "./Store";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import Controls from "./Controls";
-import ThreeD from "./ThreeD";
-import LiveLink from "./LiveLink";
+import ThreeD, { mocapPlugin } from "./ThreeD";
+import {
+  AppHeaderBar,
+  FloatingControlDock,
+  CanvasControlToolbar,
+  useVictorShellTheme
+} from "@trikomi/ui-kit";
+import MocapInspector from "./MocapInspector";
+import LiveLinkHelpModal from "./LiveLinkHelpModal";
+
 const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
-
-
-const _videoWidth = Math.min(480, window.innerWidth * .8);
 
 const MediaSelector = observer(() => {
     const vidRef = useRef(0);
     const fileRef = useRef(0);
     const canvasRef = useRef(0);
-    const [panelOpen, setPanelOpen] = useState(true);
     const [containerStyle, setContainerStyle] = useState({ width: '100%', height: '100%' });
+
+    // VictorShell Theme Integration
+    let themeContext = null;
+    try {
+        themeContext = useVictorShellTheme();
+    } catch {}
+    const [localTheme, setLocalTheme] = useState('violet');
+    const activeAccent = themeContext ? themeContext.accent : localTheme;
+    const setActiveAccent = themeContext ? themeContext.setAccent : setLocalTheme;
+
+    // Viewport responsiveness & Inspector Drawer state
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+    const [inspectorOpen, setInspectorOpen] = useState(typeof window !== 'undefined' ? window.innerWidth > 768 : true);
+    const [activeDockTab, setActiveDockTab] = useState('avatar');
+    const [helpOpen, setHelpOpen] = useState(false);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const handleViewportChange = (e) => {
+            setIsMobile(e.matches);
+            if (e.matches) {
+                setInspectorOpen(false);
+            }
+        };
+        mediaQuery.addEventListener('change', handleViewportChange);
+        return () => mediaQuery.removeEventListener('change', handleViewportChange);
+    }, []);
 
     const updateLayout = () => {
         if (!vidRef.current) return;
@@ -59,16 +89,49 @@ const MediaSelector = observer(() => {
 
         window.addEventListener('resize', updateLayout);
         return () => window.removeEventListener('resize', updateLayout);
-    }, [])
+    }, []);
+
+    const handleCameraChange = (val) => {
+        if (!vidRef.current) return;
+        vidRef.current.setAttribute('src', '');
+        vidRef.current.srcObject = null;
+
+        if (val === 'video') {
+            fileRef.current?.click();
+        } else if (navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: val } }).then((stream) => {
+                if (vidRef.current) {
+                    vidRef.current.srcObject = stream;
+                }
+            }).catch(err => console.warn('Could not switch camera:', err));
+        }
+    };
+
+    const handleRecordToggle = () => {
+        if (store.recording) {
+            store.recording = false;
+            mocapPlugin.downloadCSV('BlendshapeData.csv');
+        } else {
+            store.recording = true;
+        }
+    };
+
+    const dockItems = [
+        { id: 'avatar', label: 'Avatar', icon: '🎭', badge: store.avatar === 'raccoon' ? 'Raccoon' : 'Glasses' },
+        { id: 'camera', label: 'Camera', icon: '📷' },
+        { id: 'blendshapes', label: 'Blendshapes', icon: '📊', badge: '52' },
+        { id: 'livelink', label: 'LiveLink', icon: '🔗', badge: store.connected ? 'ON' : undefined },
+        { id: 'settings', label: 'Settings', icon: '⚙️' }
+    ];
 
     return (
-        <div className="viewer-wrapper">
+        <div className="viewer-wrapper" style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
 
             {/* Fullscreen Video and Canvas */}
             {!store.loaded && (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.8)', color: 'var(--accent)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.85)', color: 'var(--accent, #a855f7)' }}>
                     <img src={spinnerSvg} width={60} alt="Loading..." style={{ marginBottom: '15px' }} />
-                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem' }}>INITIALIZING ENGINE</div>
+                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 600 }}>INITIALIZING TRACKING ENGINE</div>
                 </div>
             )}
 
@@ -97,8 +160,6 @@ const MediaSelector = observer(() => {
                         loop
                         muted
                         onLoadedData={_e => {
-                            const _vw = vidRef.current.videoWidth;
-                            const _vh = vidRef.current.videoHeight;
                             updateLayout();
                         }}
                         ref={vidRef}
@@ -106,127 +167,190 @@ const MediaSelector = observer(() => {
                 </div>
             </div>
 
-            {/* Floating Side Panel */}
-            <div className={`glass-panel floating-panel ${panelOpen ? 'panel-open' : ''}`}>
+            {/* VictorShell Overlay Layer: non-blocking pointer events */}
+            <div
+                className="vs-mocap-ui-layer"
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                    zIndex: 20
+                }}
+            >
+                {/* 1. App Header Bar */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <AppHeaderBar
+                        brandTitle="TRIKOMI"
+                        productTitle="Face Mocap"
+                        backLabel="← Back to Overview"
+                        onBack={() => {
+                            window.location.hash = '#/';
+                        }}
+                        theme={activeAccent}
+                        onThemeChange={setActiveAccent}
+                        showThemeSwitcher={true}
+                        statusBadge={
+                            <span
+                                className="vs-mocap-status-badge"
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '3px 10px',
+                                    borderRadius: '999px',
+                                    fontSize: '11.5px',
+                                    fontWeight: 600,
+                                    background: store.tracking ? 'rgba(74, 222, 128, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                                    color: store.tracking ? '#4ade80' : '#f59e0b',
+                                    border: store.tracking ? '1px solid rgba(74, 222, 128, 0.3)' : '1px solid rgba(245, 158, 11, 0.3)'
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        background: store.tracking ? '#4ade80' : '#f59e0b'
+                                    }}
+                                />
+                                {store.tracking ? 'Tracking Active • 52 ARKit' : 'Awaiting Face • Ready'}
+                            </span>
+                        }
+                    />
+                </div>
 
-                {/* Toggle Button attached to the left side */}
-                <button
-                    className="panel-toggle-btn"
-                    onClick={() => setPanelOpen(!panelOpen)}
-                    title="Toggle Controls"
-                >
-                    {panelOpen ? '▶' : '◀'}
-                </button>
+                {/* 2. Top-Right Canvas Control Toolbar */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <CanvasControlToolbar
+                        position="top-right"
+                        onRecenter={() => {
+                            updateLayout();
+                        }}
+                        extraActions={
+                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                <button
+                                    type="button"
+                                    className={`vs-toolbar-btn ${store.recording ? 'is-recording' : ''}`}
+                                    onClick={handleRecordToggle}
+                                    disabled={!store.tracking}
+                                    style={{
+                                        background: store.recording ? '#ef4444' : 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        fontWeight: 600,
+                                        cursor: store.tracking ? 'pointer' : 'not-allowed',
+                                        opacity: store.tracking ? 1 : 0.5
+                                    }}
+                                    title={store.recording ? 'Stop Recording CSV' : 'Record CSV'}
+                                >
+                                    {store.recording ? '⏹ Stop' : '🔴 Rec'}
+                                </button>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => { store.grid = !store.grid; }}
+                                    style={{
+                                        background: store.grid ? 'var(--accent, #a855f7)' : 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Toggle Face Landmarks Grid"
+                                >
+                                    🌐 Grid
+                                </button>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => { store.connected = !store.connected; }}
+                                    style={{
+                                        background: store.connected ? '#22c55e' : 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Toggle LiveLink WebSocket Broadcast"
+                                >
+                                    🔗 LiveLink
+                                </button>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => {
+                                        if (!document.fullscreenElement) {
+                                            document.documentElement.requestFullscreen?.();
+                                        } else {
+                                            document.exitFullscreen?.();
+                                        }
+                                    }}
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Fullscreen"
+                                >
+                                    ⛶
+                                </button>
+                            </div>
+                        }
+                    />
+                </div>
 
-                <div className="floating-panel-content">
-                    {/* Header Branding */}
-                    <div className="control-section" style={{ alignItems: 'center', textAlign: 'center' }}>
-                        <img src={`${import.meta.env.BASE_URL}logos/facemocap.png`} height={40} alt="Face Mocap Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
-                        <h1 style={{ margin: '5px 0 0 0', fontSize: '1.4rem', letterSpacing: '1px', background: 'linear-gradient(to right, #fff, #8b8b9c)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                            Trikomi
-                        </h1>
-                        <h4 style={{ margin: '3px 0 0 0', fontSize: '0.65rem', fontWeight: 600, color: 'var(--accent)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                            Motion Capture
-                        </h4>
-                    </div>
+                {/* 3. Bottom Floating Control Dock */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <FloatingControlDock
+                        position="bottom"
+                        items={dockItems}
+                        activeId={activeDockTab}
+                        onSelect={(id) => {
+                            setActiveDockTab(id);
+                            setInspectorOpen(true);
+                        }}
+                    />
+                </div>
 
-                    {/* Input Controls */}
-                    <div className="control-section">
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Camera Source</span>
-                        <select
-                            className="premium-select"
-                            style={{ width: '100%' }}
-                            onChange={e => {
-                                const val = e.target.value;
-                                vidRef.current.setAttribute('src', '');
-                                vidRef.current.srcObject = null;
+                {/* 4. Glass Inspector Drawer */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <MocapInspector
+                        isOpen={inspectorOpen}
+                        onClose={() => setInspectorOpen(false)}
+                        activeTab={activeDockTab}
+                        onTabChange={setActiveDockTab}
+                        onCameraChange={handleCameraChange}
+                        onToggleRecord={handleRecordToggle}
+                        onOpenHelp={() => setHelpOpen(true)}
+                    />
+                </div>
 
-                                if (val === 'video') {
-                                    fileRef.current.click();
-                                } else if (navigator.mediaDevices) {
-                                    navigator.mediaDevices.getUserMedia({ video: { deviceId: val } }).then((stream) => {
-                                        vidRef.current.srcObject = stream;
-                                    });
-                                }
-                            }}
-                        >
-                            <option value="" disabled selected>Select Input Camera</option>
-                            {store.cameras.map(device => (
-                                <option key={device.deviceId} value={device.deviceId}>{device.label || `Camera ${device.deviceId.substring(0, 5)}`}</option>
-                            ))}
-                            <option value="video">Load video from file</option>
-                        </select>
-                    </div>
+                {/* 5. LiveLink Setup Help Modal */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <LiveLinkHelpModal
+                        isOpen={helpOpen}
+                        onClose={() => setHelpOpen(false)}
+                    />
+                </div>
+            </div>
 
-                    {/* Avatar Selection */}
-                    <div className="control-section">
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Avatar</span>
-                        <select
-                            className="premium-select"
-                            style={{ width: '100%', marginTop: '5px' }}
-                            value={store.avatar}
-                            onChange={e => store.avatar = e.target.value}
-                        >
-                            <option value="raccoon">Raccoon Head</option>
-                            <option value="glasses">3D Glasses</option>
-                        </select>
-                    </div>
-
-                    {/* Settings */}
-                    <div className="control-section">
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Settings</span>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <span style={{ fontSize: '0.85rem' }}>Tracking Smoother</span>
-                            <input
-                                type="range"
-                                className="premium-range"
-                                defaultValue={0.5}
-                                min={0.5}
-                                max={1}
-                                step={0.005}
-                                onChange={e => store.smoothStep = parseFloat(e.target.value)}
-                            />
-                        </div>
-
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem', marginTop: '10px' }}>
-                            <input
-                                type="checkbox"
-                                className="premium-checkbox"
-                                defaultChecked={store.mirror}
-                                onChange={e => store.mirror = e.target.checked}
-                            />
-                            Mirror View
-                        </label>
-                    </div>
-
-                    {/* Integration Controls */}
-                    <div className="control-section">
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Integration</span>
-                        <Controls />
-                        <LiveLink />
-                    </div>
-
-                    {/* Footer Links */}
-                    <div className="control-section" style={{ borderBottom: 'none', textAlign: 'center', gap: '15px' }}>
-                        <a href="https://youtu.be/np0dIP4I_Vc" target="_blank" rel="noreferrer" className="premium-btn" style={{ display: 'block' }}>
-                            ▶ Watch Tutorial
-                        </a>
-                        <a href="assets/LiveLinkShell.zip" className="premium-btn" style={{ display: 'block', fontSize: '0.8rem' }}>
-                            ↓ LiveLinkShell (Windows)
-                        </a>
-                        <a href="assets/UnityLiveLink.unitypackage" className="premium-btn" style={{ display: 'block', fontSize: '0.8rem' }}>
-                            ↓ Unity Package
-                        </a>
-                    </div>
-                </div> {/* End floating-panel-content */}
-            </div> {/* End floating-panel */}
-
+            {/* Hidden Video File Uploader */}
             <input
                 onChange={e => {
                     if (e.target.files.length > 0) {
                         const fileURL = URL.createObjectURL(e.target.files[0]);
-                        vidRef.current.setAttribute("src", fileURL)
+                        vidRef.current.setAttribute("src", fileURL);
                     }
                 }}
                 ref={fileRef}

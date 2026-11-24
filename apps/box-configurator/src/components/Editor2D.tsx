@@ -1,4 +1,4 @@
-import { drawUniversalHole, _PathAdapter, DESIGN_SCALE, _DESIGN_CENTER_X, _DESIGN_CENTER_Y, _DESIGN_WIDTH, _DESIGN_HEIGHT, getPatternCanvasCached, getClockwisePath } from '@trikomi/core/box';
+import { drawUniversalHole, DESIGN_SCALE, getPatternCanvasCached, getClockwisePath } from '@trikomi/core/box';
 import React, { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Rect, Transformer, Line, Text, Group, Circle, Image, Shape } from 'react-konva';
 import { observer } from 'mobx-react-lite';
@@ -7,7 +7,7 @@ import useImage from 'use-image';
 import { FlapShapeRender } from './FlapShape';
 
 
-const HoleShapeRender = observer(({ hole, factorX, h, scale }: Record<string, unknown> | string | number | boolean) => {
+const HoleShapeRender = observer(({ hole, factorX, h, scale }: any) => {
   // Access path to trigger reactivity
   const templatePath = hole.type === 'custom' && hole.shapeTemplateId
     ? configStore.templates[hole.shapeTemplateId]?.path
@@ -21,7 +21,7 @@ const HoleShapeRender = observer(({ hole, factorX, h, scale }: Record<string, un
   const cx = hole.x * factorX * scale;
   const cy = -h * scale / 2 - hole.y * scale;
 
-  const drawShape = (ctx: Record<string, unknown> | string | number | boolean, bOffset: number = 0) => {
+  const drawShape = (ctx: any, bOffset: number = 0) => {
     ctx.beginPath();
     const adapter = {
       moveTo: (x: number, y: number) => ctx.moveTo(x, y),
@@ -73,7 +73,7 @@ const HoleShapeRender = observer(({ hole, factorX, h, scale }: Record<string, un
   );
 });
 
-const DesignImage = ({ id, src, x, y, width, height, rotation, onSelect, onChange }: Record<string, unknown> | string | number | boolean) => {
+const DesignImage = ({ id, src, x, y, width, height, rotation, onSelect, onChange }: any) => {
   const [image] = useImage(src);
 
   return (
@@ -121,7 +121,7 @@ const DesignImage = ({ id, src, x, y, width, height, rotation, onSelect, onChang
   );
 };
 
-const DesignText = ({ id, text, x, y, color, scale, rotation, fontSize, fontFamily, onSelect, onChange }: Record<string, unknown> | string | number | boolean) => {
+const DesignText = ({ id, text, x, y, color, scale, rotation, fontSize, fontFamily, onSelect, onChange }: any) => {
   return (
     <Text
       id={id}
@@ -234,11 +234,11 @@ const VerticalMeasure = ({ x, y1, y2, label }: { x: number; y1: number; y2: numb
   );
 };
 
-const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSelectedDesignElementId, setAddMenuOverlay, isExport = false }: { selectedNodeId: string | null, selectedDesignElementId: string | null, setSelectedDesignElementId?: (id: string | null) => void, setAddMenuOverlay?: (overlay: Record<string, unknown> | string | number | boolean) => void, isExport?: boolean }) => {
+const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSelectedDesignElementId, setAddMenuOverlay, isExport = false }: { selectedNodeId: string | null, selectedDesignElementId: string | null, setSelectedDesignElementId?: (id: string | null) => void, setAddMenuOverlay?: (overlay: any) => void, isExport?: boolean }) => {
   const { designElements, flattenedLayout, layoutBounds } = configStore;
   const scale = DESIGN_SCALE;
   const showMeas = !isExport && configStore.showMeasurements;
-  const trRef = useRef<Record<string, unknown>>(null);
+  const trRef = useRef<any>(null);
 
   useEffect(() => {
     if (trRef.current) {
@@ -258,10 +258,10 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
     }
   }, [selectedDesignElementId, designElements]);
 
-  const drawHolesCCW = (ctx: Record<string, unknown> | string | number | boolean, node: THREE.Object3D, h: number, scale: number, bleedOffset: number = 0) => {
+  const drawHolesCCW = (ctx: any, node: any, h: number, scale: number, bleedOffset: number = 0) => {
     if (!node.holes || node.holes.length === 0) return;
 
-    node.holes.forEach((hole: Record<string, unknown> | string | number | boolean) => {
+    node.holes.forEach((hole: any) => {
       const factorX = node.flipped ? -1 : 1;
       const cx = hole.x * factorX * scale;
       const cy = -h * scale / 2 - hole.y * scale;
@@ -277,7 +277,7 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
     });
   };
 
-  const clipLayout = (ctx: Record<string, unknown> | string | number | boolean) => {
+  const clipLayout = (ctx: any) => {
     ctx.beginPath();
     Object.values(flattenedLayout).forEach(({ node, x, y, w, h, rotation }) => {
       ctx.save();
@@ -320,7 +320,7 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
     });
   };
 
-  const clipBleed = (ctx: Record<string, unknown> | string | number | boolean) => {
+  const clipBleed = (ctx: any) => {
     const BLEED = 8;
     ctx.beginPath();
     Object.values(flattenedLayout).forEach(({ node, x, y, w, h, rotation }) => {
@@ -386,7 +386,7 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
                     width={Math.max(1, w * scale)}
                     height={Math.max(1, h * scale)}
                     fill={configStore.activePattern === 'none' ? node.color : undefined}
-                    fillPatternImage={configStore.activePattern !== 'none' ? getPatternCanvasCached(configStore.activePattern, node.color) as HTMLCanvasElement : undefined}
+                    fillPatternImage={configStore.activePattern !== 'none' ? (getPatternCanvasCached(configStore.activePattern, node.color) as any) : undefined}
                     fillPatternRepeat="repeat"
                     stroke="rgba(255,255,255,0.2)"
                     strokeWidth={2}
@@ -514,7 +514,7 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
         </Group>
 
         {/* Keep UI Overlays normal Y-down, but masked to the bleeding area (layout expanded by 8px) */}
-        <Group clipFunc={clipBleed}>
+        <Group clipFunc={clipBleed as any}>
           {designElements.map((el, i) => {
             if (el.type === 'text') {
               return (
@@ -522,12 +522,12 @@ const DesignLayer = observer(({ selectedNodeId, selectedDesignElementId, setSele
                   key={el.id}
                   id={el.id}
                   {...el}
-                  onSelect={(e: Event) => {
+                  onSelect={(e: any) => {
                     if (e) e.cancelBubble = true;
                     setSelectedDesignElementId?.(el.id);
                     configStore.setSelectedNodeId(null);
                   }}
-                  onChange={(newAttrs: Record<string, unknown> | string | number | boolean) => {
+                  onChange={(newAttrs: any) => {
                     Object.assign(configStore.designElements[i], newAttrs);
                   }}
                 />
@@ -641,8 +641,8 @@ export const Editor2D = observer(() => {
   const [stageScale, setStageScale] = useState(0.4);
   const [stagePos, setStagePos] = useState({ x: 0, y: 0 });
 
-  const stageRef = useRef<Record<string, unknown>>(null);
-  const exportStageRef = useRef<Record<string, unknown>>(null);
+  const stageRef = useRef<any>(null);
+  const exportStageRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -700,7 +700,7 @@ export const Editor2D = observer(() => {
   };
 
   useEffect(() => {
-    let timeoutId: Record<string, unknown> | string | number | boolean;
+    let timeoutId: any;
     import('mobx').then(({ reaction }) => {
       const disposer = reaction(
         () => {
@@ -726,7 +726,7 @@ export const Editor2D = observer(() => {
     });
   }, []);
 
-  const handleWheel = (e: Event) => {
+  const handleWheel = (e: any) => {
     e.evt.preventDefault();
     const scaleBy = 1.05;
     const stage = stageRef.current;
@@ -788,7 +788,7 @@ export const Editor2D = observer(() => {
     }
   };
 
-  const checkDeselect = (e: Event) => {
+  const checkDeselect = (e: any) => {
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
       configStore.setSelectedDesignElementId(null);

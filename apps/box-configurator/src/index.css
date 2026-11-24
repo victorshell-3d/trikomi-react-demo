@@ -23,14 +23,22 @@
   padding: 0;
 }
 
+html,
 body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
   font-family: 'Outfit', sans-serif;
   background-color: var(--color-bg-base);
   color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
 }
 
 /* Scrollbars */

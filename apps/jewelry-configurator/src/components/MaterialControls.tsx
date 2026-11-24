@@ -96,9 +96,9 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
       const targetModel = viewerStore.currentModel || viewer.runtimeRoot.children[0]?.nativeObject || viewer.scene;
       if (!targetModel) return;
 
-      const uniqueMats = new Map<string, { id: string, name: string, color: string, mat: THREE.Material | import('three/webgpu').NodeMaterial, mesh: THREE.Object3D, isDiamond: boolean }>();
+      const uniqueMats = new Map<string, { id: string, name: string, color: string, mat: any, mesh: any, isDiamond: boolean }>();
 
-      targetModel.traverse((child: THREE.Object3D) => {
+      targetModel.traverse((child: any) => {
         if (child.isMesh || child.isInstancedMesh) {
           const mats = Array.isArray(child.material) ? child.material : [child.material];
 
@@ -115,7 +115,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
             child.userData.originalGeometry = child.geometry.clone();
           }
 
-          mats.forEach((mat) => {
+          mats.forEach((mat: any) => {
             if (!mat) return;
             let displayName = child.name;
             if (child.parent && child.parent.name && child.parent.name !== 'Scene') {
@@ -149,7 +149,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
         }
       });
 
-      setMaterials(Array.from(uniqueMats.values()));
+      setMaterials(Array.from(uniqueMats.values()) as any);
     }, 500);
 
     return () => clearTimeout(timeoutId);
@@ -160,7 +160,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     newMats[index].color = newColorStr;
     setMaterials(newMats);
 
-    const mat = newMats[index].mat;
+    const mat: any = newMats[index].mat;
     if (mat) {
       if (mat.color && mat.color.value && mat.color.value.isColor) {
         mat.color.value.set(newColorStr);
@@ -171,7 +171,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     }
   };
 
-  const applyGeometryTransform = async (matId: string, mesh: THREE.Mesh, shapeName: string | undefined, rotationZ: number, scaleOffset: number, yOffset: number, isFinal: boolean) => {
+  const applyGeometryTransform = async (_matId: string, mesh: any, shapeName: string | undefined, rotationZ: number, scaleOffset: number, yOffset: number, isFinal: boolean) => {
     let cloned: THREE.BufferGeometry;
 
     if (shapeName && diamondGeometries[shapeName]) {
@@ -212,7 +212,7 @@ export const MaterialControls: React.FC<MaterialControlsProps> = observer(({ vie
     const viewer = viewerRef.current;
     if (viewer) {
       if (isFinal) {
-        const diamondPlugin = viewer.getPlugin(DiamondPlugin);
+        const diamondPlugin = viewer.getPlugin(DiamondPlugin) as any;
         if (diamondPlugin && diamondPlugin.updateDiamondGeometry) {
           await diamondPlugin.updateDiamondGeometry(mesh, cloned);
         } else {

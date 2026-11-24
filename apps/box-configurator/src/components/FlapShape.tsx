@@ -23,7 +23,7 @@ export const FlapShapeRender = observer(({ node, w, h }: FlapShapeProps) => {
         width={w}
         height={h}
         fill={configStore.activePattern === 'none' ? (node.color || '#ffffff') : undefined}
-        fillPatternImage={configStore.activePattern !== 'none' ? getPatternCanvasCached(configStore.activePattern, node.color || '#ffffff') as HTMLCanvasElement : undefined}
+        fillPatternImage={configStore.activePattern !== 'none' ? (getPatternCanvasCached(configStore.activePattern, node.color || '#ffffff') as any) : undefined}
         fillPatternRepeat="repeat"
         stroke="rgba(255,255,255,0.2)"
         strokeWidth={2}

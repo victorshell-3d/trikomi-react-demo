@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Stage, Layer, Path, Circle, Line, Group, Text, Rect } from 'react-konva';
 import { generateSVGPath, PathCommand, distToSegment, getBezierPoint, splitBezier, getClosestTOnBezier, convertLineToBezier } from '@trikomi/core/box';
+import { FrostedModalDialog } from '@trikomi/ui-kit';
 import { configStore } from '../store/ConfigStore';
 
 const SCALE = 350; // pixels to render the 1x1 relative coordinate space
@@ -11,7 +12,7 @@ export const ShapeEditorModal = observer(() => {
   const template = templateId ? configStore.templates[templateId] : null;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<Record<string, unknown>>(null);
+  const stageRef = useRef<any>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [selectedPointIndex, setSelectedPointIndex] = useState<number | null>(null);
   const [scale, setScale] = useState(1.0);
@@ -213,37 +214,37 @@ export const ShapeEditorModal = observer(() => {
   };
 
   return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-      backgroundColor: 'rgba(10, 12, 16, 0.95)', zIndex: 1000,
-      display: 'flex', flexDirection: 'column', fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      {/* Header */}
-      <div style={{
-        padding: '16px 24px', backgroundColor: '#161920', borderBottom: '1px solid #2d3748',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 1001
-      }}>
-        <div>
-          <h2 style={{ margin: 0, color: 'white', fontSize: '1.25rem', fontWeight: 600 }}>Vector Shape Editor</h2>
-          <div style={{ fontSize: '0.85rem', color: '#a0aec0', marginTop: '4px' }}>
-            Modify custom templates for <span style={{ color: '#818cf8', fontWeight: 'bold' }}>{template.name}</span>
-          </div>
+    <FrostedModalDialog
+      isOpen={!!template}
+      onClose={() => configStore.setEditingTemplateId(null)}
+      title="Vector Shape Editor"
+      subtitle={`Modify custom vector profile for ${template.name}`}
+      size="xl"
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+          <button
+            type="button"
+            onClick={() => configStore.setEditingTemplateId(null)}
+            className="vs-btn vs-btn-primary"
+            style={{ padding: '8px 24px', fontSize: '13px', fontWeight: 600 }}
+          >
+            Done Editing
+          </button>
         </div>
-        <button 
-          onClick={() => configStore.setEditingTemplateId(null)}
-          style={{ 
-            background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)', 
-            color: 'white', border: 'none', padding: '8px 24px', borderRadius: '6px', 
-            cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          Done
-        </button>
-      </div>
-
-      {/* Main Workspace (Full-screen Canvas) */}
-      <div ref={containerRef} style={{ flex: 1, position: 'relative', overflow: 'hidden', backgroundColor: '#0d0f14' }}>
+      }
+    >
+      {/* Main Workspace Canvas */}
+      <div
+        ref={containerRef}
+        style={{
+          width: '100%',
+          height: '520px',
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: '12px',
+          backgroundColor: '#0d0f14'
+        }}
+      >
         
         {/* Floating Shortcuts / Instructions */}
         <div style={{
@@ -594,6 +595,6 @@ export const ShapeEditorModal = observer(() => {
           </Layer>
         </Stage>
       </div>
-    </div>
+    </FrostedModalDialog>
   );
 });

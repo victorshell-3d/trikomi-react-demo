@@ -32,7 +32,7 @@ export const Playground: React.FC<PlaygroundProps> = ({ onBack }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleWheel = (e: Event) => {
+  const handleWheel = (e: any) => {
     e.evt.preventDefault();
     const scaleBy = 1.05;
     const stage = e.target.getStage();

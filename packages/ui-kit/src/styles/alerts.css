@@ -1,0 +1,171 @@
+.vs-ui-root .vs-alert-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+}
+
+.vs-ui-root .vs-alert {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border: 1px solid;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--vs-ink);
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-xs);
+  line-height: 1.45;
+}
+
+.vs-ui-root .vs-alert--info {
+  border-color: #E9D5FF;
+}
+
+.vs-ui-root .vs-alert--success {
+  border-color: #A7F3D0;
+}
+
+.vs-ui-root .vs-alert--warning {
+  border-color: #FDE68A;
+}
+
+.vs-ui-root .vs-alert--error {
+  border-color: #FECACA;
+}
+
+.vs-ui-root .vs-alert__icon {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: var(--vs-font-size-md);
+  font-weight: var(--vs-font-weight-bold);
+  line-height: 1;
+}
+
+.vs-ui-root .vs-alert--info .vs-alert__icon {
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-primary);
+}
+
+.vs-ui-root .vs-alert--success .vs-alert__icon {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.vs-ui-root .vs-alert--warning .vs-alert__icon {
+  background: rgba(245, 158, 11, 0.15);
+  color: #B45309;
+}
+
+.vs-ui-root .vs-alert--error .vs-alert__icon {
+  background: rgba(239, 68, 68, 0.15);
+  color: #DC2626;
+}
+
+.vs-ui-root .vs-alert__content {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+}
+
+.vs-ui-root .vs-alert__title {
+  color: var(--vs-ink);
+  font-weight: var(--vs-font-weight-bold);
+}
+
+.vs-ui-root .vs-alert__description {
+  color: var(--vs-ink-muted);
+}
+
+.vs-ui-root .vs-alert__dismiss {
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--vs-radius-pill);
+  background: transparent;
+  color: var(--vs-ink-subtle);
+  cursor: pointer;
+  transition: color var(--vs-transition-fast), background-color var(--vs-transition-fast);
+}
+
+.vs-ui-root .vs-alert__dismiss:hover {
+  background: var(--vs-tonal-lavender);
+  color: var(--vs-ink);
+}
+
+.vs-ui-root .vs-alert__dismiss:focus-visible {
+  outline: 2px solid var(--vs-primary);
+  outline-offset: 2px;
+}
+
+.vs-ui-root .vs-toast {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  display: flex;
+  width: max-content;
+  max-width: calc(100vw - 2.5rem);
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: var(--vs-dark-pill);
+  box-shadow: 0 20px 25px -5px rgba(26, 22, 43, 0.2), 0 8px 10px -6px rgba(26, 22, 43, 0.2);
+  color: #FFFFFF;
+  font-family: var(--vs-font-sans);
+  font-size: var(--vs-font-size-xs);
+  font-weight: var(--vs-font-weight-semibold);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.5rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vs-ui-root .vs-toast.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.vs-ui-root .vs-toast__message {
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .vs-ui-root .vs-alert-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .vs-ui-root .vs-toast {
+    right: 1rem;
+    bottom: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-ui-root .vs-toast,
+  .vs-ui-root .vs-alert__dismiss {
+    transition: none;
+  }
+
+  .vs-ui-root .vs-toast .vs-pulse-emerald {
+    animation: none;
+  }
+}

@@ -1,24 +1,52 @@
 /* eslint-disable */
 import store from "./Store";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import ThreeD, { AVAILABLE_MODELS } from "./ThreeD";
 import Controls from "./Controls";
+import {
+  AppHeaderBar,
+  FloatingControlDock,
+  CanvasControlToolbar,
+  useVictorShellTheme
+} from "@trikomi/ui-kit";
+import EyewearInspector from "./EyewearInspector";
+
 const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
-
-
-const _videoWidth = Math.min(480, window.innerWidth * .8);
-
-const isDebugMode = new URLSearchParams(window.location.search).get('debug') === 'true' ||
-                    window.location.href.includes('debug=true');
 
 const MediaSelector = observer(() => {
     const vidRef = useRef(0);
     const fileRef = useRef(0);
     const canvasRef = useRef(0);
     const carouselRef = useRef(null);
-    const [panelOpen, setPanelOpen] = useState(isDebugMode);
     const [containerStyle, setContainerStyle] = useState({ width: '100%', height: '100%' });
+
+    // VictorShell Theme Integration
+    let themeContext = null;
+    try {
+        themeContext = useVictorShellTheme();
+    } catch {}
+    const [localTheme, setLocalTheme] = useState('indigo');
+    const activeAccent = themeContext ? themeContext.accent : localTheme;
+    const setActiveAccent = themeContext ? themeContext.setAccent : setLocalTheme;
+
+    // Viewport responsiveness & Inspector Drawer state
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+    const [isInspectorOpen, setIsInspectorOpen] = useState(typeof window !== 'undefined' ? window.innerWidth > 768 : false);
+    const [activeDockTab, setActiveDockTab] = useState('models');
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const handleViewportChange = (e) => {
+            setIsMobile(e.matches);
+            if (e.matches) {
+                setIsInspectorOpen(false);
+            }
+        };
+        mediaQuery.addEventListener('change', handleViewportChange);
+        return () => mediaQuery.removeEventListener('change', handleViewportChange);
+    }, []);
 
     useEffect(() => {
         if (carouselRef.current && carouselRef.current.children[store.modelIndex]) {
@@ -69,16 +97,41 @@ const MediaSelector = observer(() => {
 
         window.addEventListener('resize', updateLayout);
         return () => window.removeEventListener('resize', updateLayout);
-    }, [])
+    }, []);
+
+    const toggleFullscreen = () => {
+        if (typeof document === 'undefined') return;
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.().catch(() => {});
+        } else {
+            document.exitFullscreen?.().catch(() => {});
+        }
+    };
+
+    const dockItems = useMemo(() => [
+        { id: 'models', label: 'Styles', icon: '👓', badge: AVAILABLE_MODELS.length },
+        { id: 'frames', label: 'Frame', icon: '🎨' },
+        { id: 'lenses', label: 'Lenses', icon: '🕶️' },
+        { id: 'camera', label: 'Camera', icon: '📹' },
+        { id: 'debug', label: 'Tools', icon: '⚙️' }
+    ], []);
+
+    const handleDockSelect = (tabId) => {
+        setActiveDockTab(tabId);
+        if (!isInspectorOpen) {
+            setIsInspectorOpen(true);
+        }
+    };
+
+    const currentModel = AVAILABLE_MODELS[store.modelIndex] || AVAILABLE_MODELS[0];
 
     return (
         <div className="viewer-wrapper">
-
             {/* Fullscreen Video and Canvas */}
             {!store.loaded && (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.8)', color: 'var(--accent)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'absolute', inset: 0, zIndex: 99, background: 'rgba(0,0,0,0.85)', color: 'var(--accent)', backdropFilter: 'blur(12px)' }}>
                     <img src={spinnerSvg} width={60} alt="Loading..." style={{ marginBottom: '15px' }} />
-                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem' }}>INITIALIZING ENGINE</div>
+                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem', color: '#fff', fontWeight: 600 }}>INITIALIZING EYEWEAR AR ENGINE</div>
                 </div>
             )}
 
@@ -108,8 +161,6 @@ const MediaSelector = observer(() => {
                         loop
                         muted
                         onLoadedData={_e => {
-                            const _vw = vidRef.current.videoWidth;
-                            const _vh = vidRef.current.videoHeight;
                             updateLayout();
                         }}
                         ref={vidRef}
@@ -117,99 +168,173 @@ const MediaSelector = observer(() => {
                 </div>
             </div>
 
-            {/* Top Header */}
-            <div className="app-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <img src={`${import.meta.env.BASE_URL}logos/eyewear.png`} height={40} alt="Trikomi Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-                        <span style={{ fontWeight: 800, fontSize: '1.4rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Trikomi</span>
-                        <span style={{ fontWeight: 400, fontSize: '0.9rem', color: '#a855f7', letterSpacing: '2px', textTransform: 'uppercase' }}>Eyewear</span>
-                    </div>
+            {/* VictorShell AppHeaderBar Overlay */}
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, pointerEvents: 'none' }}>
+                <div style={{ pointerEvents: 'auto' }}>
+                    <AppHeaderBar
+                        brandTitle="TRIKOMI"
+                        productTitle="EYEWEAR AR STUDIO"
+                        backLabel="← Back to Overview"
+                        onBack={() => {
+                            window.location.hash = '#/';
+                        }}
+                        theme={activeAccent}
+                        onThemeChange={setActiveAccent}
+                        showThemeSwitcher={true}
+                        statusBadge={
+                            <span
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    fontSize: '0.8rem',
+                                    padding: '4px 10px',
+                                    borderRadius: '12px',
+                                    background: 'rgba(255, 255, 255, 0.08)',
+                                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                                    color: 'rgba(255, 255, 255, 0.9)'
+                                }}
+                            >
+                                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
+                                {currentModel.name}
+                            </span>
+                        }
+                        actions={
+                            <button
+                                type="button"
+                                className="vs-btn vs-btn-secondary"
+                                style={{
+                                    padding: '6px 14px',
+                                    fontSize: '0.85rem',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px'
+                                }}
+                                onClick={() => setIsInspectorOpen(prev => !prev)}
+                                aria-label="Toggle Eyewear Drawer"
+                            >
+                                <span>{isInspectorOpen ? '✕ Hide Drawer' : '☰ Eyewear Drawer'}</span>
+                            </button>
+                        }
+                    />
                 </div>
-                {isDebugMode && (
-                    <button className="icon-button" title="Debug Tools" onClick={() => setPanelOpen(!panelOpen)}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                    </button>
-                )}
             </div>
 
-            {/* Floating Controls Panel (Only in Debug Mode) */}
-            {isDebugMode && (
-                <div className={`floating-panel ${panelOpen ? 'panel-open' : ''}`}>
-                    <div className="floating-panel-content">
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '1rem', fontWeight: 600 }}>Settings & Debug</h3>
-                        <Controls />
-                    </div>
-                </div>
-            )}
-
-            {/* Vertical Color Panels */}
-            {store.glassConfigs.materials.map(matName => {
-                const props = store.materialProps[matName];
-                if (!props) return null;
-                
-                const isFrame = matName.toLowerCase().includes('frame');
-                const isLens = matName.toLowerCase().includes('lens');
-                
-                if (!isFrame && !isLens) return null;
-
-                const frameColors = [
-                    { name: 'Black', hex: '#222222' },
-                    { name: 'Tortoise', hex: '#8b4513' },
-                    { name: 'Silver', hex: '#e0e0e0' },
-                    { name: 'Gold', hex: '#d4af37' },
-                    { name: 'Clear', hex: '#ffffff' },
-                ];
-                
-                const lensColors = [
-                    { name: 'Dark', hex: '#111111' },
-                    { name: 'Green', hex: '#1d3e2b' },
-                    { name: 'Brown', hex: '#4a2f1d' },
-                    { name: 'Blue', hex: '#1c2d54' },
-                    { name: 'Purple', hex: '#3b1c54' },
-                ];
-
-                const presetColors = isFrame ? frameColors : lensColors;
-
-                return (
-                    <div key={matName} className={`vertical-panel ${isFrame ? 'left' : 'right'}`}>
-                        {presetColors.map(c => (
-                            <button 
-                                key={c.name}
-                                className={`swatch-btn ${props.color === c.hex ? 'active' : ''}`}
-                                style={{ background: c.hex }}
-                                title={c.name}
-                                onClick={() => {
-                                    const p = { ...store.materialProps[matName] };
-                                    p.color = c.hex;
-                                    // For clear/tortoise we might need to adjust roughness/metalness or opacity
-                                    if (c.name === 'Clear') {
-                                        p.opacity = 0.5;
-                                        p.transparent = true;
-                                    } else {
-                                        p.opacity = 1.0;
-                                    }
-                                    if (isLens) {
-                                        p.opacity = 0.7; // Lens are typically slightly transparent
-                                    }
-                                    store.materialProps[matName] = p;
+            {/* Top-Right Canvas Control Toolbar */}
+            <div style={{ position: 'fixed', top: '76px', right: '20px', zIndex: 90 }}>
+                <CanvasControlToolbar
+                    position="top-right"
+                    extraActions={
+                        <div style={{ display: 'inline-flex', gap: '4px' }}>
+                            <button
+                                type="button"
+                                className={`vs-btn vs-btn-icon ${store.mirror ? 'vs-btn--active' : ''}`}
+                                onClick={() => { store.mirror = !store.mirror; }}
+                                title={store.mirror ? 'Disable Mirror View' : 'Enable Mirror View'}
+                                aria-label="Toggle Mirror View"
+                                style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: store.mirror ? 'var(--vs-accent-primary, #6366f1)' : 'rgba(255, 255, 255, 0.06)',
+                                    color: '#fff',
+                                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                                    cursor: 'pointer'
                                 }}
-                            />
-                        ))}
-                    </div>
-                );
-            })}
+                            >
+                                🪞
+                            </button>
+                            <button
+                                type="button"
+                                className={`vs-btn vs-btn-icon ${store.showOccluderWireframe ? 'vs-btn--active' : ''}`}
+                                onClick={() => { store.showOccluderWireframe = !store.showOccluderWireframe; }}
+                                title={store.showOccluderWireframe ? 'Hide Occluder Wireframe' : 'Show Occluder Wireframe'}
+                                aria-label="Toggle Occluder Wireframe"
+                                style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: store.showOccluderWireframe ? 'var(--vs-accent-primary, #6366f1)' : 'rgba(255, 255, 255, 0.06)',
+                                    color: '#fff',
+                                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                📐
+                            </button>
+                            <button
+                                type="button"
+                                className={`vs-btn vs-btn-icon ${store.grid ? 'vs-btn--active' : ''}`}
+                                onClick={() => { store.grid = !store.grid; }}
+                                title={store.grid ? 'Hide Grid' : 'Show Grid'}
+                                aria-label="Toggle Grid"
+                                style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: store.grid ? 'var(--vs-accent-primary, #6366f1)' : 'rgba(255, 255, 255, 0.06)',
+                                    color: '#fff',
+                                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                ▦
+                            </button>
+                            <button
+                                type="button"
+                                className="vs-btn vs-btn-icon"
+                                onClick={toggleFullscreen}
+                                title="Toggle Fullscreen"
+                                aria-label="Toggle Fullscreen"
+                                style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: 'rgba(255, 255, 255, 0.06)',
+                                    color: '#fff',
+                                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                ⛶
+                            </button>
+                        </div>
+                    }
+                />
+            </div>
 
-            {/* Bottom Carousel */}
-            <div className="bottom-carousel-container">
+            {/* Quick Model Selector Carousel (Positioned above dock) */}
+            <div
+                className="bottom-carousel-container"
+                style={{
+                    position: 'fixed',
+                    bottom: '84px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 90
+                }}
+            >
                 <button 
                     className="carousel-arrow"
                     onClick={() => {
                         const len = AVAILABLE_MODELS.length;
                         store.modelIndex = (store.modelIndex - 1 + len) % len;
                     }}
+                    aria-label="Previous model"
                 >
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
                 <div className="carousel-items" ref={carouselRef}>
                     {AVAILABLE_MODELS.map((model, idx) => (
@@ -233,16 +358,43 @@ const MediaSelector = observer(() => {
                         const len = AVAILABLE_MODELS.length;
                         store.modelIndex = (store.modelIndex + 1) % len;
                     }}
+                    aria-label="Next model"
                 >
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
             </div>
+
+            {/* Floating Control Dock */}
+            <FloatingControlDock
+                items={dockItems}
+                activeId={activeDockTab}
+                onSelect={handleDockSelect}
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 100
+                }}
+            />
+
+            {/* Glass Inspector Drawer */}
+            <EyewearInspector
+                isOpen={isInspectorOpen}
+                onClose={() => setIsInspectorOpen(false)}
+                activeTab={activeDockTab}
+                onTabChange={setActiveDockTab}
+                models={AVAILABLE_MODELS}
+                activeModelIndex={store.modelIndex}
+                onSelectModel={(idx) => { store.modelIndex = idx; }}
+                store={store}
+            />
 
             <input
                 onChange={e => {
                     if (e.target.files.length > 0) {
                         const fileURL = URL.createObjectURL(e.target.files[0]);
-                        vidRef.current.setAttribute("src", fileURL)
+                        vidRef.current.setAttribute("src", fileURL);
                     }
                 }}
                 ref={fileRef}

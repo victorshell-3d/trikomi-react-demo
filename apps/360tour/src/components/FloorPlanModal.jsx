@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { uploadApi } from '../api/dashboardApi';
 import { useLocalImage } from '../hooks/useLocalImage';
+import { FrostedModalDialog } from '@trikomi/ui-kit';
 import ImageSelectDialog from './ImageSelectDialog';
 
 const FloorPlanModal = ({
@@ -66,44 +67,54 @@ const FloorPlanModal = ({
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-box modal-full" style={{ height: '90vh' }}>
-        {/* Header */}
-        <div className="modal-head">
-          <span className="modal-head-title">🗺️ Floor Plan Manager</span>
-          <div className="flex items-center gap-3">
-            <div className="settings-row" style={{ padding: 0 }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginRight: 8 }}>Enable Minimap</span>
-              <div
-                className={`toggle-switch${floorPlan.enabled ? ' active' : ''}`}
+    <>
+      <FrostedModalDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        title="🗺️ Floor Plan Manager"
+        subtitle="Place scene navigation dots on your 2D architectural map"
+        size="xl"
+        className="vs-floorplan-modal-dialog"
+        footer={
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.8rem', color: 'var(--vs-ink-muted)', fontWeight: 600 }}>Enable In Viewer:</span>
+              <button
+                type="button"
+                className={`vs-btn vs-btn-sm ${floorPlan.enabled ? 'vs-btn-primary' : 'vs-btn-secondary'}`}
                 onClick={handleToggle}
-              />
+              >
+                {floorPlan.enabled ? 'Minimap Enabled' : 'Minimap Disabled'}
+              </button>
             </div>
-            <button className="modal-close-btn" onClick={onClose}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            <button
+              type="button"
+              className="vs-btn vs-btn-secondary"
+              onClick={onClose}
+            >
+              Done
             </button>
           </div>
-        </div>
-
-        {/* Content */}
-        <div className="floorplan-editor">
+        }
+      >
+        <div className="floorplan-editor" style={{ display: 'flex', gap: '16px', minHeight: '480px' }}>
           {/* Left: Scene List */}
-          <div className="floorplan-scene-list">
+          <div className="floorplan-scene-list" style={{ width: '260px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div className="floorplan-scene-list-header">
               <button
                 type="button"
                 onClick={() => setGalleryOpen(true)}
-                className="btn btn-secondary btn-sm w-full"
-                style={{ marginTop: 4 }}
+                className="vs-btn vs-btn-primary vs-btn-sm"
+                style={{ width: '100%' }}
               >
                 Select / Upload Map
               </button>
             </div>
-            <div className="floorplan-scene-list-help">
+            <div className="floorplan-scene-list-help" style={{ fontSize: '0.75rem', color: 'var(--vs-ink-muted)', padding: '6px 0' }}>
               1. Select a scene below.<br />
               2. Click on the map to place it.
             </div>
-            <div className="floorplan-scene-list-items">
+            <div className="floorplan-scene-list-items" style={{ display: 'flex', flexDirection: 'column', gap: '6px', overflowY: 'auto', maxHeight: '360px' }}>
               {scenes.map((scene, idx) => {
                 const isSelected = activeToolSceneId === scene.id;
                 const isPlaced = !!scene.floorPlanPosition;
@@ -112,18 +123,29 @@ const FloorPlanModal = ({
                     key={scene.id}
                     onClick={() => setActiveToolSceneId(scene.id)}
                     className={`fp-scene-item${isSelected ? ' active' : ''}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      background: isSelected ? 'var(--vs-tonal-lavender)' : 'rgba(255, 255, 255, 0.45)',
+                      border: isSelected ? '1px solid var(--vs-primary)' : '1px solid rgba(255, 255, 255, 0.65)',
+                      cursor: 'pointer'
+                    }}
                   >
-                    <div className="fp-scene-left">
+                    <div className="fp-scene-left" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div className={`fp-dot ${isPlaced ? 'placed' : 'unplaced'}`} title={isPlaced ? 'Placed' : 'Not Placed'} />
-                      <span className="fp-scene-name">{idx + 1}. {scene.name}</span>
+                      <span className="fp-scene-name" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--vs-ink)' }}>{idx + 1}. {scene.name}</span>
                     </div>
                     {isPlaced && (
                       <button
                         onClick={(e) => { e.stopPropagation(); handleClearPosition(scene.id); }}
                         className="fp-clear-btn"
                         title="Clear Position"
+                        style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--vs-crimson)' }}
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        ✕
                       </button>
                     )}
                   </div>
@@ -133,23 +155,24 @@ const FloorPlanModal = ({
           </div>
 
           {/* Right: Map Canvas */}
-          <div className="floorplan-canvas">
+          <div className="floorplan-canvas" style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '12px', overflow: 'hidden' }}>
             {!floorPlan.image ? (
-              <div className="floorplan-empty">
-                <div className="floorplan-empty-icon">🗺️</div>
-                <p style={{ marginBottom: 4 }}>No floor plan image uploaded.</p>
-                <p style={{ fontSize: '0.75rem' }}>Upload an image from the sidebar to begin mapping scenes.</p>
+              <div className="floorplan-empty" style={{ textAlign: 'center', padding: '32px' }}>
+                <div className="floorplan-empty-icon" style={{ fontSize: '2rem' }}>🗺️</div>
+                <p style={{ margin: '8px 0 4px', fontWeight: 600 }}>No floor plan image uploaded.</p>
+                <p style={{ fontSize: '0.75rem', color: 'var(--vs-ink-muted)' }}>Upload an image from the sidebar to begin mapping scenes.</p>
               </div>
             ) : !localImageUrl ? (
-              <div style={{ color: 'var(--color-text-muted)' }}>Loading map image…</div>
+              <div style={{ color: 'var(--vs-ink-muted)' }}>Loading map image…</div>
             ) : (
-              <div className="floorplan-canvas-image">
+              <div className="floorplan-canvas-image" style={{ position: 'relative', maxWidth: '100%', maxHeight: '100%' }}>
                 <img
                   ref={imageRef}
                   src={localImageUrl}
                   alt="Floor Plan"
                   onClick={handleImageClick}
                   draggable={false}
+                  style={{ display: 'block', maxWidth: '100%', maxHeight: '440px', objectFit: 'contain', cursor: 'crosshair' }}
                 />
                 {scenes.map(scene => {
                   if (!scene.floorPlanPosition) return null;
@@ -159,7 +182,24 @@ const FloorPlanModal = ({
                       key={scene.id}
                       onClick={(e) => { e.stopPropagation(); setActiveToolSceneId(scene.id); }}
                       className={`floorplan-marker${isSelected ? ' selected' : ''}`}
-                      style={{ left: `${scene.floorPlanPosition.x}%`, top: `${scene.floorPlanPosition.y}%` }}
+                      style={{
+                        position: 'absolute',
+                        left: `${scene.floorPlanPosition.x}%`,
+                        top: `${scene.floorPlanPosition.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        background: isSelected ? 'var(--vs-primary)' : '#10B981',
+                        color: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                        cursor: 'pointer'
+                      }}
                       title={scene.name}
                     >
                       {scenes.indexOf(scene) + 1}
@@ -169,8 +209,9 @@ const FloorPlanModal = ({
               </div>
             )}
           </div>
-      </div>
-      </div>
+        </div>
+      </FrostedModalDialog>
+
       <ImageSelectDialog 
         isOpen={galleryOpen} 
         onClose={() => setGalleryOpen(false)} 
@@ -183,7 +224,7 @@ const FloorPlanModal = ({
           setGalleryOpen(false);
         }} 
       />
-    </div>
+    </>
   );
 };
 

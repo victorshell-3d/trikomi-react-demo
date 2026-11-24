@@ -27,25 +27,31 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body, #root {
+html, body {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   font-family: var(--font-family);
   color: var(--color-dark-main);
   background-color: #f1f5f9;
-  user-select: none;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
 }
 
 /* --------------------------------------------------------------------------
-   LUXURY STUDIO STAGE & LIGHTING
+   LUXURY STUDIO STAGE & LIGHTING (Active in 3D Configurator Stage)
    -------------------------------------------------------------------------- */
 .luxury-studio-stage {
-  position: relative;
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background-color: #f1f5f9;
+  user-select: none;
 }
 
 /* High-Key Softbox Studio Overhead Glow */

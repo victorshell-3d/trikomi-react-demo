@@ -1,0 +1,162 @@
+.vs-ui-root .vs-popover {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  overflow: visible;
+  vertical-align: middle;
+}
+
+.vs-ui-root .vs-popover-trigger {
+  padding: 0.5rem 1rem;
+  font-size: var(--vs-font-size-sm);
+}
+
+.vs-ui-root .vs-popover-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.625rem);
+  display: none;
+  width: min(16rem, calc(100vw - 2rem));
+  padding: 1rem;
+  border: 1px solid #FFFFFF;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: var(--vs-blur-float);
+  -webkit-backdrop-filter: var(--vs-blur-float);
+  box-shadow: 0 20px 25px -5px rgba(26, 22, 43, 0.1), 0 8px 10px -6px rgba(26, 22, 43, 0.1);
+  color: var(--vs-ink);
+  font-size: var(--vs-font-size-xs);
+  line-height: 1.5;
+  z-index: 40;
+}
+
+.vs-ui-root .vs-popover-panel.is-open {
+  display: block;
+}
+
+.vs-ui-root .vs-popover-panel:focus-visible {
+  outline: 2px solid var(--vs-primary);
+  outline-offset: 3px;
+}
+
+.vs-ui-root .vs-popover-panel--portal {
+  position: fixed;
+  right: auto;
+  bottom: auto;
+}
+
+.vs-ui-root .vs-popover-panel--portal.is-below {
+  transform-origin: top right;
+}
+
+.vs-ui-root .vs-tooltip {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.vs-ui-root .vs-tooltip-bubble {
+  position: absolute;
+  z-index: 45;
+  max-width: calc(100vw - 1rem);
+  padding: 0.36rem 0.75rem;
+  border-radius: var(--vs-radius-pill);
+  background: var(--vs-dark-pill);
+  box-shadow: 0 6px 16px rgba(26, 22, 43, 0.22);
+  color: #FFFFFF;
+  font-size: 0.7rem;
+  font-weight: var(--vs-font-weight-semibold);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.18s var(--vs-ease),
+    transform 0.18s var(--vs-ease),
+    visibility 0.18s;
+}
+
+.vs-ui-root .vs-tooltip-bubble[data-placement='top'] {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble[data-placement='bottom'] {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble[data-placement='left'] {
+  top: 50%;
+  right: calc(100% + 8px);
+  transform: translateY(-50%) translateX(4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble[data-placement='right'] {
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.vs-ui-root .vs-tooltip-bubble.is-visible[data-placement='top'],
+.vs-ui-root .vs-tooltip-bubble.is-visible[data-placement='bottom'] {
+  transform: translateX(-50%) translateY(0);
+}
+
+.vs-ui-root .vs-tooltip-bubble.is-visible[data-placement='left'] {
+  transform: translateY(-50%) translateX(0);
+}
+
+.vs-ui-root .vs-tooltip-bubble.is-visible[data-placement='right'] {
+  transform: translateY(-50%) translateX(0);
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal {
+  position: fixed;
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='top'],
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='bottom'] {
+  left: auto;
+  bottom: auto;
+  top: auto;
+  transform: translateY(4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='left'],
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='right'] {
+  left: auto;
+  right: auto;
+  top: auto;
+  transform: translateX(4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='bottom'] {
+  transform: translateY(-4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal[data-placement='right'] {
+  transform: translateX(-4px);
+}
+
+.vs-ui-root .vs-tooltip-bubble--portal.is-visible {
+  transform: translate(0, 0);
+}
+
+@media (max-width: 479px) {
+  .vs-ui-root .vs-popover-panel {
+    right: auto;
+    left: 0;
+    width: min(16rem, 100%);
+  }
+}

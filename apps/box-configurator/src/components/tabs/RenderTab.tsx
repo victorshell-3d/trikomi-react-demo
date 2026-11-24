@@ -119,40 +119,40 @@ const MaterialFinishCard = observer(() => {
         <button
           className="camera-btn"
           onClick={() => {
-            viewerStore.setSelectedMaterialRoughness(1.0);
-            viewerStore.setSelectedMaterialMetalness(0.0);
+            (viewerStore as any).setSelectedMaterialRoughness?.(1.0);
+            (viewerStore as any).setSelectedMaterialMetalness?.(0.0);
           }}
-          style={{ fontSize: '11px', padding: '6px', background: (viewerStore.selectedMaterialRoughness === 1 && viewerStore.selectedMaterialMetalness === 0) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: (viewerStore.selectedMaterialRoughness === 1 && viewerStore.selectedMaterialMetalness === 0) ? '#818cf8' : '' }}
+          style={{ fontSize: '11px', padding: '6px', background: ((viewerStore as any).selectedMaterialRoughness === 1 && (viewerStore as any).selectedMaterialMetalness === 0) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: ((viewerStore as any).selectedMaterialRoughness === 1 && (viewerStore as any).selectedMaterialMetalness === 0) ? '#818cf8' : '' }}
         >
           Matte Cardboard
         </button>
         <button
           className="camera-btn"
           onClick={() => {
-            viewerStore.setSelectedMaterialRoughness(0.2);
-            viewerStore.setSelectedMaterialMetalness(0.05);
+            (viewerStore as any).setSelectedMaterialRoughness?.(0.2);
+            (viewerStore as any).setSelectedMaterialMetalness?.(0.05);
           }}
-          style={{ fontSize: '11px', padding: '6px', background: (viewerStore.selectedMaterialRoughness === 0.2 && viewerStore.selectedMaterialMetalness === 0.05) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: (viewerStore.selectedMaterialRoughness === 0.2 && viewerStore.selectedMaterialMetalness === 0.05) ? '#818cf8' : '' }}
+          style={{ fontSize: '11px', padding: '6px', background: ((viewerStore as any).selectedMaterialRoughness === 0.2 && (viewerStore as any).selectedMaterialMetalness === 0.05) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: ((viewerStore as any).selectedMaterialRoughness === 0.2 && (viewerStore as any).selectedMaterialMetalness === 0.05) ? '#818cf8' : '' }}
         >
           Glossy Coated
         </button>
         <button
           className="camera-btn"
           onClick={() => {
-            viewerStore.setSelectedMaterialRoughness(0.55);
-            viewerStore.setSelectedMaterialMetalness(0.05);
+            (viewerStore as any).setSelectedMaterialRoughness?.(0.55);
+            (viewerStore as any).setSelectedMaterialMetalness?.(0.05);
           }}
-          style={{ fontSize: '11px', padding: '6px', background: (viewerStore.selectedMaterialRoughness === 0.55 && viewerStore.selectedMaterialMetalness === 0.05) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: (viewerStore.selectedMaterialRoughness === 0.55 && viewerStore.selectedMaterialMetalness === 0.05) ? '#818cf8' : '' }}
+          style={{ fontSize: '11px', padding: '6px', background: ((viewerStore as any).selectedMaterialRoughness === 0.55 && (viewerStore as any).selectedMaterialMetalness === 0.05) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: ((viewerStore as any).selectedMaterialRoughness === 0.55 && (viewerStore as any).selectedMaterialMetalness === 0.05) ? '#818cf8' : '' }}
         >
           Satin Finish
         </button>
         <button
           className="camera-btn"
           onClick={() => {
-            viewerStore.setSelectedMaterialRoughness(0.25);
-            viewerStore.setSelectedMaterialMetalness(0.85);
+            (viewerStore as any).setSelectedMaterialRoughness?.(0.25);
+            (viewerStore as any).setSelectedMaterialMetalness?.(0.85);
           }}
-          style={{ fontSize: '11px', padding: '6px', background: (viewerStore.selectedMaterialRoughness === 0.25 && viewerStore.selectedMaterialMetalness === 0.85) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: (viewerStore.selectedMaterialRoughness === 0.25 && viewerStore.selectedMaterialMetalness === 0.85) ? '#818cf8' : '' }}
+          style={{ fontSize: '11px', padding: '6px', background: ((viewerStore as any).selectedMaterialRoughness === 0.25 && (viewerStore as any).selectedMaterialMetalness === 0.85) ? 'rgba(129, 140, 248, 0.15)' : '', borderColor: ((viewerStore as any).selectedMaterialRoughness === 0.25 && (viewerStore as any).selectedMaterialMetalness === 0.85) ? '#818cf8' : '' }}
         >
           Metallic Foil
         </button>
@@ -165,8 +165,8 @@ const MaterialFinishCard = observer(() => {
           min="0.0"
           max="1.0"
           step="0.05"
-          value={viewerStore.selectedMaterialRoughness}
-          onChange={e => viewerStore.setSelectedMaterialRoughness(parseFloat(e.target.value))}
+          value={(viewerStore as any).selectedMaterialRoughness ?? 0.5}
+          onChange={e => (viewerStore as any).setSelectedMaterialRoughness?.(parseFloat(e.target.value))}
         />
       </div>
 
@@ -177,8 +177,8 @@ const MaterialFinishCard = observer(() => {
           min="0.0"
           max="1.0"
           step="0.05"
-          value={viewerStore.selectedMaterialMetalness}
-          onChange={e => viewerStore.setSelectedMaterialMetalness(parseFloat(e.target.value))}
+          value={(viewerStore as any).selectedMaterialMetalness ?? 0.0}
+          onChange={e => (viewerStore as any).setSelectedMaterialMetalness?.(parseFloat(e.target.value))}
         />
       </div>
     </div>

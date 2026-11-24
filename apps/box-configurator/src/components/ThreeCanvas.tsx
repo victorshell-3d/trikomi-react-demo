@@ -266,8 +266,8 @@ export const ThreeCanvas = observer(({ }: {}) => {
         tree: JSON.stringify(configStore.rootNode),
         layout: JSON.stringify(configStore.flattenedLayout),
         templates: JSON.stringify(configStore.templates),
-        roughness: viewerStore.selectedMaterialRoughness,
-        metalness: viewerStore.selectedMaterialMetalness
+        roughness: (viewerStore as any).selectedMaterialRoughness ?? 0.5,
+        metalness: (viewerStore as any).selectedMaterialMetalness ?? 0.1
       }),
       () => {
         builder.update();

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:ui-kit": "vite --config packages/ui-kit/vite.config.ts",
     "dev:sdk": "USE_LOCAL_SDK=true vite",
     "serve": "serve dist -p 3000",
     "build": "node build-monorepo.js",
@@ -28,6 +29,9 @@
     "build:materials": "pnpm --filter @trikomi/app-material-library build",
     "preview:materials": "pnpm --filter @trikomi/app-material-library preview",
     "lint": "eslint .",
+    "test:ui-kit:integration": "node --test tests/ui-kit-integration.test.mjs",
+    "test:landing:unit": "esbuild tests/landing-components.unit.test.mjs --bundle --platform=node --format=esm --outfile=tests/landing-components.bundled.mjs --packages=external && node --test tests/landing-components.bundled.mjs",
+    "typecheck:ui-kit:integration": "tsc --project tests/tsconfig.json",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -48,6 +52,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.184.1",
+    "@trikomi/ui-kit": "workspace:*",
     "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^6.0.1",
     "chalk": "^5.6.2",

@@ -4,6 +4,8 @@ import store from './Store';
 import MediaSelector, { AVAILABLE_MODELS } from './MediaSelector';
 import { EighthWallSDK } from '@trikomi/core/8thwall';
 import { ThreeViewer, viewerStore } from '@trikomi/core';
+import { VictorShellThemeProvider } from '@trikomi/ui-kit';
+import '@trikomi/ui-kit/styles.css';
 import './index.css';
 
 const App = () => {
@@ -56,12 +58,14 @@ const App = () => {
     }, []);
 
     return (
-        <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', zIndex: 10, pointerEvents: 'none' }}>
-            <div ref={viewerMountRef} style={{ display: 'none' }} />
-            <div style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}>
-                <MediaSelector />
+        <VictorShellThemeProvider initialAccent="orchid">
+            <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', zIndex: 10, pointerEvents: 'none' }}>
+                <div ref={viewerMountRef} style={{ display: 'none' }} />
+                <div style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none' }}>
+                    <MediaSelector />
+                </div>
             </div>
-        </div>
+        </VictorShellThemeProvider>
     );
 };
 

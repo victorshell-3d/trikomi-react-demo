@@ -1,8 +1,15 @@
 /* eslint-disable */
 import store from "./Store";
 import { observer } from "mobx-react-lite";
-import { useEffect, useRef } from "react";
-import '../../eyewear-tryon/src/App.css';
+import { useEffect, useState } from "react";
+import {
+  AppHeaderBar,
+  FloatingControlDock,
+  CanvasControlToolbar,
+  useVictorShellTheme
+} from "@trikomi/ui-kit";
+import EighthWallInspector from "./EighthWallInspector";
+import WebARHelpModal from "./WebARHelpModal";
 
 const spinnerSvg = `${import.meta.env.BASE_URL}svgs/spinner.svg`;
 
@@ -23,16 +30,75 @@ export const AVAILABLE_MODELS = [
 ];
 
 const MediaSelector = observer(() => {
-    const carouselRef = useRef(null);
+    // VictorShell Theme Integration (Default: Orchid Glow)
+    let themeContext = null;
+    try {
+        themeContext = useVictorShellTheme();
+    } catch {}
+    const [localTheme, setLocalTheme] = useState('orchid');
+    const activeAccent = themeContext ? themeContext.accent : localTheme;
+    const setActiveAccent = themeContext ? themeContext.setAccent : setLocalTheme;
+
+    // Viewport responsiveness & Inspector Drawer state (collapsed by default on mobile)
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+    const [isInspectorOpen, setIsInspectorOpen] = useState(typeof window !== 'undefined' ? window.innerWidth > 768 : false);
+    const [activeDockTab, setActiveDockTab] = useState('models');
+    const [helpOpen, setHelpOpen] = useState(false);
 
     useEffect(() => {
-        if (carouselRef.current && carouselRef.current.children[store.modelIndex]) {
-            carouselRef.current.children[store.modelIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        if (typeof window === 'undefined') return;
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        const handleViewportChange = (e) => {
+            setIsMobile(e.matches);
+            if (e.matches) {
+                setIsInspectorOpen(false);
+            }
+        };
+        mediaQuery.addEventListener('change', handleViewportChange);
+        return () => mediaQuery.removeEventListener('change', handleViewportChange);
+    }, []);
+
+    const handleSelectModel = (idx) => {
+        store.modelIndex = idx;
+    };
+
+    const handleApplyColor = (type, hex, colorName) => {
+        for (const matName of store.glassConfigs.materials || []) {
+            const isMatch = type === 'frame'
+                ? matName.toLowerCase().includes('frame')
+                : matName.toLowerCase().includes('lens');
+
+            if (isMatch) {
+                const p = { ...(store.materialProps[matName] || {}) };
+                p.color = hex;
+                if (colorName === 'Clear') {
+                    p.opacity = 0.5;
+                    p.transparent = true;
+                } else if (type === 'lens') {
+                    p.opacity = 0.75;
+                } else {
+                    p.opacity = 1.0;
+                }
+                store.materialProps[matName] = p;
+
+                if (window.applyMaterialColor) {
+                    window.applyMaterialColor(matName, hex);
+                }
+            }
         }
-    }, [store.modelIndex]);
+    };
+
+    const dockItems = [
+        { id: 'models', label: 'Styles', icon: '👓', badge: AVAILABLE_MODELS.length },
+        { id: 'frames', label: 'Frames', icon: '🎨' },
+        { id: 'lenses', label: 'Lenses', icon: '🕶️' },
+        { id: 'webar', label: 'WebAR', icon: '🌐', badge: store.tracking ? 'ON' : undefined },
+        { id: 'info', label: 'Info', icon: '📋' }
+    ];
 
     return (
-        <div className="viewer-wrapper" style={{ background: 'transparent', pointerEvents: 'none', zIndex: 10 }}>
+        <div className="viewer-wrapper" style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 10 }}>
+
             {/* Loading Overlay */}
             {!store.loaded && (
                 <div style={{
@@ -43,122 +109,172 @@ const MediaSelector = observer(() => {
                     position: 'absolute',
                     inset: 0,
                     zIndex: 99,
-                    background: 'rgba(0,0,0,0.85)',
-                    color: 'var(--accent, #00f2fe)',
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    color: 'var(--accent, #c084fc)',
                     pointerEvents: 'auto'
                 }}>
                     <img src={spinnerSvg} width={60} alt="Loading..." style={{ marginBottom: '15px' }} />
-                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 600 }}>INITIALIZING ENGINE</div>
+                    <div style={{ letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 600 }}>
+                        INITIALIZING 8THWALL ENGINE
+                    </div>
                 </div>
             )}
 
-            {/* Top Header */}
-            <div className="app-header" style={{ pointerEvents: 'auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <img src={`${import.meta.env.BASE_URL}logos/eyewear.png`} height={40} alt="Trikomi Logo" style={{ filter: 'drop-shadow(0 0 10px rgba(0, 242, 254, 0.3))' }} />
-                    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.1' }}>
-                        <span style={{ fontWeight: 800, fontSize: '1.4rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Trikomi</span>
-                        <span style={{ fontWeight: 400, fontSize: '0.9rem', color: '#a855f7', letterSpacing: '2px', textTransform: 'uppercase' }}>Eyewear</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Vertical Material Color Panels */}
-            {store.glassConfigs.materials.map(matName => {
-                const props = store.materialProps[matName];
-                if (!props) return null;
-
-                const isFrame = matName.toLowerCase().includes('frame');
-                const isLens = matName.toLowerCase().includes('lens');
-
-                if (!isFrame && !isLens) return null;
-
-                const frameColors = [
-                    { name: 'Black', hex: '#222222' },
-                    { name: 'Tortoise', hex: '#8b4513' },
-                    { name: 'Silver', hex: '#e0e0e0' },
-                    { name: 'Gold', hex: '#d4af37' },
-                    { name: 'Clear', hex: '#ffffff' },
-                ];
-
-                const lensColors = [
-                    { name: 'Dark', hex: '#111111' },
-                    { name: 'Green', hex: '#1d3e2b' },
-                    { name: 'Brown', hex: '#4a2f1d' },
-                    { name: 'Blue', hex: '#1c2d54' },
-                    { name: 'Purple', hex: '#3b1c54' },
-                ];
-
-                const presetColors = isFrame ? frameColors : lensColors;
-
-                return (
-                    <div key={matName} className={`vertical-panel ${isFrame ? 'left' : 'right'}`} style={{ pointerEvents: 'auto' }}>
-                        {presetColors.map(c => (
-                            <button
-                                key={c.name}
-                                className={`swatch-btn ${props.color === c.hex ? 'active' : ''}`}
-                                style={{ background: c.hex }}
-                                title={c.name}
-                                onClick={() => {
-                                    const p = { ...store.materialProps[matName] };
-                                    p.color = c.hex;
-                                    if (c.name === 'Clear') {
-                                        p.opacity = 0.5;
-                                        p.transparent = true;
-                                    } else {
-                                        p.opacity = 1.0;
-                                    }
-                                    if (isLens) {
-                                        p.opacity = 0.75;
-                                    }
-                                    store.materialProps[matName] = p;
-
-                                    if (window.applyMaterialColor) {
-                                        window.applyMaterialColor(matName, c.hex);
-                                    }
+            {/* VictorShell Overlay Layer: non-blocking pointer events pass through to #xr-canvas */}
+            <div
+                className="vs-8theye-ui-layer"
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                    zIndex: 20
+                }}
+            >
+                {/* 1. App Header Bar */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <AppHeaderBar
+                        brandTitle="TRIKOMI"
+                        productTitle="8thWall WebAR Eyewear"
+                        backLabel="← Back to Overview"
+                        onBack={() => {
+                            window.location.hash = '#/';
+                        }}
+                        theme={activeAccent}
+                        onThemeChange={setActiveAccent}
+                        showThemeSwitcher={true}
+                        statusBadge={
+                            <span
+                                className="vs-8theye-status-badge"
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '3px 10px',
+                                    borderRadius: '999px',
+                                    fontSize: '11.5px',
+                                    fontWeight: 600,
+                                    background: store.tracking ? 'rgba(74, 222, 128, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                                    color: store.tracking ? '#4ade80' : '#f59e0b',
+                                    border: store.tracking ? '1px solid rgba(74, 222, 128, 0.3)' : '1px solid rgba(245, 158, 11, 0.3)'
                                 }}
-                            />
-                        ))}
-                    </div>
-                );
-            })}
-
-            {/* Bottom Eyewear Model Selection Carousel */}
-            <div className="bottom-carousel-container" style={{ pointerEvents: 'auto' }}>
-                <button
-                    className="carousel-arrow"
-                    onClick={() => {
-                        const newIdx = (store.modelIndex - 1 + AVAILABLE_MODELS.length) % AVAILABLE_MODELS.length;
-                        store.modelIndex = newIdx;
-                    }}
-                >
-                    ❮
-                </button>
-                <div className="carousel-items" ref={carouselRef}>
-                    {AVAILABLE_MODELS.map((model, idx) => (
-                        <div
-                            key={model.name}
-                            className={`model-card ${store.modelIndex === idx ? 'active' : ''}`}
-                            onClick={() => store.modelIndex = idx}
-                            title={model.name}
-                        >
-                            {model.thumb ? (
-                                <img src={model.thumb} alt={model.name} style={{ width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
-                            ) : (
-                                <span style={{ fontSize: '0.75rem', color: 'white', fontWeight: 600 }}>{model.name.split(' ')[0]}</span>
-                            )}
-                        </div>
-                    ))}
+                            >
+                                <span
+                                    style={{
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        background: store.tracking ? '#4ade80' : '#f59e0b'
+                                    }}
+                                />
+                                {store.tracking ? 'Face Tracked • 8thWall' : 'Align Face • WebAR'}
+                            </span>
+                        }
+                    />
                 </div>
-                <button
-                    className="carousel-arrow"
-                    onClick={() => {
-                        const newIdx = (store.modelIndex + 1) % AVAILABLE_MODELS.length;
-                        store.modelIndex = newIdx;
-                    }}
-                >
-                    ❯
-                </button>
+
+                {/* 2. Top-Right Canvas Control Toolbar */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <CanvasControlToolbar
+                        position="top-right"
+                        extraActions={
+                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => { store.grid = !store.grid; }}
+                                    style={{
+                                        background: store.grid ? 'var(--accent, #c084fc)' : 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Toggle Face Mesh & Occluder Grid"
+                                >
+                                    🌐 Grid
+                                </button>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => { store.naturalLighting = !store.naturalLighting; }}
+                                    style={{
+                                        background: store.naturalLighting ? 'var(--accent, #c084fc)' : 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Toggle Natural Lighting Simulation"
+                                >
+                                    💡 Light
+                                </button>
+                                <button
+                                    type="button"
+                                    className="vs-toolbar-btn"
+                                    onClick={() => {
+                                        if (!document.fullscreenElement) {
+                                            document.documentElement.requestFullscreen?.();
+                                        } else {
+                                            document.exitFullscreen?.();
+                                        }
+                                    }}
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.08)',
+                                        color: '#ffffff',
+                                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                                        borderRadius: '6px',
+                                        padding: '4px 8px',
+                                        fontSize: '11.5px',
+                                        cursor: 'pointer'
+                                    }}
+                                    title="Fullscreen"
+                                >
+                                    ⛶
+                                </button>
+                            </div>
+                        }
+                    />
+                </div>
+
+                {/* 3. Bottom Floating Control Dock */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <FloatingControlDock
+                        position="bottom"
+                        items={dockItems}
+                        activeId={activeDockTab}
+                        onSelect={(id) => {
+                            setActiveDockTab(id);
+                            setIsInspectorOpen(true);
+                        }}
+                    />
+                </div>
+
+                {/* 4. Glass Inspector Drawer */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <EighthWallInspector
+                        isOpen={isInspectorOpen}
+                        onClose={() => setIsInspectorOpen(false)}
+                        activeTab={activeDockTab}
+                        onTabChange={setActiveDockTab}
+                        models={AVAILABLE_MODELS}
+                        activeModelIndex={store.modelIndex}
+                        onSelectModel={handleSelectModel}
+                        onApplyColor={handleApplyColor}
+                        onOpenHelp={() => setHelpOpen(true)}
+                    />
+                </div>
+
+                {/* 5. WebAR Help Modal */}
+                <div style={{ pointerEvents: 'auto' }}>
+                    <WebARHelpModal
+                        isOpen={helpOpen}
+                        onClose={() => setHelpOpen(false)}
+                    />
+                </div>
             </div>
         </div>
     );
