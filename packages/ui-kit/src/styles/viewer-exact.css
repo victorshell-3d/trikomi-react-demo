@@ -50,12 +50,14 @@
   margin: 0;
   padding: 0;
   font-family: var(--tk-font-sans);
-  background: 
-    radial-gradient(circle at 85% 12%, rgba(124, 58, 237, 0.18) 0%, transparent 45%),
-    radial-gradient(circle at 15% 35%, rgba(0, 240, 255, 0.14) 0%, transparent 40%),
-    radial-gradient(circle at 82% 58%, rgba(124, 58, 237, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.12) 0%, transparent 40%),
-    linear-gradient(180deg, #0B0F19 0%, #0D1222 25%, #0B0F19 50%, #0e1326 75%, #0B0F19 100%);
+  background-color: #070913;
+  background-image: 
+    linear-gradient(180deg, rgba(7, 9, 19, 0.20) 0%, rgba(7, 9, 19, 0.35) 40%, rgba(7, 9, 19, 0.55) 100%),
+    url('/images/viewer-page-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--tk-text-primary-dark);
   overflow-x: hidden;
   box-sizing: border-box;
@@ -63,12 +65,14 @@
 }
 
 .tk-viewer-page[data-theme="light"] {
-  background: 
-    radial-gradient(circle at 85% 12%, rgba(237, 233, 254, 0.6) 0%, transparent 45%),
-    radial-gradient(circle at 15% 35%, rgba(224, 242, 254, 0.5) 0%, transparent 40%),
-    radial-gradient(circle at 82% 58%, rgba(243, 232, 255, 0.55) 0%, transparent 45%),
-    radial-gradient(circle at 20% 80%, rgba(224, 242, 254, 0.5) 0%, transparent 40%),
+  background-color: #F8FAFC;
+  background-image: 
+    radial-gradient(circle at 80% 10%, rgba(237, 233, 254, 0.7) 0%, transparent 50%),
+    radial-gradient(circle at 18% 30%, rgba(224, 242, 254, 0.6) 0%, transparent 45%),
+    radial-gradient(circle at 75% 60%, rgba(243, 232, 255, 0.65) 0%, transparent 50%),
+    radial-gradient(circle at 22% 85%, rgba(224, 242, 254, 0.55) 0%, transparent 45%),
     linear-gradient(180deg, #F8FAFC 0%, #F5F3FF 35%, #F8FAFC 70%, #F1F5F9 100%);
+  background-attachment: fixed;
   color: var(--tk-text-primary-light);
 }
 
@@ -87,49 +91,12 @@
   overflow: hidden;
 }
 
-/* Dark Theme Ambient Neon Glow Orbs */
-.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-1 {
-  position: absolute;
-  top: -120px;
-  right: 5%;
-  width: 850px;
-  height: 850px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(99, 102, 241, 0.12) 42%, transparent 70%);
-  filter: blur(90px);
-}
-
-.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-2 {
-  position: absolute;
-  top: 22%;
-  left: -180px;
-  width: 850px;
-  height: 850px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, rgba(59, 130, 246, 0.08) 45%, transparent 70%);
-  filter: blur(95px);
-}
-
-.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-3 {
-  position: absolute;
-  top: 54%;
-  right: -120px;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.16) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 68%);
-  filter: blur(90px);
-}
-
+/* Dark Theme Ambient Neon Glow Orbs - subtle to let background image shine through */
+.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-1,
+.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-2,
+.tk-viewer-page[data-theme="dark"] .tk-ambient-orb-3,
 .tk-viewer-page[data-theme="dark"] .tk-ambient-orb-4 {
-  position: absolute;
-  bottom: 2%;
-  left: 8%;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 229, 255, 0.11) 0%, rgba(139, 92, 246, 0.09) 45%, transparent 70%);
-  filter: blur(95px);
+  opacity: 0.15;
 }
 
 /* Light Theme Ambient Soft Glow Orbs */
@@ -1008,6 +975,66 @@
   overflow: visible;
   filter: drop-shadow(0 16px 40px rgba(124, 58, 237, 0.45));
   animation: tk-float-3d 6s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.tk-hero-mockup-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(124, 58, 237, 0.45);
+  background: rgba(11, 15, 28, 0.85);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tk-hero__visual-wrap:hover .tk-hero-mockup-frame {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(0, 240, 255, 0.6);
+  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.35), 0 0 24px rgba(0, 240, 255, 0.25);
+}
+
+.tk-viewer-page[data-theme="light"] .tk-hero-mockup-frame {
+  border-color: rgba(124, 58, 237, 0.25);
+  background: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(110, 44, 242, 0.12);
+}
+
+.tk-hero-mockup-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 17px;
+}
+
+.tk-hero-mockup-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: rgba(11, 15, 28, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #E2E8F0;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.tk-hero__visual-wrap:hover .tk-hero-mockup-badge {
+  background: rgba(124, 58, 237, 0.9);
+  border-color: #00F0FF;
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.5);
 }
 
 /* --------------------------------------------------------------------------
