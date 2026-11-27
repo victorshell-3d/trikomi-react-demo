@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="100%" height="100%">
+  <defs>
+    <!-- Background Glow -->
+    <radialGradient id="colBgGlow" cx="50%" cy="48%" r="55%">
+      <stop offset="0%" stop-color="#FF7900" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#2563EB" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#08090B" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Platform Gradient -->
+    <radialGradient id="colPlatGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#222838" />
+      <stop offset="70%" stop-color="#141824" />
+      <stop offset="100%" stop-color="#090B10" />
+    </radialGradient>
+
+    <!-- Neon Glow Filters -->
+    <filter id="colGlowOrange" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="colGlowCyan" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="colDropShadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#000000" flood-opacity="0.75" />
+    </filter>
+
+    <!-- Linear Gradients for Color Spheres / Chips -->
+    <linearGradient id="swOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA84A" />
+      <stop offset="50%" stop-color="#FF7900" />
+      <stop offset="100%" stop-color="#B34F00" />
+    </linearGradient>
+
+    <linearGradient id="swBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1E3A8A" />
+    </linearGradient>
+
+    <linearGradient id="swPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="50%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#4C1D95" />
+    </linearGradient>
+
+    <linearGradient id="swEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="50%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#064E3B" />
+    </linearGradient>
+
+    <linearGradient id="swWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </linearGradient>
+
+    <!-- Jersey Two-Tone Gradient -->
+    <linearGradient id="jerseyBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#141824" />
+      <stop offset="48%" stop-color="#1A2030" />
+      <stop offset="52%" stop-color="#FF7900" />
+      <stop offset="100%" stop-color="#FFA84A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="480" height="360" fill="#0C0E14" />
+  <rect width="480" height="360" fill="url(#colBgGlow)" />
+
+  <!-- Podium / Stage Floor -->
+  <ellipse cx="240" cy="295" rx="160" ry="32" fill="#FF7900" opacity="0.12" filter="url(#colGlowOrange)" />
+  <ellipse cx="240" cy="290" rx="145" ry="26" fill="url(#colPlatGrad)" stroke="#FF9A32" stroke-width="1.6" />
+  <ellipse cx="240" cy="290" rx="120" ry="19" fill="none" stroke="rgba(255,154,50,0.25)" stroke-width="1" stroke-dasharray="4 4" />
+
+  <!-- Color Palette Wheel Orbit Rings -->
+  <circle cx="240" cy="165" r="115" fill="none" stroke="rgba(255,121,0,0.18)" stroke-width="1.5" stroke-dasharray="3 6" />
+  <circle cx="240" cy="165" r="85" fill="none" stroke="rgba(96,165,250,0.18)" stroke-width="1" />
+
+  <!-- Center Garment Silhouette with Dual Color Splitting -->
+  <g transform="translate(180, 75)" filter="url(#colDropShadow)">
+    <!-- Jersey Body -->
+    <path d="M 35 15 Q 60 28 85 15 L 105 40 L 92 65 L 82 58 L 82 145 Q 60 152 38 145 L 38 58 L 28 65 L 15 40 Z" fill="url(#jerseyBody)" stroke="#FFA84A" stroke-width="1.8" />
+    <!-- V-Neck Collar Accent -->
+    <path d="M 45 19 Q 60 38 75 19" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
+    <!-- Center Division Line -->
+    <line x1="60" y1="36" x2="60" y2="148" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="2 3" />
+    <!-- Raglan Seams -->
+    <path d="M 46 20 L 32 55" fill="none" stroke="rgba(255,121,0,0.7)" stroke-width="1.2" />
+    <path d="M 74 20 L 88 55" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" />
+    <!-- Zone Indicator Dots -->
+    <circle cx="48" cy="80" r="3.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="1" />
+    <circle cx="72" cy="80" r="3.5" fill="#FF7900" stroke="#FFFFFF" stroke-width="1" />
+    <circle cx="60" cy="120" r="3.5" fill="#10B981" stroke="#FFFFFF" stroke-width="1" />
+  </g>
+
+  <!-- Floating Colorway Swatches / Spheres Orbiting Around -->
+  <!-- Swatch 1: Vibrant Orange (Active Zone) -->
+  <g transform="translate(70, 95)" filter="url(#colGlowOrange)">
+    <circle cx="28" cy="28" r="24" fill="url(#swOrange)" stroke="#FFFFFF" stroke-width="2.5" />
+    <circle cx="28" cy="28" r="28" fill="none" stroke="#FF7900" stroke-width="1.5" stroke-dasharray="3 3" />
+    <!-- Label -->
+    <rect x="-8" y="58" width="72" height="18" rx="4" fill="#141824" stroke="#FF7900" stroke-width="1" />
+    <text x="28" y="70" fill="#FFA84A" font-size="9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">#FF7900</text>
+  </g>
+
+  <!-- Swatch 2: Speed Blue -->
+  <g transform="translate(355, 95)" filter="url(#colGlowCyan)">
+    <circle cx="24" cy="24" r="22" fill="url(#swBlue)" stroke="#FFFFFF" stroke-width="2" />
+    <rect x="-10" y="52" width="68" height="18" rx="4" fill="#141824" stroke="#2563EB" stroke-width="1" />
+    <text x="24" y="64" fill="#60A5FA" font-size="9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">#2563EB</text>
+  </g>
+
+  <!-- Swatch 3: Electric Violet -->
+  <g transform="translate(55, 205)">
+    <circle cx="22" cy="22" r="20" fill="url(#swPurple)" stroke="#FFFFFF" stroke-width="1.8" />
+    <rect x="-10" y="48" width="64" height="17" rx="4" fill="#141824" stroke="#7C3AED" stroke-width="1" />
+    <text x="22" y="60" fill="#C084FC" font-size="9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">#7C3AED</text>
+  </g>
+
+  <!-- Swatch 4: Emerald Green -->
+  <g transform="translate(370, 205)">
+    <circle cx="22" cy="22" r="20" fill="url(#swEmerald)" stroke="#FFFFFF" stroke-width="1.8" />
+    <rect x="-10" y="48" width="64" height="17" rx="4" fill="#141824" stroke="#059669" stroke-width="1" />
+    <text x="22" y="60" fill="#34D399" font-size="9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">#059669</text>
+  </g>
+
+  <!-- Swatch 5: Pure White -->
+  <g transform="translate(216, 25)">
+    <circle cx="24" cy="24" r="18" fill="url(#swWhite)" stroke="#FF7900" stroke-width="2" />
+  </g>
+
+  <!-- Tech Status Banner at Bottom -->
+  <g transform="translate(130, 316)">
+    <rect width="220" height="26" rx="13" fill="#141824" stroke="rgba(255,121,0,0.5)" stroke-width="1" />
+    <circle cx="16" cy="13" r="4" fill="#FF7900" filter="url(#colGlowOrange)" />
+    <text x="30" y="17" fill="#E2E8F0" font-size="10.5" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" letter-spacing="0.5">
+      5 MULTI-ZONE HEX CHANNELS
+    </text>
+  </g>
+</svg>

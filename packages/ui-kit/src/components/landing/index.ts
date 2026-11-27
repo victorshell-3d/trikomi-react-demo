@@ -75,11 +75,6 @@ export {
 } from './ProductLandingTemplate';
 
 export {
-  SportswearLandingPage,
-  type SportswearLandingPageProps
-} from './SportswearLandingPage';
-
-export {
   FaceMocapLandingPage,
   type FaceMocapLandingPageProps
 } from './FaceMocapLandingPage';
@@ -108,6 +103,11 @@ export {
   ViewerLandingPage,
   type ViewerLandingPageProps
 } from './ViewerLandingPage';
+
+export {
+  SportswearLandingPage,
+  type SportswearLandingPageProps
+} from './SportswearLandingPage';
 
 export {
   ViewerHero3DCanvas,

@@ -1,865 +1,1041 @@
-import React, { useState, useRef } from 'react';
-import { ProductLandingTemplate } from './ProductLandingTemplate';
-import { Hero3DCanvas } from './Hero3DCanvas';
-import type { FeatureItem } from './LandingFeatures';
-import type { BenefitItem } from './LandingBenefits';
-import type { ShowcaseItem } from './LandingVisualShowcase';
-import type { LandingNavLink } from './LandingNav';
+import React, { useState, useEffect } from 'react';
 
 export interface SportswearLandingPageProps {
-  /** Callback to launch the actual Sportswear Configurator 3D demo. */
+  /** Callback to launch the actual 3D Sportswear Configurator application. */
   onExploreDemo: () => void;
-  /** Destination route for the demo. Defaults to '/apps/sportswear-configurator/index.html#demo'. */
+  /** Destination route for the demo. Defaults to '#demo'. */
   exploreDemoHref?: string;
-  /** Active theme accent. Defaults to 'violet'. */
-  theme?: 'violet' | 'indigo' | 'orchid';
+  /** Active theme accent. Defaults to 'orange'. */
+  theme?: string;
   /** Additional CSS class names. */
   className?: string;
 }
 
+interface SportswearCategoryItem {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+}
+
+const SPORTSWEAR_CATEGORIES: SportswearCategoryItem[] = [
+  {
+    id: 'athletic-jerseys',
+    name: 'Athletic Jerseys',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+      </svg>
+    )
+  },
+  {
+    id: 'performance-hoodies',
+    name: 'Performance Hoodies',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 3a3 3 0 0 1 6 0v2H9V3z" />
+        <path d="M20 7l-3-2H7L4 7a2 2 0 0 0-1 1.7V12l3-1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-9l3 1V8.7A2 2 0 0 0 20 7z" />
+        <line x1="12" y1="5" x2="12" y2="12" />
+      </svg>
+    )
+  },
+  {
+    id: 'tracksuits',
+    name: 'Tracksuits',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 6.5L8 4l4 2 4-2 4 2.5v4l-3-1v12.5H7V9.5L4 10.5v-4z" />
+        <line x1="12" y1="6" x2="12" y2="22" />
+        <line x1="8.5" y1="9.5" x2="8.5" y2="22" />
+        <line x1="15.5" y1="9.5" x2="15.5" y2="22" />
+      </svg>
+    )
+  },
+  {
+    id: 'running-wear',
+    name: 'Running Wear',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 2h2v4a3 3 0 0 0 6 0V2h2l1 5-2 1v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8L4 7l1-5z" />
+        <path d="M9 13l3 2 3-2" />
+      </svg>
+    )
+  },
+  {
+    id: 'teamwear',
+    name: 'Teamwear',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <polygon points="12 7 13.5 10 17 10.5 14.5 13 15 16.5 12 15 9 16.5 9.5 13 7 10.5 10.5 10 12 7" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    )
+  }
+];
+
 /**
  * SportswearLandingPage
- *
- * Dedicated, luxury single-product landing page for the VictorShell Sportswear Configurator.
- * Rebuilt to match the approved VictorShell reference image:
- * - Left column: Category badge, heading with "in 3D" purple gradient, description, Try Live Demo & Book a Demo CTAs, 3 Tech Badges
- * - Center: Large realistic 3D sportswear jersey on marble pedestal with neon halo, Drag to Rotate pill, Fullscreen button
- * - Right: Floating glassmorphism Customization Panel with Design, Fabric, Logo, Text tabs
- * - Bottom: Four equal-width feature cards (Realistic 3D Visualization, Complete Customization, Fast & Seamless, Cross-Platform)
+ * Trikomi Sportswear landing experience with dark obsidian (#08090B) and vibrant orange (#FF7200)
+ * styling, animated hero stage, interactive category showcase, studio capabilities, and 3D preview.
  */
 export const SportswearLandingPage: React.FC<SportswearLandingPageProps> = ({
   onExploreDemo,
-  exploreDemoHref = '/apps/sportswear-configurator/index.html#demo',
-  theme = 'violet',
+  exploreDemoHref = '#demo',
+  theme = 'orange',
   className = ''
 }) => {
-  const stageRef = useRef<HTMLDivElement>(null);
+  // Active category selection state
+  const [activeCategory, setActiveCategory] = useState<string>('Athletic Jerseys');
 
-  // Navigation anchors for single-page scroll layout matching reference
-  const navLinks: LandingNavLink[] = [
-    { label: 'Overview', href: '#overview', active: true },
-    { label: 'Features', href: '#features' },
-    { label: 'Use Cases', href: '#use-cases' },
-    { label: 'Performance', href: '#benefits' },
-    { label: 'Tech Specs', href: '#cta' }
-  ];
+  // Scroll detection for navbar background blur transition
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Interactive Customizer State
-  const [activeTab, setActiveTab] = useState<'design' | 'fabric' | 'logo' | 'text'>('design');
-  const [activeColor, setActiveColor] = useState<'purple' | 'blue' | 'red' | 'orange' | 'white'>('purple');
-  const [activePattern, setActivePattern] = useState<'sash' | 'waves' | 'dots' | 'hex' | 'chevron'>('sash');
-  const [activeFabric, setActiveFabric] = useState<'mesh' | 'knit' | 'smooth' | 'pique' | 'jacquard'>('mesh');
-  const [playerName, setPlayerName] = useState<string>('VICTOR');
-  const [playerNumber, setPlayerNumber] = useState<string>('10');
-  const [logoPosition, setLogoPosition] = useState<'chest' | 'left' | 'sleeve'>('chest');
-  const [showSponsor, setShowSponsor] = useState<boolean>(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window !== 'undefined') {
+        setIsScrolled(window.scrollY > 20);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const toggleFullscreen = () => {
-    if (!stageRef.current) return;
-    if (!document.fullscreenElement) {
-      stageRef.current.requestFullscreen().catch(() => {});
+  // Mobile drawer state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      document.exitFullscreen().catch(() => {});
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const handleLaunchStudio = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    if (onExploreDemo) {
+      onExploreDemo();
+    } else if (typeof window !== 'undefined') {
+      window.location.hash = exploreDemoHref;
     }
   };
 
-  // 6 Extended Features for the Features section
-  const features: FeatureItem[] = [
-    {
-      id: 'dynamic-decals',
-      title: 'Dynamic Vector Decals',
-      description:
-        'Upload custom SVG team crests and sponsor marks with real-time UV projection conforming to fabric seams.',
-      badge: 'Core Engine',
-      highlight: true
-    },
-    {
-      id: 'fabric-shaders',
-      title: 'Technical Fabric Shaders',
-      description:
-        'Switch between moisture-wicking technical mesh, heavy-duty interlock knit, and smooth poly with physically accurate sheen.',
-      badge: 'Photorealistic PBR'
-    },
-    {
-      id: 'player-typography',
-      title: 'Player Names & Numbers',
-      description:
-        'Built-in vector typography engine rendering custom player names and jersey numbers with instant font and color control.',
-      badge: 'Vector Canvas'
-    },
-    {
-      id: 'studio-cameras',
-      title: '4-Angle Studio Cameras',
-      description:
-        'Instant one-click camera pivots across Front, Back, Left Profile, and Right Profile angles for 360 inspection.',
-      badge: 'Multi-Angle'
-    },
-    {
-      id: 'garment-library',
-      title: 'Multi-Sport Garment Models',
-      description:
-        'Production-accurate 3D models for Pro Soccer Jerseys, Rugby Match Kits, and Basketball Singlets with optimized GLTF geometry.',
-      badge: 'GLTF / WebGPU'
-    },
-    {
-      id: 'dieline-export',
-      title: 'Factory Snapshot Export',
-      description:
-        'Generate high-resolution PNG renders and 2D sublimation UV dielines directly in the browser for instant manufacturing.',
-      badge: 'Sublimation Pipeline'
+  const handleScrollTo = (id: string, e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    if (typeof document !== 'undefined') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-  ];
-
-  // Benefits & Performance Metrics
-  const benefits: BenefitItem[] = [
-    {
-      metric: '60 FPS',
-      label: 'Real-Time WebGPU Render',
-      description: 'Zero lag when updating decals, jersey numbers, and fabric shaders in real time.',
-      tag: 'Hardware Accelerated'
-    },
-    {
-      metric: '< 1.2s',
-      label: 'Initial Kit Load Time',
-      description: 'Draco-compressed GLTF models stream instantaneously on desktop and mobile browsers.',
-      tag: 'Optimized Assets'
-    },
-    {
-      metric: '$0 / hr',
-      label: 'Client-Side Rendering Cost',
-      description: 'All 3D calculations execute locally on user hardware with zero expensive server GPU costs.',
-      tag: 'Serverless Architecture'
-    },
-    {
-      metric: '100%',
-      label: 'Color Channel Independence',
-      description: '5 independent hex channels guarantee pixel-perfect brand color reproduction.',
-      tag: 'Factory Accurate'
-    }
-  ];
-
-  // Interactive Showcase Views
-  const showcaseItems: ShowcaseItem[] = [
-    {
-      id: 'soccer-view',
-      label: 'Pro Soccer Kit',
-      badge: 'SoccerJersey.gltf',
-      description:
-        'High-performance soccer match jersey featuring raglan sleeves, ribbed collar, and breathable underarm mesh zones.',
-      visual: (
-        <div className="vs-sportswear-showcase-card" data-testid="showcase-soccer-preview">
-          <div className="vs-sportswear-showcase-card__badge-row">
-            <span className="vs-sportswear-chip">SoccerJersey.gltf</span>
-            <span className="vs-sportswear-chip vs-sportswear-chip--accent">Technical Mesh · Raglan Cut</span>
-          </div>
-          <div className="vs-sportswear-showcase-card__visual">
-            <img
-              src="/logos/jersey.png"
-              alt="Pro Soccer Kit 3D Preview"
-              className="vs-sportswear-showcase-card__img"
-              loading="lazy"
-            />
-          </div>
-          <div className="vs-sportswear-showcase-card__meta">
-            <span className="vs-sportswear-showcase-card__title">Athletic Match Jersey</span>
-            <span className="vs-sportswear-showcase-card__spec">5 Color Zones · Chest & Sleeve Decals</span>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'rugby-view',
-      label: 'Rugby Match Kit',
-      badge: 'RugbyJersey.gltf',
-      description:
-        'Reinforced heavy-duty rugby kit with heavy poly-interlock weave, reinforced collar placket, and high-impact stretch seams.',
-      visual: (
-        <div className="vs-sportswear-showcase-card" data-testid="showcase-rugby-preview">
-          <div className="vs-sportswear-showcase-card__badge-row">
-            <span className="vs-sportswear-chip">RugbyJersey.gltf</span>
-            <span className="vs-sportswear-chip vs-sportswear-chip--accent">Interlock Knit · Heavy Poly</span>
-          </div>
-          <div className="vs-sportswear-showcase-card__visual">
-            <img
-              src="/logos/jersey.png"
-              alt="Rugby Match Kit 3D Preview"
-              className="vs-sportswear-showcase-card__img vs-sportswear-showcase-card__img--alt"
-              loading="lazy"
-            />
-          </div>
-          <div className="vs-sportswear-showcase-card__meta">
-            <span className="vs-sportswear-showcase-card__title">Heavyweight Rugby Kit</span>
-            <span className="vs-sportswear-showcase-card__spec">Reinforced Seams · Sublimation Ready</span>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'basketball-view',
-      label: 'Basketball Singlet',
-      badge: 'BasketballSinglet.gltf',
-      description:
-        'Ultralight sleeveless basketball jersey with deep armholes, rib-knit binding, and open-hole athletic mesh for elite court speed.',
-      visual: (
-        <div className="vs-sportswear-showcase-card" data-testid="showcase-basketball-preview">
-          <div className="vs-sportswear-showcase-card__badge-row">
-            <span className="vs-sportswear-chip">BasketballSinglet.gltf</span>
-            <span className="vs-sportswear-chip vs-sportswear-chip--accent">Open-Hole Mesh · Sleeveless</span>
-          </div>
-          <div className="vs-sportswear-showcase-card__visual">
-            <img
-              src="/logos/jersey.png"
-              alt="Basketball Singlet 3D Preview"
-              className="vs-sportswear-showcase-card__img vs-sportswear-showcase-card__img--alt2"
-              loading="lazy"
-            />
-          </div>
-          <div className="vs-sportswear-showcase-card__meta">
-            <span className="vs-sportswear-showcase-card__title">Pro Basketball Singlet</span>
-            <span className="vs-sportswear-showcase-card__spec">Dual-Tone Piping · Large Number Canvas</span>
-          </div>
-        </div>
-      )
-    }
-  ];
-
-  // Hero visual stage with marble pedestal, glowing halo, Drag to Rotate pill, Fullscreen, and Floating Glass Panel
-  const heroVisual = (
-    <div ref={stageRef} className="vs-sportswear-hero-showcase" data-testid="sportswear-hero-stage">
-      {/* 3D Sportswear Stage with Marble Pedestal & Halo */}
-      <div className="vs-sportswear-hero-stage__viewport">
-        <Hero3DCanvas
-          modelUrl="/models/SoccerJersey.gltf"
-          preset="sportswear"
-          activeMaterial={activeFabric}
-          activeVariant={activePattern}
-          activeColor={activeColor}
-          activeNumber={playerNumber}
-        />
-
-        {/* Floating Pedestal Interaction Bar */}
-        <div className="vs-sportswear-pedestal-bar">
-          <div className="vs-sportswear-rotate-pill" title="Drag to Rotate Jersey">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-            </svg>
-            <span>Drag to Rotate</span>
-          </div>
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            className="vs-sportswear-fullscreen-btn"
-            title="Toggle Fullscreen View"
-            aria-label="Toggle Fullscreen View"
-          >
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Floating Glass Customization Panel */}
-      <div className="vs-sportswear-customizer-card" data-testid="sportswear-customizer-card">
-        <h3 className="vs-sportswear-customizer-title">Customize Your Design</h3>
-
-        {/* 4 Tabs: Design, Fabric, Logo, Text */}
-        <div className="vs-sportswear-customizer-tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'design'}
-            className={`vs-sportswear-tab-btn ${activeTab === 'design' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('design')}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-            </svg>
-            <span>Design</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'fabric'}
-            className={`vs-sportswear-tab-btn ${activeTab === 'fabric' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('fabric')}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
-            </svg>
-            <span>Fabric</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'logo'}
-            className={`vs-sportswear-tab-btn ${activeTab === 'logo' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('logo')}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            <span>Logo</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'text'}
-            className={`vs-sportswear-tab-btn ${activeTab === 'text' ? 'is-active' : ''}`}
-            onClick={() => setActiveTab('text')}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="4 7 4 4 20 4 20 7" />
-              <line x1="9" y1="20" x2="15" y2="20" />
-              <line x1="12" y1="4" x2="12" y2="20" />
-            </svg>
-            <span>Text</span>
-          </button>
-        </div>
-
-        {/* Tab 1: Design (Base Color, Pattern, Fabric Type) */}
-        {activeTab === 'design' && (
-          <>
-            {/* Section: Base Color */}
-            <div className="vs-sportswear-customizer-section">
-              <span className="vs-sportswear-section-label">Base Color</span>
-              <div className="vs-sportswear-swatches-grid">
-                <button
-                  type="button"
-                  className={`vs-sportswear-swatch vs-sportswear-swatch--purple ${activeColor === 'purple' ? 'is-active' : ''}`}
-                  onClick={() => setActiveColor('purple')}
-                  title="Royal Purple (#7628D9)"
-                  aria-label="Royal Purple color"
-                />
-                <button
-                  type="button"
-                  className={`vs-sportswear-swatch vs-sportswear-swatch--blue ${activeColor === 'blue' ? 'is-active' : ''}`}
-                  onClick={() => setActiveColor('blue')}
-                  title="Electric Blue (#2563EB)"
-                  aria-label="Electric Blue color"
-                />
-                <button
-                  type="button"
-                  className={`vs-sportswear-swatch vs-sportswear-swatch--red ${activeColor === 'red' ? 'is-active' : ''}`}
-                  onClick={() => setActiveColor('red')}
-                  title="Crimson Red (#DC2626)"
-                  aria-label="Crimson Red color"
-                />
-                <button
-                  type="button"
-                  className={`vs-sportswear-swatch vs-sportswear-swatch--orange ${activeColor === 'orange' ? 'is-active' : ''}`}
-                  onClick={() => setActiveColor('orange')}
-                  title="Energy Orange (#EA580C)"
-                  aria-label="Energy Orange color"
-                />
-                <button
-                  type="button"
-                  className={`vs-sportswear-swatch vs-sportswear-swatch--white ${activeColor === 'white' ? 'is-active' : ''}`}
-                  onClick={() => setActiveColor('white')}
-                  title="Pure White (#FFFFFF)"
-                  aria-label="Pure White color"
-                />
-              </div>
-            </div>
-
-            {/* Section: Pattern */}
-            <div className="vs-sportswear-customizer-section">
-              <span className="vs-sportswear-section-label">Pattern</span>
-              <div className="vs-sportswear-patterns-grid">
-                <button
-                  type="button"
-                  className={`vs-sportswear-pattern-btn ${activePattern === 'sash' ? 'is-active' : ''}`}
-                  onClick={() => setActivePattern('sash')}
-                  title="Diagonal Lightning Sash"
-                  aria-label="Diagonal Lightning Sash pattern"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <line x1="4" y1="20" x2="16" y2="4" />
-                    <line x1="8" y1="20" x2="20" y2="4" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-pattern-btn ${activePattern === 'waves' ? 'is-active' : ''}`}
-                  onClick={() => setActivePattern('waves')}
-                  title="Aerodynamic Twin Waves"
-                  aria-label="Aerodynamic Twin Waves pattern"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <path d="M2 9 Q 7 4 12 9 T 22 9" />
-                    <path d="M2 15 Q 7 10 12 15 T 22 15" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-pattern-btn ${activePattern === 'dots' ? 'is-active' : ''}`}
-                  onClick={() => setActivePattern('dots')}
-                  title="Gradient Perforated Dots"
-                  aria-label="Gradient Perforated Dots pattern"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <circle cx="5" cy="5" r="2" />
-                    <circle cx="12" cy="5" r="2" />
-                    <circle cx="19" cy="5" r="2" />
-                    <circle cx="5" cy="12" r="2" />
-                    <circle cx="12" cy="12" r="2" />
-                    <circle cx="19" cy="12" r="2" />
-                    <circle cx="5" cy="19" r="2" />
-                    <circle cx="12" cy="19" r="2" />
-                    <circle cx="19" cy="19" r="2" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-pattern-btn ${activePattern === 'hex' ? 'is-active' : ''}`}
-                  onClick={() => setActivePattern('hex')}
-                  title="Honeycomb Tech Hexagons"
-                  aria-label="Honeycomb Tech Hexagons pattern"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 3 19 7 19 15 12 19 5 15 5 7" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-pattern-btn ${activePattern === 'chevron' ? 'is-active' : ''}`}
-                  onClick={() => setActivePattern('chevron')}
-                  title="Athletic Chevron Stripes"
-                  aria-label="Athletic Chevron Stripes pattern"
-                >
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="5 9 12 15 19 9" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Section: Fabric Type */}
-            <div className="vs-sportswear-customizer-section">
-              <span className="vs-sportswear-section-label">Fabric Type</span>
-              <div className="vs-sportswear-fabrics-grid">
-                <button
-                  type="button"
-                  className={`vs-sportswear-fabric-btn ${activeFabric === 'mesh' ? 'is-active' : ''}`}
-                  onClick={() => setActiveFabric('mesh')}
-                  title="Breathable Athletic Mesh (160 GSM)"
-                  aria-label="Breathable Athletic Mesh"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <circle cx="7" cy="7" r="1.5" fill="currentColor" />
-                    <circle cx="12" cy="7" r="1.5" fill="currentColor" />
-                    <circle cx="17" cy="7" r="1.5" fill="currentColor" />
-                    <circle cx="7" cy="12" r="1.5" fill="currentColor" />
-                    <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                    <circle cx="17" cy="12" r="1.5" fill="currentColor" />
-                    <circle cx="7" cy="17" r="1.5" fill="currentColor" />
-                    <circle cx="12" cy="17" r="1.5" fill="currentColor" />
-                    <circle cx="17" cy="17" r="1.5" fill="currentColor" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-fabric-btn ${activeFabric === 'knit' ? 'is-active' : ''}`}
-                  onClick={() => setActiveFabric('knit')}
-                  title="Interlock Ribbed Knit (220 GSM)"
-                  aria-label="Interlock Ribbed Knit"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <line x1="6" y1="4" x2="6" y2="20" />
-                    <line x1="10" y1="4" x2="10" y2="20" />
-                    <line x1="14" y1="4" x2="14" y2="20" />
-                    <line x1="18" y1="4" x2="18" y2="20" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-fabric-btn ${activeFabric === 'smooth' ? 'is-active' : ''}`}
-                  onClick={() => setActiveFabric('smooth')}
-                  title="Silky Poly Tricot with Sheen"
-                  aria-label="Silky Poly Tricot"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M4 16c4 0 6-8 10-8s4 8 6 8" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-fabric-btn ${activeFabric === 'pique' ? 'is-active' : ''}`}
-                  onClick={() => setActiveFabric('pique')}
-                  title="Matte Moisture-Wicking Pique"
-                  aria-label="Matte Moisture-Wicking Pique"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="5" y="5" width="4" height="4" />
-                    <rect x="15" y="5" width="4" height="4" />
-                    <rect x="10" y="10" width="4" height="4" />
-                    <rect x="5" y="15" width="4" height="4" />
-                    <rect x="15" y="15" width="4" height="4" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className={`vs-sportswear-fabric-btn ${activeFabric === 'jacquard' ? 'is-active' : ''}`}
-                  onClick={() => setActiveFabric('jacquard')}
-                  title="Engineered Jacquard Knit"
-                  aria-label="Engineered Jacquard Knit"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 4 19 12 12 20 5 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Tab 2: Fabric Specs */}
-        {activeTab === 'fabric' && (
-          <div className="vs-sportswear-customizer-section" style={{ gap: '0.65rem' }}>
-            <span className="vs-sportswear-section-label">Selected Fabric Details</span>
-            <div style={{ background: 'var(--vs-soft-lavender, #EDE5FF)', padding: '0.75rem', borderRadius: '12px', fontSize: '0.78rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: 'var(--vs-ink-muted)' }}>Material:</span>
-                <span style={{ fontWeight: 700, color: 'var(--vs-ink)' }}>
-                  {activeFabric === 'mesh' ? 'Athletic Micro-Mesh' :
-                   activeFabric === 'knit' ? 'Interlock Ribbed Poly' :
-                   activeFabric === 'smooth' ? 'Silky Polyester Tricot' :
-                   activeFabric === 'pique' ? 'Matte Hydrophilic Pique' : 'Engineered Jacquard'}
-                </span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: 'var(--vs-ink-muted)' }}>Weight:</span>
-                <span style={{ fontWeight: 600, color: 'var(--vs-ink)' }}>160 GSM Light</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                <span style={{ color: 'var(--vs-ink-muted)' }}>Breathability:</span>
-                <span style={{ fontWeight: 600, color: 'var(--vs-primary)' }}>98.4% Air Permeable</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: 'var(--vs-ink-muted)' }}>Stretch:</span>
-                <span style={{ fontWeight: 600, color: 'var(--vs-ink)' }}>4-Way Spandex Blend</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Logo & Decals */}
-        {activeTab === 'logo' && (
-          <div className="vs-sportswear-customizer-section" style={{ gap: '0.65rem' }}>
-            <span className="vs-sportswear-section-label">Team Crest Placement</span>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.4rem' }}>
-              {(['chest', 'left', 'sleeve'] as const).map((pos) => (
-                <button
-                  key={pos}
-                  type="button"
-                  onClick={() => setLogoPosition(pos)}
-                  style={{
-                    padding: '0.45rem',
-                    borderRadius: '10px',
-                    fontSize: '0.72rem',
-                    fontWeight: 600,
-                    border: logoPosition === pos ? '1.5px solid var(--vs-primary)' : '1px solid var(--vs-light-lavender-border)',
-                    background: logoPosition === pos ? 'var(--vs-soft-lavender)' : '#FFFFFF',
-                    color: logoPosition === pos ? 'var(--vs-primary)' : 'var(--vs-ink-muted)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {pos === 'chest' ? 'Center' : pos === 'left' ? 'Left Chest' : 'Sleeve'}
-                </button>
-              ))}
-            </div>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.35rem', fontSize: '0.76rem', color: 'var(--vs-ink)' }}>
-              <input
-                type="checkbox"
-                checked={showSponsor}
-                onChange={(e) => setShowSponsor(e.target.checked)}
-                style={{ accentColor: 'var(--vs-primary)' }}
-              />
-              Show Vector Sponsor Mark
-            </label>
-          </div>
-        )}
-
-        {/* Tab 4: Player Name & Number */}
-        {activeTab === 'text' && (
-          <div className="vs-sportswear-customizer-section" style={{ gap: '0.65rem' }}>
-            <span className="vs-sportswear-section-label">Player Typography</span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.72rem', color: 'var(--vs-ink-muted)' }}>
-                Player Name:
-                <input
-                  type="text"
-                  value={playerName}
-                  maxLength={12}
-                  onChange={(e) => setPlayerName(e.target.value.toUpperCase())}
-                  style={{
-                    width: '100%',
-                    padding: '0.45rem 0.65rem',
-                    marginTop: '2px',
-                    borderRadius: '8px',
-                    border: '1px solid var(--vs-light-lavender-border)',
-                    fontFamily: 'var(--vs-font-display)',
-                    fontWeight: 700,
-                    fontSize: '0.84rem',
-                    color: 'var(--vs-ink)',
-                    background: '#FFFFFF'
-                  }}
-                />
-              </label>
-              <label style={{ fontSize: '0.72rem', color: 'var(--vs-ink-muted)' }}>
-                Jersey Number:
-                <input
-                  type="text"
-                  value={playerNumber}
-                  maxLength={2}
-                  onChange={(e) => setPlayerNumber(e.target.value.replace(/\D/g, ''))}
-                  style={{
-                    width: '100%',
-                    padding: '0.45rem 0.65rem',
-                    marginTop: '2px',
-                    borderRadius: '8px',
-                    border: '1px solid var(--vs-light-lavender-border)',
-                    fontFamily: 'var(--vs-font-display)',
-                    fontWeight: 900,
-                    fontSize: '1rem',
-                    color: 'var(--vs-primary)',
-                    background: '#FFFFFF'
-                  }}
-                />
-              </label>
-            </div>
-          </div>
-        )}
-
-        {/* View in 3D Button */}
-        <button
-          type="button"
-          onClick={onExploreDemo}
-          className="vs-sportswear-view-3d-btn"
-          data-testid="sportswear-view-3d-btn"
-        >
-          <span>View in 3D</span>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <line x1="7" y1="17" x2="17" y2="7" />
-            <polyline points="7 7 17 7 17 17" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  );
+  };
 
   return (
-    <ProductLandingTemplate
-      productTitle="Sportswear Configurator"
-      productBadge="3D Sportswear Configurator"
-      productTagline="A real-time sportswear configurator to design jerseys, hoodies, and team kits with full customization, realistic fabrics and instant 3D preview."
-      brandName="VictorShell"
-      theme={theme}
-      onExploreDemo={onExploreDemo}
-      exploreDemoLabel="Try Live Demo"
-      exploreDemoHref={exploreDemoHref}
-      navLinks={navLinks}
-      className={`vs-sportswear-landing-page ${className}`.trim()}
-      heroProps={{
-        title: (
-          <>
-            Design, Customize &<br />
-            Visualize Sportswear <span className="vs-gradient-text">in 3D</span>
-          </>
-        ),
-        badge: (
-          <span className="vs-sportswear-hero-badge">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-            </svg>
-            3D Sportswear Configurator
-          </span>
-        ),
-        description:
-          'A real-time sportswear configurator to design jerseys, hoodies, and team kits with full customization, realistic fabrics and instant 3D preview.',
-        exploreDemoLabel: 'Try Live Demo',
-        secondaryCta: {
-          label: 'Book a Demo',
-          href: '#cta',
-          icon: (
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-          )
-        },
-        // Three Technical Badges beneath CTAs matching reference
-        techBadges: [
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            ),
-            label: 'Real-Time',
-            sublabel: 'Rendering'
-          },
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <path d="M7 9v6h3v-3h-3" />
-                <path d="M14 9v6l3-3" />
-              </svg>
-            ),
-            label: '4K',
-            sublabel: 'Ultra Quality'
-          },
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                <polyline points="2 17 12 22 22 17" />
-                <polyline points="2 12 12 17 22 12" />
-              </svg>
-            ),
-            label: 'PBR',
-            sublabel: 'Materials'
-          }
-        ],
-        // Four Feature Cards matching exact reference text and icons
-        featureHighlights: [
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-            ),
-            title: 'Realistic 3D Visualization',
-            description: 'See your design in true-to-life 3D with realistic fabric, fit and detail.'
-          },
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="4" y1="21" x2="4" y2="14" />
-                <line x1="4" y1="10" x2="4" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="12" />
-                <line x1="12" y1="8" x2="12" y2="3" />
-                <line x1="20" y1="21" x2="20" y2="16" />
-                <line x1="20" y1="12" x2="20" y2="3" />
-                <line x1="1" y1="14" x2="7" y2="14" />
-                <line x1="9" y1="8" x2="15" y2="8" />
-                <line x1="17" y1="16" x2="23" y2="16" />
-              </svg>
-            ),
-            title: 'Complete Customization',
-            description: 'Change colors, patterns, logos, text and fabric in real time.'
-          },
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            ),
-            title: 'Fast & Seamless',
-            description: 'Instant updates with high-performance WebGL.'
-          },
-          {
-            icon: (
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                <line x1="8" y1="21" x2="16" y2="21" />
-                <line x1="12" y1="17" x2="12" y2="21" />
-              </svg>
-            ),
-            title: 'Cross-Platform',
-            description: 'Works smoothly on desktop, tablet and mobile.'
-          }
-        ],
-        visual: heroVisual,
-        visualPosition: 'right'
-      }}
-      overviewProps={{
-        id: 'overview',
-        badge: 'Technical Overview',
-        title: 'True-to-Scale Fabric Simulation & Sublimation Pipeline',
-        subtitle: 'From 3D interactive design directly to precision manufacturing-ready sublimation patterns.',
-        narrative:
-          'The VictorShell Sportswear Configurator unites WebGPU real-time 3D rendering with a direct sublimation dieline generator. Seamlessly map SVG emblems and sponsor graphics across 3D garment seams while previewing physically based fabric microfacet normals.',
-        highlights: [
-          {
-            title: 'Dynamic Seam Decals',
-            description: 'Scalable vector emblems conform to garment geometry without texture stretching or pixelation.'
-          },
-          {
-            title: 'Sublimation Dielines',
-            description: 'Instant millimeter-accurate SVG and PDF export formatted directly for digital fabric cutters.'
-          },
-          {
-            title: 'Team Roster Batching',
-            description: 'Automate hundreds of player names and numbers across the full roster in a single export.'
-          }
-        ],
-        visual: (
-          <div className="vs-sportswear-dieline-card" data-testid="sportswear-dieline-card">
-            <div className="vs-sportswear-dieline-card__header">
-              <span className="vs-sportswear-dieline-card__title">Sublimation Pattern &amp; Zone Mapping</span>
-              <span className="vs-sportswear-chip">5 Seam Panels</span>
+    <div
+      className={`tk-sw-page ${className}`.trim()}
+      data-theme="dark"
+      data-accent={theme}
+      data-testid="trikomi-sportswear-landing"
+    >
+      {/* Ambient Futuristic Orange Background Glow */}
+      <div className="tk-sw-ambient" aria-hidden="true">
+        <div className="tk-sw-ambient-top" />
+        <div className="tk-sw-ambient-stage" />
+        <div className="tk-sw-ambient-left" />
+      </div>
+
+      {/* ----------------------------------------------------------------------
+          1. Header / Navbar
+          ---------------------------------------------------------------------- */}
+      <header
+        className={`tk-sw-navbar ${isScrolled ? 'is-scrolled' : ''}`}
+        data-testid="sportswear-navbar"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-navbar__inner">
+            {/* Trikomi Brand Logo */}
+            <a
+              href="#/"
+              className="tk-sw-brand"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              title="Trikomi 3D Platform"
+            >
+              <div className="tk-sw-brand__icon" aria-hidden="true">
+                <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
+                  <path
+                    d="M4 6L24 14L4 22L8 14L4 6Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 14L24 14"
+                    stroke="#FFFFFF"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    style={{ opacity: 0.72 }}
+                  />
+                </svg>
+              </div>
+              <span className="tk-sw-brand__name">Trikomi</span>
+            </a>
+
+            {/* Navigation Links */}
+            <nav className="tk-sw-nav" aria-label="Main Navigation">
+              <ul className="tk-sw-nav-links">
+                {/* 3D Studio */}
+                <li className="tk-sw-nav-item">
+                  <a
+                    href="#demo"
+                    onClick={handleLaunchStudio}
+                    className="tk-sw-nav-link"
+                  >
+                    3D Studio
+                  </a>
+                </li>
+
+                {/* Industries */}
+                <li className="tk-sw-nav-item">
+                  <a
+                    href="#categories"
+                    onClick={(e) => handleScrollTo('categories', e)}
+                    className="tk-sw-nav-link"
+                  >
+                    Industries
+                  </a>
+                </li>
+
+                {/* Resources */}
+                <li className="tk-sw-nav-item">
+                  <a
+                    href="#capabilities"
+                    onClick={(e) => handleScrollTo('capabilities', e)}
+                    className="tk-sw-nav-link"
+                  >
+                    Resources
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            {/* Right Controls: Search, Launch Studio */}
+            <div className="tk-sw-nav-actions">
+              {/* Search Icon */}
+              <button
+                type="button"
+                className="tk-sw-search-btn"
+                aria-label="Browse sportswear styles"
+                title="Browse sportswear styles"
+                onClick={(e) => handleScrollTo('categories', e)}
+                data-testid="navbar-search-btn"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+
+              {/* Orange Launch Studio Button */}
+              <button
+                type="button"
+                className="tk-sw-btn-launch"
+                onClick={handleLaunchStudio}
+                data-testid="navbar-launch-studio-btn"
+              >
+                <span>Launch Studio</span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+
+              {/* Mobile Drawer Hamburger */}
+              <button
+                type="button"
+                className="tk-sw-mobile-toggle"
+                aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                data-testid="navbar-mobile-toggle"
+              >
+                {mobileMenuOpen ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                )}
+              </button>
             </div>
-            <div className="vs-sportswear-dieline-card__visual">
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Navigation Panel */}
+      {mobileMenuOpen && (
+        <div
+          className="tk-sw-mobile-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
+          data-testid="sportswear-mobile-drawer"
+        >
+          <div
+            className="tk-sw-mobile-drawer__backdrop"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="tk-sw-mobile-drawer__panel">
+            <div className="tk-sw-mobile-drawer__header">
+              <div className="tk-sw-brand">
+                <div className="tk-sw-brand__icon" aria-hidden="true">
+                  <svg viewBox="0 0 28 28" width="24" height="24" fill="none">
+                    <path d="M4 6L24 14L4 22L8 14L4 6Z" fill="currentColor" />
+                  </svg>
+                </div>
+                <span className="tk-sw-brand__name">Trikomi</span>
+              </div>
+              <button
+                type="button"
+                className="tk-sw-mobile-drawer__close"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close menu"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <nav className="tk-sw-mobile-drawer__nav" aria-label="Mobile Navigation Links">
+              <a
+                href="#demo"
+                className="tk-sw-mobile-drawer__link"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleLaunchStudio(e);
+                }}
+              >
+                Sportswear 3D Configurator
+              </a>
+              <a
+                href="#categories"
+                className="tk-sw-mobile-drawer__link"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleScrollTo('categories', e);
+                }}
+              >
+                Sportswear Styles
+              </a>
+              <a
+                href="#capabilities"
+                className="tk-sw-mobile-drawer__link"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleScrollTo('capabilities', e);
+                }}
+              >
+                Studio Capabilities
+              </a>
+              <a
+                href="#studio"
+                className="tk-sw-mobile-drawer__link"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleScrollTo('studio', e);
+                }}
+              >
+                3D Preview Studio
+              </a>
+            </nav>
+
+            <div className="tk-sw-mobile-drawer__footer">
+              <button
+                type="button"
+                className="tk-sw-btn-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleLaunchStudio(e);
+                }}
+              >
+                <span>Launch 3D Studio</span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ----------------------------------------------------------------------
+          2. Hero Section (Left: Copy & CTAs | Right: Cinematic 3D Presentation)
+          ---------------------------------------------------------------------- */}
+      <section className="tk-sw-hero" id="hero" data-testid="sportswear-hero-section">
+        <div className="tk-sw-container">
+          <div className="tk-sw-hero__grid">
+            {/* Left Content Column */}
+            <div className="tk-sw-hero__content">
+              {/* Small Orange Outlined Badge */}
+              <div className="tk-sw-badge" data-testid="sportswear-hero-badge">
+                <svg
+                  className="tk-sw-badge__icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                </svg>
+                <span>INTERACTIVE 3D SPORTSWEAR PLATFORM</span>
+              </div>
+
+              {/* Main Heading */}
+              <h1 className="tk-sw-hero__title" data-testid="sportswear-hero-title">
+                Design, Customize &amp; Experience Sportswear in{' '}
+                <span className="tk-sw-hero__highlight">Real-Time 3D</span>
+              </h1>
+
+              {/* Description */}
+              <p className="tk-sw-hero__desc" data-testid="sportswear-hero-desc">
+                Create, customize and visualize sportswear products with high-quality 3D previews,
+                realistic materials, colors and interactive customization tools.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="tk-sw-hero__actions">
+                <button
+                  type="button"
+                  className="tk-sw-btn-primary"
+                  onClick={handleLaunchStudio}
+                  data-testid="hero-launch-studio-btn"
+                >
+                  <span>Launch 3D Studio</span>
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  className="tk-sw-btn-secondary"
+                  onClick={(e) => handleScrollTo('capabilities', e)}
+                  data-testid="hero-explore-capabilities-btn"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                  <span>Explore Capabilities</span>
+                </button>
+              </div>
+
+              {/* Three Feature Indicators */}
+              <div className="tk-sw-indicators" data-testid="sportswear-hero-indicators">
+                {/* 1. Real-Time 3D */}
+                <div className="tk-sw-indicator">
+                  <div className="tk-sw-indicator__icon" aria-hidden="true">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-indicator__text">Real-Time 3D</span>
+                </div>
+
+                {/* 2. Material Customization */}
+                <div className="tk-sw-indicator">
+                  <div className="tk-sw-indicator__icon" aria-hidden="true">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                      <polyline points="2 17 12 22 22 17" />
+                      <polyline points="2 12 12 17 22 12" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-indicator__text">Material Customization</span>
+                </div>
+
+                {/* 3. Live Preview */}
+                <div className="tk-sw-indicator">
+                  <div className="tk-sw-indicator__icon" aria-hidden="true">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-indicator__text">Live Preview</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Cinematic 3D Presentation */}
+            <div className="tk-sw-hero__visual" data-testid="sportswear-hero-visual">
+              <div
+                className="tk-sw-stage-wrap"
+                onClick={handleLaunchStudio}
+                title="Click to launch Sportswear 3D Studio"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleLaunchStudio();
+                  }
+                }}
+              >
+                {/* Animated Volumetric Orange Ring & Podium Glow Layers */}
+                <div className="tk-sw-hero-ring-glow" aria-hidden="true" />
+                <div className="tk-sw-hero-ring-sweep" aria-hidden="true" />
+
+                {/* 3D Cinematic Sportswear Render */}
+                <img
+                  src="/images/sportswear-hero-cinematic.jpg"
+                  alt="Trikomi 3D Sportswear Configurator presentation featuring a prominent matte black and orange athletic technical jacket inside an illuminated neon orange ring stage"
+                  className="tk-sw-product-img"
+                  loading="eager"
+                  data-testid="sportswear-hero-product-img"
+                />
+
+                {/* Hover Action Pill Overlay */}
+                <div className="tk-sw-interactive-pill">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                  <span>Launch 3D Studio</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------------
+          3. Sportswear Categories Section ("One Studio, Multiple Sportswear Styles")
+          ---------------------------------------------------------------------- */}
+      <section
+        className="tk-sw-categories-section"
+        id="categories"
+        data-testid="sportswear-categories-section"
+        aria-label="Sportswear Categories"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-categories-strip">
+            {/* Heading on Left */}
+            <div className="tk-sw-categories-header">
+              <h2 className="tk-sw-categories-title" data-testid="sportswear-categories-title">
+                One Studio,<br />Multiple Sportswear Styles
+              </h2>
+            </div>
+
+            {/* Orange Vertical Separator */}
+            <div className="tk-sw-categories-divider" aria-hidden="true" />
+
+            {/* 5 Interactive Category Tabs */}
+            <div
+              className="tk-sw-categories-list"
+              role="tablist"
+              aria-label="Sportswear Categories"
+              data-testid="sportswear-categories-list"
+            >
+              {SPORTSWEAR_CATEGORIES.map((cat) => {
+                const isActive = activeCategory === cat.name;
+                return (
+                  <button
+                    key={cat.id}
+                    id={`cat-tab-${cat.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    tabIndex={0}
+                    className={`tk-sw-category-item ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setActiveCategory(cat.name)}
+                    data-testid={`sportswear-category-${cat.id}`}
+                  >
+                    <span className="tk-sw-category-icon" aria-hidden="true">
+                      {cat.icon}
+                    </span>
+                    <span className="tk-sw-category-name">{cat.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------------
+          4. Studio Capabilities Section (Exact Reference Two-Column Layout)
+          ---------------------------------------------------------------------- */}
+      <section
+        className="tk-sw-capabilities-exact-section"
+        id="capabilities"
+        data-testid="sportswear-capabilities-section"
+        aria-label="Studio Capabilities"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-capabilities-row">
+            {/* Left Side: Four Large Tilted Rectangular Product Image Panels */}
+            <div className="tk-sw-capabilities-panels-col" data-testid="sportswear-capabilities-visual">
+              <div
+                className="tk-sw-tilted-panels-wrap"
+                onClick={handleLaunchStudio}
+                title="Click to Launch 3D Studio"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleLaunchStudio();
+                  }
+                }}
+              >
+                <img
+                  src="/images/sportswear-capabilities-panels.jpg"
+                  alt="Studio Capabilities displaying four floating sportswear cards with an athletic jersey, full tracksuit, zip performance hoodie, and carbon running shoes"
+                  className="tk-sw-tilted-panels-img"
+                  loading="eager"
+                  data-testid="sportswear-capabilities-panels-img"
+                />
+              </div>
+            </div>
+
+            {/* Right Side: Heading, Description & 3-Column Feature Container */}
+            <div className="tk-sw-capabilities-content-col">
+              <span className="tk-sw-section-label" data-testid="sportswear-capabilities-badge">
+                STUDIO CAPABILITIES
+              </span>
+
+              <h2 className="tk-sw-capabilities-title" data-testid="sportswear-capabilities-title">
+                From Inspection to <br />Full Customization
+              </h2>
+
+              <p className="tk-sw-capabilities-desc" data-testid="sportswear-capabilities-desc">
+                A complete set of 3D tools to visualize, configure, measure, and test your sportswear products in real-time.
+              </p>
+
+              {/* ONE Horizontal Feature Container (3 Columns) */}
+              <div className="tk-sw-features-box" data-testid="sportswear-features-box">
+                {/* Column 1: Material Inspection */}
+                <div className="tk-sw-feature-col" data-testid="sportswear-feature-col-1">
+                  <div className="tk-sw-feature-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <line x1="3.6" y1="9" x2="20.4" y2="9" />
+                      <line x1="3.6" y1="15" x2="20.4" y2="15" />
+                      <path d="M12 3a14.5 14.5 0 0 0 0 18" />
+                      <path d="M12 3a14.5 14.5 0 0 1 0 18" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-feature-title">Material <br />Inspection</span>
+                </div>
+
+                <div className="tk-sw-feature-sep" aria-hidden="true" />
+
+                {/* Column 2: Dimension & Measurement */}
+                <div className="tk-sw-feature-col" data-testid="sportswear-feature-col-2">
+                  <div className="tk-sw-feature-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 14.5C4 9.5 7.5 6 12 6C16.5 6 20 9.5 20 14.5" />
+                      <circle cx="19" cy="14" r="2.5" />
+                      <line x1="6" y1="14.5" x2="6" y2="17.5" />
+                      <line x1="10" y1="14.5" x2="10" y2="16.5" />
+                      <line x1="14" y1="14.5" x2="14" y2="17.5" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-feature-title">Dimension &amp; <br />Measurement</span>
+                </div>
+
+                <div className="tk-sw-feature-sep" aria-hidden="true" />
+
+                {/* Column 3: Texture & Color Variants */}
+                <div className="tk-sw-feature-col" data-testid="sportswear-feature-col-3">
+                  <div className="tk-sw-feature-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.5 22 14.5 21 14.5 19.5C14.5 18.8 14.2 18.2 13.8 17.7C13.4 17.2 13.1 16.6 13.1 16C13.1 14.9 14 14 15.1 14H17C19.8 14 22 11.8 22 9C22 5.1 17.5 2 12 2Z" />
+                      <circle cx="7.5" cy="10" r="1.5" fill="currentColor" />
+                      <circle cx="12" cy="7" r="1.5" fill="currentColor" />
+                      <circle cx="16.5" cy="10" r="1.5" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <span className="tk-sw-feature-title">Texture &amp; <br />Color Variants</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------------
+          5. Real-Time 3D Studio Section (Exact Reference Two-Column Layout)
+          ---------------------------------------------------------------------- */}
+      <section
+        className="tk-sw-studio-exact-section"
+        id="studio"
+        data-testid="sportswear-showcase-section"
+        aria-label="Real-Time 3D Studio"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-studio-row">
+            {/* Left Column: Large Realistic Laptop Mockup */}
+            <div className="tk-sw-studio-laptop-col" data-testid="sportswear-showcase-visual">
+              <div
+                className="tk-sw-laptop-mockup-wrap"
+                onClick={handleLaunchStudio}
+                title="Click to Launch 3D Studio"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleLaunchStudio();
+                  }
+                }}
+              >
+                <img
+                  src="/images/sportswear-studio-laptop.jpg"
+                  alt="Trikomi Real-Time 3D Sportswear Studio laptop viewport displaying a glowing orange grid pedestal, 3D running sneaker and jacket model, toolbar icons, and PBR material spheres"
+                  className="tk-sw-laptop-img"
+                  loading="eager"
+                  data-testid="sportswear-showcase-img"
+                />
+
+                {/* Subtle Hover Action Pill */}
+                <div className="tk-sw-laptop-hover-pill">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                  <span>Launch 3D Studio</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Heading, Description & Orange Gradient Pill Button */}
+            <div className="tk-sw-studio-content-col">
+              <span className="tk-sw-section-label" data-testid="sportswear-showcase-badge">
+                REAL-TIME 3D STUDIO
+              </span>
+
+              <h2 className="tk-sw-studio-title" data-testid="sportswear-showcase-title">
+                Inspect with <span className="tk-sw-highlight-orange">Confidence</span>
+              </h2>
+
+              <p className="tk-sw-studio-desc" data-testid="sportswear-showcase-desc">
+                Evaluate lighting, materials, surface quality, and exact measurements in real-time.
+              </p>
+
+              <button
+                type="button"
+                className="tk-sw-btn-primary tk-sw-studio-btn"
+                onClick={handleLaunchStudio}
+                data-testid="showcase-launch-studio-btn"
+              >
+                <span>Launch 3D Studio</span>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------------
+          6. Final CTA Section ("Bring Your Sportswear Designs to Life in 3D")
+          ---------------------------------------------------------------------- */}
+      <section
+        className="tk-sw-cta-section"
+        id="cta"
+        data-testid="sportswear-cta-section"
+        aria-label="Experience Sportswear 3D"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-cta-card" data-testid="sportswear-cta-card">
+            {/* Left Content Column */}
+            <div className="tk-sw-cta-content">
+              <span className="tk-sw-section-label tk-sw-cta-badge" data-testid="sportswear-cta-label">
+                READY TO EXPERIENCE SPORTSWEAR 3D?
+              </span>
+
+              <h2 className="tk-sw-cta-title" data-testid="sportswear-cta-title">
+                Bring Your Sportswear<br />Designs to Life in 3D
+              </h2>
+
+              <button
+                type="button"
+                className="tk-sw-btn-primary tk-sw-cta-btn"
+                onClick={handleLaunchStudio}
+                data-testid="cta-launch-studio-btn"
+              >
+                <span>Launch 3D Studio</span>
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Right Orange Dotted Wave Mesh Visual attached to right edge */}
+            <div className="tk-sw-cta-wave-wrap" aria-hidden="true">
               <img
-                src="/textures/FTB20_01.svg"
-                alt="2D Vector Sublimation Pattern"
-                className="vs-sportswear-dieline-card__img"
-                loading="lazy"
+                src="/images/sportswear-cta-wave.jpg"
+                alt="Futuristic glowing orange particle wave mesh"
+                className="tk-sw-cta-wave-img"
+                loading="eager"
+                data-testid="sportswear-cta-wave-img"
               />
             </div>
           </div>
-        )
-      }}
-      featuresProps={{
-        id: 'features',
-        badge: 'Core Capabilities',
-        sectionTitle: 'Engineered for Performance Athletics',
-        sectionSubtitle: 'Sub-millimeter accurate sublimation mapping meets real-time 3D garment simulation.',
-        features,
-        layout: 'grid',
-        columns: 3
-      }}
-      showcaseProps={{
-        id: 'showcase',
-        badge: 'Garment Models',
-        title: 'Pro Sport Garment Architecture',
-        subtitle: 'Inspect production-ready match kits with realistic technical fabrics and raglan sleeve construction.',
-        items: showcaseItems,
-        activeId: 'soccer-view'
-      }}
-      benefitsProps={{
-        id: 'benefits',
-        badge: 'Production Metrics',
-        title: 'High-Throughput Sublimation Pipeline',
-        subtitle: 'Engineered to accelerate athletic manufacturing from initial concept to digital fabric cutter.',
-        items: benefits,
-        columns: 4
-      }}
-      ctaProps={{
-        id: 'cta',
-        badge: 'Ready to Design?',
-        title: 'Launch the Sportswear 3D Studio',
-        subtitle: 'Design custom match kits with dynamic vector decals and instant sublimation dielines.',
-        primaryAction: {
-          label: 'Launch 3D Configurator',
-          onClick: onExploreDemo,
-          href: exploreDemoHref
-        },
-        secondaryAction: {
-          label: 'Book a Demo',
-          href: '#cta'
-        },
-        reassurance: 'Production 4K WebGL · Vector Dieline Export · Zero Plugins Required'
-      }}
-    />
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------------------
+          7. Footer Section (Exact Reference Layout)
+          ---------------------------------------------------------------------- */}
+      <footer
+        className="tk-sw-footer"
+        id="footer"
+        data-testid="sportswear-footer"
+        aria-label="Site Footer"
+      >
+        <div className="tk-sw-container">
+          <div className="tk-sw-footer-inner">
+            {/* Left: Brand Logo & Name */}
+            <div className="tk-sw-footer-brand">
+              <a
+                href="#/"
+                className="tk-sw-footer-logo-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                title="Trikomi Home"
+                data-testid="sportswear-footer-logo"
+              >
+                <div className="tk-sw-brand-icon" aria-hidden="true">
+                  <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
+                    <path d="M3 5.5L25 14L3 22.5L7.5 14L3 5.5Z" fill="currentColor" />
+                    <path
+                      d="M12.5 14L25 14"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      style={{ opacity: 0.3 }}
+                    />
+                  </svg>
+                </div>
+                <span className="tk-sw-brand-name">Trikomi</span>
+              </a>
+
+              <div className="tk-sw-footer-sep" aria-hidden="true" />
+            </div>
+
+            {/* Middle: Navigation Links */}
+            <nav className="tk-sw-footer-nav" aria-label="Footer Navigation">
+              <ul className="tk-sw-footer-links">
+                <li>
+                  <a href="#categories" onClick={(e) => handleScrollTo('categories', e)} className="tk-sw-footer-link">
+                    Products
+                  </a>
+                </li>
+                <li>
+                  <a href="#demo" onClick={handleLaunchStudio} className="tk-sw-footer-link">
+                    3D Studio
+                  </a>
+                </li>
+                <li>
+                  <a href="#capabilities" onClick={(e) => handleScrollTo('capabilities', e)} className="tk-sw-footer-link">
+                    Industries
+                  </a>
+                </li>
+                <li>
+                  <a href="#studio" onClick={(e) => handleScrollTo('studio', e)} className="tk-sw-footer-link">
+                    Resources
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            {/* Right: Copyright Notice */}
+            <div className="tk-sw-footer-copyright" data-testid="sportswear-footer-copyright">
+              <span>&copy; 2026 Trikomi. All rights reserved.</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
+
+export default SportswearLandingPage;

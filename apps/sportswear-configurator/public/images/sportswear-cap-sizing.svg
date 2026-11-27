@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="100%" height="100%">
+  <defs>
+    <!-- Background Glow -->
+    <radialGradient id="szBgGlow" cx="50%" cy="46%" r="55%">
+      <stop offset="0%" stop-color="#FF7900" stop-opacity="0.22" />
+      <stop offset="50%" stop-color="#FF9A32" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#08090B" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Platform Gradient -->
+    <radialGradient id="szPlatGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#222838" />
+      <stop offset="70%" stop-color="#141824" />
+      <stop offset="100%" stop-color="#0A0C10" />
+    </radialGradient>
+
+    <!-- Blueprint Grid Pattern -->
+    <pattern id="szGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,121,0,0.12)" stroke-width="0.8" />
+    </pattern>
+
+    <!-- Neon Glow & Shadow -->
+    <filter id="szGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="szShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="480" height="360" fill="#0C0E14" />
+  <rect width="480" height="360" fill="url(#szBgGlow)" />
+  <rect width="480" height="360" fill="url(#szGrid)" opacity="0.7" />
+
+  <!-- Floor Glow & Platform -->
+  <ellipse cx="240" cy="295" rx="160" ry="32" fill="#FF7900" opacity="0.12" filter="url(#szGlow)" />
+  <ellipse cx="240" cy="290" rx="145" ry="26" fill="url(#szPlatGrad)" stroke="#FF9A32" stroke-width="1.6" />
+  <ellipse cx="240" cy="290" rx="120" ry="19" fill="none" stroke="rgba(255,154,50,0.25)" stroke-width="1" stroke-dasharray="4 4" />
+
+  <!-- Multi-Layered Sizing Contours (XXL, XL, L, M, S) -->
+  <g transform="translate(240, 160)" filter="url(#szShadow)">
+    <!-- XXL Contour (Faintest Outer) -->
+    <path d="M -90 -95 L -60 -115 L -25 -105 Q 0 -95 25 -105 L 60 -115 L 90 -95 L 75 -65 L 68 -72 L 68 85 Q 0 95 -68 85 L -68 -72 L -75 -65 Z"
+          fill="none" stroke="#FF7900" stroke-width="1" stroke-opacity="0.2" stroke-dasharray="3 3" />
+
+    <!-- XL Contour -->
+    <path d="M -82 -90 L -55 -108 L -22 -100 Q 0 -90 22 -100 L 55 -108 L 82 -90 L 68 -62 L 62 -68 L 62 76 Q 0 85 -62 76 L -62 -68 L -68 -62 Z"
+          fill="none" stroke="#FF7900" stroke-width="1.2" stroke-opacity="0.35" stroke-dasharray="4 2" />
+
+    <!-- L Contour (Active Selected Size - High Intensity) -->
+    <path d="M -75 -85 L -50 -102 L -20 -95 Q 0 -85 20 -95 L 50 -102 L 75 -85 L 62 -60 L 56 -65 L 56 68 Q 0 76 -56 68 L -56 -65 L -62 -60 Z"
+          fill="rgba(20, 25, 36, 0.75)" stroke="#FFA84A" stroke-width="2.2" filter="url(#szGlow)" />
+
+    <!-- M Contour (Inner) -->
+    <path d="M -67 -80 L -45 -95 L -18 -88 Q 0 -80 18 -88 L 45 -95 L 67 -80 L 55 -58 L 50 -62 L 50 60 Q 0 68 -50 60 L -50 -62 L -55 -58 Z"
+          fill="none" stroke="#FF9A32" stroke-width="1.2" stroke-opacity="0.45" />
+
+    <!-- S Contour (Innermost) -->
+    <path d="M -60 -75 L -40 -90 L -15 -82 Q 0 -75 15 -82 L 40 -90 L 60 -75 L 48 -55 L 44 -58 L 44 52 Q 0 60 -44 52 L -44 -58 L -48 -55 Z"
+          fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="2 3" />
+
+    <!-- Collar & Seam Lines for Active Size L -->
+    <path d="M -20 -95 Q 0 -75 20 -95" fill="none" stroke="#FFA84A" stroke-width="2" />
+    <path d="M -20 -95 L -56 -65" fill="none" stroke="rgba(255,168,74,0.6)" stroke-width="1.2" />
+    <path d="M 20 -95 L 56 -65" fill="none" stroke="rgba(255,168,74,0.6)" stroke-width="1.2" />
+
+    <!-- Caliper 1: Chest Width (Horizontal) -->
+    <g transform="translate(0, 0)">
+      <line x1="-56" y1="0" x2="56" y2="0" stroke="#FF7900" stroke-width="1.5" />
+      <line x1="-56" y1="-6" x2="-56" y2="6" stroke="#FF7900" stroke-width="1.5" />
+      <line x1="56" y1="-6" x2="56" y2="6" stroke="#FF7900" stroke-width="1.5" />
+      <rect x="-35" y="-18" width="70" height="15" rx="3" fill="#0C0E14" stroke="#FF7900" stroke-width="1" />
+      <text x="0" y="-7" fill="#FFA84A" font-size="9" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">CHEST 108 cm</text>
+    </g>
+
+    <!-- Caliper 2: Body Length (Vertical Right) -->
+    <g transform="translate(85, -10)">
+      <line x1="0" y1="-85" x2="0" y2="85" stroke="#FF9A32" stroke-width="1.4" />
+      <line x1="-5" y1="-85" x2="5" y2="-85" stroke="#FF9A32" stroke-width="1.4" />
+      <line x1="-5" y1="85" x2="5" y2="85" stroke="#FF9A32" stroke-width="1.4" />
+      <rect x="6" y="-8" width="62" height="15" rx="3" fill="#0C0E14" stroke="#FF9A32" stroke-width="1" />
+      <text x="37" y="3" fill="#FFA84A" font-size="8.5" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">LEN 76 cm</text>
+    </g>
+  </g>
+
+  <!-- Interactive Size Grading Selector Chips (Top Overlay) -->
+  <g transform="translate(100, 32)">
+    <!-- Size S -->
+    <rect x="0" y="0" width="46" height="28" rx="6" fill="#141824" stroke="rgba(255,121,0,0.3)" stroke-width="1" />
+    <text x="23" y="18" fill="#94A3B8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">S</text>
+
+    <!-- Size M -->
+    <rect x="58" y="0" width="46" height="28" rx="6" fill="#141824" stroke="rgba(255,121,0,0.3)" stroke-width="1" />
+    <text x="81" y="18" fill="#94A3B8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">M</text>
+
+    <!-- Size L (Active Selected) -->
+    <g filter="url(#szGlow)">
+      <rect x="116" y="0" width="48" height="28" rx="6" fill="#FF7900" stroke="#FFFFFF" stroke-width="1.5" />
+      <text x="140" y="18" fill="#FFFFFF" font-size="12" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" text-anchor="middle">L</text>
+    </g>
+
+    <!-- Size XL -->
+    <rect x="176" y="0" width="46" height="28" rx="6" fill="#141824" stroke="rgba(255,121,0,0.3)" stroke-width="1" />
+    <text x="199" y="18" fill="#94A3B8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">XL</text>
+
+    <!-- Size XXL -->
+    <rect x="234" y="0" width="46" height="28" rx="6" fill="#141824" stroke="rgba(255,121,0,0.3)" stroke-width="1" />
+    <text x="257" y="18" fill="#94A3B8" font-size="11" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" text-anchor="middle">XXL</text>
+  </g>
+
+  <!-- Bottom Tech Badge -->
+  <g transform="translate(130, 316)">
+    <rect width="220" height="26" rx="13" fill="#141824" stroke="rgba(255,121,0,0.5)" stroke-width="1" />
+    <circle cx="16" cy="13" r="4" fill="#FF7900" filter="url(#szGlow)" />
+    <text x="30" y="17" fill="#E2E8F0" font-size="10.5" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" letter-spacing="0.5">
+      PARAMETRIC SIZING &amp; FIT GRADING
+    </text>
+  </g>
+</svg>
