@@ -1,0 +1,102 @@
+/* ==========================================================================
+   05-configurator / swatches.css
+   Themeable PBR material swatch picker & finish grid inside @layer vs.configurator.
+   ========================================================================== */
+
+@layer vs.configurator {
+  .vs-cfg-swatches {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-cfg-swatches__header {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-cfg-swatches__title {
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-cfg-swatches__active {
+    color: var(--vs-primary);
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-bold);
+    text-align: right;
+  }
+
+  .vs-cfg-swatches__grid {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--vs-space-2_5);
+  }
+
+  .vs-cfg-swatch {
+    display: flex;
+    min-width: 68px;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vs-space-1_5);
+    padding: var(--vs-space-2_5) var(--vs-space-3);
+    border: 1.5px solid transparent;
+    border-radius: var(--vs-radius-swatch);
+    background: var(--vs-surface-swatch);
+    color: var(--vs-ink);
+    cursor: pointer;
+    transition: border-color var(--vs-transition-control), background-color var(--vs-transition-control), transform var(--vs-transition-control), box-shadow var(--vs-transition-control);
+  }
+
+  .vs-cfg-swatch:hover {
+    background: var(--vs-surface-card);
+    transform: translateY(-2px);
+  }
+
+  .vs-cfg-swatch.is-selected {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-card);
+    box-shadow: var(--vs-shadow-ambient);
+  }
+
+  .vs-cfg-swatch:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  .vs-cfg-swatch__orb {
+    width: var(--vs-swatch-orb-size);
+    height: var(--vs-swatch-orb-size);
+    flex: 0 0 auto;
+    border-radius: var(--vs-radius-circle);
+    box-shadow:
+      inset 0 -4px 8px rgba(0, 0, 0, 0.22),
+      inset 0 4px 6px rgba(255, 255, 255, 0.55),
+      var(--vs-shadow-sm);
+  }
+
+  .vs-cfg-swatch__name {
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .vs-cfg-swatch.is-selected .vs-cfg-swatch__name {
+    color: var(--vs-primary);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  @media (min-width: 640px) {
+    .vs-cfg-swatches__grid--wide {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+}

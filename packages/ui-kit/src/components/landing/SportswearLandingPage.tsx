@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { VictorShellBrandFooter } from './VictorShellBrandFooter';
+import victorshellLogoUrl from '../../assets/victorshell-logo.png';
 
 export interface SportswearLandingPageProps {
   /** Callback to launch the actual 3D Sportswear Configurator application. */
@@ -167,7 +169,7 @@ export const SportswearLandingPage: React.FC<SportswearLandingPageProps> = ({
       >
         <div className="tk-sw-container">
           <div className="tk-sw-navbar__inner">
-            {/* Trikomi Brand Logo */}
+            {/* VictorShell Brand Logo */}
             <a
               href="#/"
               className="tk-sw-brand"
@@ -175,24 +177,18 @@ export const SportswearLandingPage: React.FC<SportswearLandingPageProps> = ({
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              title="Trikomi 3D Platform"
+              title="VictorShell"
+              aria-label="VictorShell"
+              data-testid="sportswear-header-logo-link"
             >
-              <div className="tk-sw-brand__icon" aria-hidden="true">
-                <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
-                  <path
-                    d="M4 6L24 14L4 22L8 14L4 6Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M12 14L24 14"
-                    stroke="#FFFFFF"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    style={{ opacity: 0.72 }}
-                  />
-                </svg>
-              </div>
-              <span className="tk-sw-brand__name">Trikomi</span>
+              <img
+                src={victorshellLogoUrl}
+                alt="VictorShell"
+                width={369}
+                height={84}
+                className="tk-sw-brand__logo"
+                data-testid="sportswear-header-logo"
+              />
             </a>
 
             {/* Navigation Links */}
@@ -346,12 +342,14 @@ export const SportswearLandingPage: React.FC<SportswearLandingPageProps> = ({
           <div className="tk-sw-mobile-drawer__panel">
             <div className="tk-sw-mobile-drawer__header">
               <div className="tk-sw-brand">
-                <div className="tk-sw-brand__icon" aria-hidden="true">
-                  <svg viewBox="0 0 28 28" width="24" height="24" fill="none">
-                    <path d="M4 6L24 14L4 22L8 14L4 6Z" fill="currentColor" />
-                  </svg>
-                </div>
-                <span className="tk-sw-brand__name">Trikomi</span>
+                <img
+                  src={victorshellLogoUrl}
+                  alt="VictorShell"
+                  width={369}
+                  height={84}
+                  className="tk-sw-brand__logo"
+                  data-testid="sportswear-drawer-header-logo"
+                />
               </div>
               <button
                 type="button"
@@ -961,79 +959,21 @@ export const SportswearLandingPage: React.FC<SportswearLandingPageProps> = ({
       </section>
 
       {/* ----------------------------------------------------------------------
-          7. Footer Section (Exact Reference Layout)
+          7. Footer Section (VictorShell Official Footer)
           ---------------------------------------------------------------------- */}
-      <footer
-        className="tk-sw-footer"
+      <VictorShellBrandFooter
         id="footer"
-        data-testid="sportswear-footer"
-        aria-label="Site Footer"
-      >
-        <div className="tk-sw-container">
-          <div className="tk-sw-footer-inner">
-            {/* Left: Brand Logo & Name */}
-            <div className="tk-sw-footer-brand">
-              <a
-                href="#/"
-                className="tk-sw-footer-logo-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                title="Trikomi Home"
-                data-testid="sportswear-footer-logo"
-              >
-                <div className="tk-sw-brand-icon" aria-hidden="true">
-                  <svg viewBox="0 0 28 28" width="28" height="28" fill="none">
-                    <path d="M3 5.5L25 14L3 22.5L7.5 14L3 5.5Z" fill="currentColor" />
-                    <path
-                      d="M12.5 14L25 14"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      style={{ opacity: 0.3 }}
-                    />
-                  </svg>
-                </div>
-                <span className="tk-sw-brand-name">Trikomi</span>
-              </a>
-
-              <div className="tk-sw-footer-sep" aria-hidden="true" />
-            </div>
-
-            {/* Middle: Navigation Links */}
-            <nav className="tk-sw-footer-nav" aria-label="Footer Navigation">
-              <ul className="tk-sw-footer-links">
-                <li>
-                  <a href="#categories" onClick={(e) => handleScrollTo('categories', e)} className="tk-sw-footer-link">
-                    Products
-                  </a>
-                </li>
-                <li>
-                  <a href="#demo" onClick={handleLaunchStudio} className="tk-sw-footer-link">
-                    3D Studio
-                  </a>
-                </li>
-                <li>
-                  <a href="#capabilities" onClick={(e) => handleScrollTo('capabilities', e)} className="tk-sw-footer-link">
-                    Industries
-                  </a>
-                </li>
-                <li>
-                  <a href="#studio" onClick={(e) => handleScrollTo('studio', e)} className="tk-sw-footer-link">
-                    Resources
-                  </a>
-                </li>
-              </ul>
-            </nav>
-
-            {/* Right: Copyright Notice */}
-            <div className="tk-sw-footer-copyright" data-testid="sportswear-footer-copyright">
-              <span>&copy; 2026 Trikomi. All rights reserved.</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+        ariaLabel="Site Footer"
+        className="tk-sw-footer"
+        containerClassName="tk-sw-container"
+        socialHeading="Connect with VictorShell"
+        copyrightText="© 2026 VictorShell. All rights reserved."
+        footerTestId="sportswear-footer"
+        logoLinkTestId="sportswear-footer-logo-link"
+        logoTestId="sportswear-footer-logo"
+        copyrightTestId="sportswear-footer-copyright"
+        socialTestIdPrefix="sportswear-footer-social"
+      />
     </div>
   );
 };

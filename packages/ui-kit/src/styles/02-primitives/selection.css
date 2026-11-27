@@ -1,0 +1,304 @@
+/* ==========================================================================
+   02-primitives / selection.css
+   Themeable BEM checkbox, radio, switch, segmented tabs & vertical rail controls.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-choice {
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    gap: var(--vs-space-3);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .vs-choice--described {
+    align-items: flex-start;
+  }
+
+  .vs-choice--between {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .vs-choice__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-1);
+  }
+
+  .vs-choice__label {
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-md);
+    font-weight: var(--vs-font-weight-medium);
+    line-height: 1.4;
+  }
+
+  .vs-choice__description {
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-sm);
+    line-height: 1.45;
+  }
+
+  /* Checkbox & Radio */
+  .vs-checkbox,
+  .vs-radio {
+    display: inline-grid;
+    width: var(--vs-check-size);
+    height: var(--vs-check-size);
+    flex: 0 0 auto;
+    place-content: center;
+    margin: 0;
+    border: 1.5px solid var(--vs-checkbox-border);
+    background: var(--vs-surface-input);
+    cursor: pointer;
+    transition: border-color var(--vs-transition-fast), background-color var(--vs-transition-fast), box-shadow var(--vs-transition-fast);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .vs-checkbox {
+    border-radius: var(--vs-radius-kbd);
+  }
+
+  .vs-radio {
+    border-radius: var(--vs-radius-circle);
+  }
+
+  .vs-checkbox:hover:not(:disabled),
+  .vs-radio:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  .vs-checkbox:checked,
+  .vs-checkbox:indeterminate {
+    border-color: var(--vs-primary);
+    background: var(--vs-primary-gradient);
+  }
+
+  .vs-checkbox:checked::after {
+    width: 9px;
+    height: 5px;
+    border-bottom: 2px solid var(--vs-ink-inverse);
+    border-left: 2px solid var(--vs-ink-inverse);
+    content: "";
+    transform: rotate(-45deg) translate(0.5px, -0.5px);
+  }
+
+  .vs-checkbox:indeterminate::after {
+    width: 9px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--vs-ink-inverse);
+    content: "";
+  }
+
+  .vs-radio:checked {
+    border-color: var(--vs-primary);
+  }
+
+  .vs-radio:checked::after {
+    width: 9px;
+    height: 9px;
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-primary-gradient);
+    content: "";
+  }
+
+  .vs-checkbox:disabled,
+  .vs-radio:disabled {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+    cursor: not-allowed;
+  }
+
+  .vs-checkbox:focus-visible,
+  .vs-radio:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  /* Toggle Switch */
+  .vs-switch {
+    position: relative;
+    display: inline-block;
+    width: var(--vs-switch-width);
+    height: var(--vs-switch-height);
+    flex: 0 0 auto;
+    vertical-align: middle;
+  }
+
+  .vs-switch__input {
+    position: absolute;
+    z-index: var(--vs-z-canvas);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .vs-switch__track {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--vs-outline-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-switch-track-bg);
+    pointer-events: none;
+    transition: background-color var(--vs-transition-control), border-color var(--vs-transition-control), box-shadow var(--vs-transition-control);
+  }
+
+  .vs-switch__track::before {
+    position: absolute;
+    top: 2.5px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-ink-secondary);
+    content: "";
+    transition: transform var(--vs-transition-control), background-color var(--vs-transition-control);
+  }
+
+  .vs-switch__input:checked + .vs-switch__track {
+    border-color: transparent;
+    background: var(--vs-primary-gradient);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  .vs-switch__input:checked + .vs-switch__track::before {
+    background: var(--vs-ink-inverse);
+    transform: translateX(19px);
+  }
+
+  .vs-switch__input:disabled + .vs-switch__track {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+  }
+
+  .vs-switch__input:disabled + .vs-switch__track::before {
+    background: var(--vs-disabled-text);
+  }
+
+  .vs-switch__input:focus-visible + .vs-switch__track {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  /* Segmented Tab Track & Pills */
+  .vs-tabs {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-tabs__list {
+    display: inline-flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px;
+    padding: var(--vs-space-1);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-bg-secondary);
+    box-shadow: var(--vs-shadow-sm);
+  }
+
+  .vs-tabs__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-2);
+    padding: 0.45rem 1.05rem;
+    border: 0;
+    border-radius: var(--vs-radius-pill);
+    background: transparent;
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-semibold);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), color var(--vs-transition-control), box-shadow var(--vs-transition-control);
+  }
+
+  .vs-tabs__pill:hover:not(.is-active) {
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-tabs__pill.is-active {
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  .vs-tabs__pill:focus-visible,
+  .vs-rail__item:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  /* Vertical Tool Rail */
+  .vs-rail {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-2);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-rail);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-blur);
+    -webkit-backdrop-filter: var(--vs-blur);
+  }
+
+  .vs-rail__item {
+    display: flex;
+    width: 62px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-1);
+    padding: var(--vs-space-2_5) var(--vs-space-1);
+    border: 0;
+    border-radius: var(--vs-radius-stage);
+    background: transparent;
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), color var(--vs-transition-control), box-shadow var(--vs-transition-control);
+  }
+
+  .vs-rail__item:hover:not(.is-active) {
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-rail__item.is-active {
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  @media (max-width: 480px) {
+    .vs-tabs__list {
+      border-radius: var(--vs-radius-lg);
+    }
+
+    .vs-tabs__pill {
+      padding: var(--vs-space-1_5) var(--vs-space-3);
+      font-size: var(--vs-font-size-xs);
+    }
+  }
+}

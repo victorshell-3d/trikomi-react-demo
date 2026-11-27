@@ -1,0 +1,297 @@
+/* ==========================================================================
+   07-themes / showcase-dark.css
+   Dedicated Dark Futuristic Studio theme for the CSS Module Kit Showcase.
+   Enforces unified deep navy surfaces, #00D5FF cyan & #3B82F6 blue accents,
+   WCAG AA contrast, and zero light or purple surface leakage.
+   ========================================================================== */
+
+@layer vs.themes {
+  [data-vs-preset='showcase-dark'],
+  [data-vs-preset='showcase-dark'][data-theme],
+  [data-vs-preset='showcase-dark'][data-accent],
+  [data-vs-preset='showcase-dark'][data-theme][data-accent] {
+    color-scheme: dark;
+
+    /* Core Surfaces & Backgrounds */
+    --vs-bg-page: #080D18;
+    --vs-bg-secondary: #0D1524;
+    --vs-bg-start: #080D18;
+    --vs-bg-end: #0D1524;
+    --vs-ice-blue: #0D1524;
+    --vs-soft-lavender: rgba(59, 130, 246, 0.14);
+
+    --vs-card-bg: #111827;
+    --vs-glass-bg: #111827;
+    --vs-glass-strong: #1E293B;
+    --vs-glass-subtle: #0D1524;
+    --vs-surface-card: #111827;
+    --vs-surface-elevated: #1E293B;
+    --vs-panel-bg: #111827;
+    --vs-surface-header: #0D1524;
+    --vs-surface-footer: #0D1524;
+    --vs-surface-menu: #111827;
+    --vs-surface-input: #0B1220;
+    --vs-surface-input-focus: #0F172A;
+    --vs-surface-stage: #0D1524;
+    --vs-surface-swatch: #0D1524;
+    --vs-surface-popover-header: #1E293B;
+    --vs-surface-hover: rgba(0, 213, 255, 0.1);
+    --vs-backdrop-scrim: rgba(4, 7, 15, 0.72);
+    --vs-backdrop-modal: rgba(4, 7, 15, 0.82);
+
+    /* Borders & Dividers */
+    --vs-border: #334155;
+    --vs-glass-border: #334155;
+    --vs-surface-border: #334155;
+    --vs-surface-card-border: #334155;
+    --vs-panel-border: #334155;
+    --vs-light-lavender-border: #334155;
+    --vs-dashed-border: #475569;
+    --vs-control-border: #334155;
+    --vs-checkbox-border: #64748B;
+    --vs-outline-border: #00D5FF;
+    --vs-divider: #334155;
+    --vs-kbd-bg: #1E293B;
+    --vs-track-bg: #334155;
+    --vs-switch-track-bg: #1E293B;
+    --vs-disabled-bg: #0B1220;
+    --vs-disabled-border: #334155;
+    --vs-disabled-text: #94A3B8;
+
+    /* Accents (Minimal Gradients, Zero Purple) */
+    --vs-primary: #00D5FF;
+    --vs-primary-light: #38BDF8;
+    --vs-primary-dark: #0284C7;
+    --vs-accent: #00D5FF;
+    --vs-accent-secondary: #3B82F6;
+    --vs-accent-secondary-soft: rgba(59, 130, 246, 0.16);
+    --vs-primary-glow: rgba(0, 213, 255, 0.18);
+    --vs-primary-gradient: linear-gradient(135deg, #00D5FF 0%, #38BDF8 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #38BDF8 0%, #60A5FA 100%);
+    --vs-tonal-lavender: rgba(0, 213, 255, 0.14);
+    --vs-tonal-hover: rgba(0, 213, 255, 0.24);
+
+    /* Typography Hierarchy */
+    --vs-ink: #F8FAFC;
+    --vs-ink-secondary: #CBD5E1;
+    --vs-ink-muted: #94A3B8;
+    --vs-ink-subtle: #94A3B8;
+    --vs-ink-accent: #00D5FF;
+    --vs-ink-inverse: #080D18;
+    --vs-dark-pill: #1E293B;
+    --vs-secondary: #1E293B;
+
+    /* Semantic Status Colors */
+    --vs-emerald: #34D399;
+    --vs-success: #34D399;
+    --vs-success-text: #34D399;
+    --vs-surface-success-soft: rgba(52, 211, 153, 0.14);
+
+    --vs-amber: #FBBF24;
+    --vs-warning: #FBBF24;
+    --vs-warning-text: #FBBF24;
+    --vs-surface-warning-soft: rgba(251, 191, 36, 0.14);
+
+    --vs-crimson: #FB7185;
+    --vs-error: #FB7185;
+    --vs-danger-text: #FB7185;
+    --vs-danger-border: rgba(251, 113, 133, 0.45);
+    --vs-surface-danger-soft: rgba(251, 113, 133, 0.14);
+
+    --vs-info: #3B82F6;
+    --vs-surface-info-soft: rgba(59, 130, 246, 0.16);
+
+    /* Soft Controlled Shadows */
+    --vs-shadow-sm: 0 2px 6px rgba(2, 6, 23, 0.45);
+    --vs-shadow-ambient: 0 8px 24px rgba(2, 6, 23, 0.5);
+    --vs-shadow-card: var(--vs-shadow-ambient);
+    --vs-shadow-raised: 0 12px 30px rgba(2, 6, 23, 0.55);
+    --vs-shadow-lg: 0 16px 38px rgba(2, 6, 23, 0.62);
+    --vs-shadow-float: 0 16px 40px rgba(2, 6, 23, 0.6);
+    --vs-shadow-primary: 0 4px 14px rgba(0, 213, 255, 0.18);
+    --vs-shadow-primary-hover: 0 6px 18px rgba(0, 213, 255, 0.26);
+    --vs-shadow-primary-active: 0 0 0 3px rgba(0, 213, 255, 0.24);
+    --vs-shadow-button-glass: 0 2px 8px rgba(2, 6, 23, 0.4);
+    --vs-shadow-button-glass-hover: 0 4px 12px rgba(0, 213, 255, 0.16);
+    --vs-shadow-popover: 0 16px 36px rgba(2, 6, 23, 0.65);
+    --vs-shadow-modal: 0 24px 56px rgba(2, 6, 23, 0.72);
+    --vs-shadow-drawer: -12px 0 36px rgba(2, 6, 23, 0.65);
+    --vs-focus-ring: 0 0 0 3px rgba(0, 213, 255, 0.28);
+    --vs-focus-ring-danger: 0 0 0 3px rgba(251, 113, 133, 0.28);
+    --vs-focus-ring-success: 0 0 0 3px rgba(52, 211, 153, 0.28);
+  }
+
+  /* Optional Cobalt-Blue Focused Dark Variant */
+  [data-vs-preset='showcase-dark'][data-showcase-tone='blue'] {
+    --vs-primary: #3B82F6;
+    --vs-primary-light: #60A5FA;
+    --vs-primary-dark: #2563EB;
+    --vs-accent: #3B82F6;
+    --vs-accent-secondary: #00D5FF;
+    --vs-ink-accent: #60A5FA;
+    --vs-outline-border: #3B82F6;
+    --vs-primary-gradient: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #60A5FA 0%, #93C5FD 100%);
+    --vs-tonal-lavender: rgba(59, 130, 246, 0.16);
+    --vs-tonal-hover: rgba(59, 130, 246, 0.26);
+    --vs-shadow-primary: 0 4px 14px rgba(59, 130, 246, 0.22);
+    --vs-shadow-primary-hover: 0 6px 18px rgba(59, 130, 246, 0.3);
+    --vs-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Ensure dark-pill components keep bright primary ink instead of dark button ink */
+  [data-vs-preset='showcase-dark'] .vs-tooltip__bubble,
+  [data-vs-preset='showcase-dark'] .vs-toast,
+  [data-vs-preset='showcase-dark'] .vs-cfg-measure-tag {
+    color: var(--vs-ink);
+    border-color: var(--vs-border);
+  }
+
+  /* Crisp dark glass button separation against #111827 cards */
+  [data-vs-preset='showcase-dark'] .vs-btn--glass {
+    background: rgba(30, 41, 59, 0.55);
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-badge--cyan {
+    border-color: rgba(59, 130, 246, 0.42);
+    color: #60A5FA;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-table__td--mono {
+    color: #60A5FA;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-title-gradient {
+    background: none;
+    -webkit-text-fill-color: var(--vs-primary);
+    color: var(--vs-primary);
+  }
+
+  /* ========================================================================
+     Prompt 09 Readability & Typography System (Scoped to showcase-dark)
+     32px display | 22px section | 16px card title/body | 14px UI | 13px min
+     ======================================================================== */
+  [data-vs-preset='showcase-dark'],
+  [data-theme='dark'][data-vs-preset='showcase-dark'] {
+    --vs-font-size-2xs: 0.8125rem;
+    --vs-font-size-xs: 0.8125rem;
+    --vs-font-size-label: 0.8125rem;
+    --vs-font-size-sm: 0.875rem;
+    --vs-font-size-button: 0.875rem;
+    --vs-btn-font-size: var(--vs-font-size-button);
+    --vs-font-size-base: 0.9375rem;
+    --vs-font-size-md: 1rem;
+    --vs-font-size-lg: 1.125rem;
+    --vs-font-size-xl: 1.375rem;
+    --vs-font-size-2xl: 1.375rem;
+    --vs-font-size-3xl: 2rem;
+    --vs-line-height-tight: 1.2;
+    --vs-line-height-snug: 1.35;
+    --vs-line-height-normal: 1.55;
+    --vs-line-height-relaxed: 1.6;
+  }
+
+  /* Typographic Hierarchy */
+  [data-vs-preset='showcase-dark'] .vs-heading--display,
+  [data-vs-preset='showcase-dark'] .vs-heading--page {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-heading--section {
+    font-size: 1.375rem;
+    line-height: 1.3;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-card__title {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-card__subtitle {
+    color: var(--vs-ink-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-text--body {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-form__label,
+  [data-vs-preset='showcase-dark'] .vs-range__label,
+  [data-vs-preset='showcase-dark'] .vs-table__td,
+  [data-vs-preset='showcase-dark'] .vs-alert__description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-alert__title {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-dropdown__kbd,
+  [data-vs-preset='showcase-dark'] .vs-kbd,
+  [data-vs-preset='showcase-dark'] .vs-form__hint,
+  [data-vs-preset='showcase-dark'] .vs-form__error,
+  [data-vs-preset='showcase-dark'] .vs-textarea__counter,
+  [data-vs-preset='showcase-dark'] .vs-input__shortcut {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  /* WCAG AA Contrast & Visibility Fixes (>= 4.5:1) */
+  [data-vs-preset='showcase-dark'] .vs-cfg-header__brand-divider {
+    opacity: 1;
+    color: var(--vs-ink-muted);
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-nav-menu__index {
+    color: #60A5FA;
+    font-size: 0.8125rem;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-nav-menu__link.is-active .vs-nav-menu__index {
+    color: var(--vs-primary);
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-alert__icon {
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-alert--info .vs-alert__icon {
+    background: rgba(59, 130, 246, 0.25);
+    color: #93C5FD;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-alert--danger .vs-alert__icon,
+  [data-vs-preset='showcase-dark'] .vs-alert--error .vs-alert__icon {
+    background: rgba(251, 113, 133, 0.22);
+    color: #FECDD3;
+  }
+
+  [data-vs-preset='showcase-dark'] .vs-pagination__btn:disabled {
+    opacity: 1;
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+    color: var(--vs-disabled-text);
+  }
+
+  @media (max-width: 480px) {
+    [data-vs-preset='showcase-dark'] .vs-btn--block,
+    [data-vs-preset='showcase-dark'] .vs-full-mobile {
+      white-space: normal;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 359px) {
+    [data-vs-preset='showcase-dark'] .vs-heading--display,
+    [data-vs-preset='showcase-dark'] .vs-heading--page {
+      font-size: 1.75rem;
+    }
+  }
+}

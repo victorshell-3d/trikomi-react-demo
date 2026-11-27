@@ -1,0 +1,273 @@
+/* ==========================================================================
+   02-primitives / buttons.css
+   Reusable BEM button & icon-trigger primitives inside @layer vs.primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-btn-padding-block) var(--vs-btn-padding-inline);
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-control);
+    background: transparent;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: var(--vs-btn-font-size);
+    font-weight: var(--vs-font-weight-semibold);
+    line-height: 1.25;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition:
+      background-color var(--vs-transition-control),
+      border-color var(--vs-transition-control),
+      color var(--vs-transition-control),
+      box-shadow var(--vs-transition-control),
+      transform var(--vs-transition-control);
+  }
+
+  .vs-btn__icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vs-btn__label {
+    min-width: 0;
+  }
+
+  .vs-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .vs-btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .vs-btn:focus-visible,
+  .vs-icon-btn:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  .vs-btn:disabled {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+    color: var(--vs-disabled-text);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Sizes */
+  .vs-btn--sm {
+    padding: var(--vs-space-1_5) var(--vs-space-3);
+    font-size: var(--vs-font-size-sm);
+  }
+
+  .vs-btn--md {
+    padding: var(--vs-btn-padding-block) var(--vs-btn-padding-inline);
+    font-size: var(--vs-btn-font-size);
+  }
+
+  .vs-btn--lg {
+    padding: var(--vs-space-3) var(--vs-space-6);
+    font-size: var(--vs-font-size-md);
+  }
+
+  /* Shape & Width Modifiers */
+  .vs-btn--pill {
+    border-radius: var(--vs-radius-pill);
+  }
+
+  .vs-btn--block {
+    display: flex;
+    width: 100%;
+  }
+
+  .vs-btn--icon {
+    padding: var(--vs-space-2);
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Variants */
+  .vs-btn--primary {
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  .vs-btn--primary:hover:not(:disabled) {
+    background: var(--vs-primary-gradient-hover);
+    box-shadow: var(--vs-shadow-primary-hover);
+  }
+
+  .vs-btn--primary.is-active {
+    background: var(--vs-primary-dark);
+    box-shadow: var(--vs-shadow-primary-active);
+  }
+
+  .vs-btn--secondary {
+    border-color: var(--vs-surface-border);
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink);
+    box-shadow: var(--vs-shadow-sm);
+  }
+
+  .vs-btn--secondary:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--outline {
+    border-width: 1.5px;
+    border-color: var(--vs-outline-border);
+    background: transparent;
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--outline:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink);
+  }
+
+  .vs-btn--outline.is-active {
+    border-color: transparent;
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+  }
+
+  .vs-btn--glass {
+    border-color: var(--vs-glass-border);
+    background: var(--vs-glass-bg);
+    color: var(--vs-ink);
+    backdrop-filter: var(--vs-blur-subtle);
+    -webkit-backdrop-filter: var(--vs-blur-subtle);
+    box-shadow: var(--vs-shadow-button-glass);
+  }
+
+  .vs-btn--glass:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    color: var(--vs-ink-accent);
+    box-shadow: var(--vs-shadow-button-glass-hover);
+  }
+
+  .vs-btn--glass.is-active {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--tonal {
+    border-color: rgba(139, 92, 246, 0.25);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--tonal:hover:not(:disabled) {
+    background: var(--vs-tonal-hover);
+  }
+
+  .vs-btn--tonal.is-active {
+    border-color: transparent;
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+  }
+
+  .vs-btn--ghost {
+    background: transparent;
+    color: var(--vs-ink-secondary);
+  }
+
+  .vs-btn--ghost:hover:not(:disabled) {
+    background: var(--vs-surface-hover);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--ghost.is-active {
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-btn--danger {
+    border-color: var(--vs-danger-border);
+    background: var(--vs-surface-danger-soft);
+    color: var(--vs-danger-text);
+  }
+
+  .vs-btn--danger:hover:not(:disabled) {
+    border-color: var(--vs-crimson);
+    background: var(--vs-crimson);
+    color: var(--vs-ink-inverse);
+  }
+
+  /* Circular Icon Trigger Primitive */
+  .vs-icon-btn {
+    display: inline-flex;
+    width: var(--vs-circle-icon-size);
+    height: var(--vs-circle-icon-size);
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-strong);
+    color: var(--vs-ink);
+    backdrop-filter: var(--vs-blur-subtle);
+    -webkit-backdrop-filter: var(--vs-blur-subtle);
+    box-shadow: var(--vs-shadow-button-glass);
+    cursor: pointer;
+    transition:
+      background-color var(--vs-transition-control),
+      border-color var(--vs-transition-control),
+      color var(--vs-transition-control),
+      transform var(--vs-transition-control),
+      box-shadow var(--vs-transition-control);
+  }
+
+  .vs-icon-btn--sm {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .vs-icon-btn--md {
+    width: var(--vs-circle-icon-size);
+    height: var(--vs-circle-icon-size);
+  }
+
+  .vs-icon-btn--lg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .vs-icon-btn:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+    transform: translateY(-1px);
+  }
+
+  .vs-icon-btn.is-active {
+    border-color: transparent;
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  .vs-icon-btn:disabled {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+    color: var(--vs-disabled-text);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+}

@@ -1,0 +1,42 @@
+/* ==========================================================================
+   00-tokens / typography.css
+   Font stacks, modular type scale, weights, line heights & tracking tokens.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    --vs-font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    --vs-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --vs-font-body: var(--vs-font-sans);
+    --vs-font-mono: 'JetBrains Mono', monospace;
+
+    --vs-font-size-2xs: 0.625rem;
+    --vs-font-size-xs: 0.6875rem;
+    --vs-font-size-sm: 0.75rem;
+    --vs-font-size-md: 0.875rem;
+    --vs-font-size-base: 1rem;
+    --vs-font-size-lg: 1.125rem;
+    --vs-font-size-xl: 1.25rem;
+    --vs-font-size-2xl: 1.5rem;
+    --vs-font-size-3xl: 1.875rem;
+    --vs-font-size-label: 0.7rem;
+    --vs-font-size-button: 0.82rem;
+
+    --vs-font-weight-regular: 400;
+    --vs-font-weight-medium: 500;
+    --vs-font-weight-semibold: 600;
+    --vs-font-weight-bold: 700;
+    --vs-font-weight-extrabold: 800;
+
+    --vs-line-height-tight: 1.2;
+    --vs-line-height-snug: 1.35;
+    --vs-line-height-normal: 1.5;
+    --vs-line-height-relaxed: 1.625;
+
+    --vs-letter-spacing-tight: -0.02em;
+    --vs-letter-spacing-normal: 0em;
+    --vs-letter-spacing-caps: 0.06em;
+  }
+}

@@ -1,0 +1,80 @@
+/* ==========================================================================
+   07-themes / preset-dark-indigo.css
+   Dark Slate + Indigo preset aligned with Viewer, Box, 360Tour & Material Library.
+   Activated opt-in via [data-vs-preset='dark-indigo'].
+   ========================================================================== */
+
+@layer vs.themes {
+  [data-vs-preset='dark-indigo'],
+  [data-vs-preset='dark-indigo'][data-theme],
+  [data-vs-preset='dark-indigo'][data-accent],
+  [data-vs-preset='dark-indigo'][data-theme][data-accent] {
+    --vs-bg-page: #0B0F19;
+    --vs-bg-secondary: #111827;
+    --vs-bg-start: #0B0F19;
+    --vs-bg-end: #111827;
+    --vs-card-bg: #151D2B;
+    --vs-glass-bg: rgba(21, 29, 43, 0.92);
+    --vs-glass-strong: #1B2638;
+    --vs-glass-subtle: #111827;
+    --vs-glass-border: #334155;
+    --vs-surface-card: #151D2B;
+    --vs-surface-elevated: #1B2638;
+    --vs-surface-border: #334155;
+    --vs-surface-menu: rgba(18, 21, 28, 0.97);
+    --vs-surface-input: rgba(0, 0, 0, 0.34);
+    --vs-surface-input-focus: rgba(15, 18, 26, 0.92);
+    --vs-surface-stage: rgba(17, 20, 26, 0.56);
+    --vs-surface-swatch: rgba(255, 255, 255, 0.05);
+    --vs-surface-popover-header: rgba(24, 28, 38, 0.94);
+    --vs-surface-footer: rgba(12, 14, 18, 0.86);
+    --vs-surface-hover: rgba(99, 102, 241, 0.14);
+    --vs-surface-danger-soft: rgba(239, 68, 68, 0.16);
+    --vs-surface-success-soft: rgba(16, 185, 129, 0.16);
+    --vs-surface-warning-soft: rgba(245, 158, 11, 0.16);
+    --vs-surface-info-soft: rgba(99, 102, 241, 0.18);
+    --vs-backdrop-scrim: rgba(4, 6, 10, 0.65);
+    --vs-backdrop-modal: rgba(4, 6, 10, 0.74);
+    --vs-kbd-bg: rgba(255, 255, 255, 0.08);
+    --vs-track-bg: rgba(99, 102, 241, 0.24);
+    --vs-control-border: rgba(255, 255, 255, 0.14);
+    --vs-outline-border: rgba(99, 102, 241, 0.55);
+    --vs-checkbox-border: rgba(148, 163, 184, 0.45);
+    --vs-dashed-border: rgba(99, 102, 241, 0.35);
+    --vs-divider: rgba(255, 255, 255, 0.08);
+    --vs-disabled-bg: rgba(255, 255, 255, 0.05);
+    --vs-disabled-border: rgba(255, 255, 255, 0.12);
+    --vs-disabled-text: #64748B;
+    --vs-switch-track-bg: rgba(255, 255, 255, 0.1);
+
+    --vs-primary: #6366F1;
+    --vs-primary-light: #818CF8;
+    --vs-primary-dark: #4F46E5;
+    --vs-accent-secondary: #06B6D4;
+    --vs-primary-glow: rgba(99, 102, 241, 0.36);
+    --vs-primary-gradient: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+    --vs-tonal-lavender: rgba(99, 102, 241, 0.16);
+    --vs-tonal-hover: rgba(99, 102, 241, 0.28);
+
+    --vs-ink: #F8FAFC;
+    --vs-ink-secondary: #CBD5E1;
+    --vs-ink-muted: #CBD5E1;
+    --vs-ink-subtle: #94A3B8;
+    --vs-ink-accent: #A5B4FC;
+    --vs-ink-inverse: #FFFFFF;
+    --vs-danger-text: #FCA5A5;
+    --vs-danger-border: rgba(248, 113, 113, 0.45);
+    --vs-success-text: #6EE7B7;
+    --vs-warning-text: #FCD34D;
+    --vs-disabled-text: #94A3B8;
+
+    --vs-shadow-primary: 0 8px 24px rgba(79, 70, 229, 0.38);
+    --vs-shadow-primary-hover: 0 12px 28px rgba(99, 102, 241, 0.48);
+    --vs-shadow-primary-active: 0 0 0 4px rgba(99, 102, 241, 0.28);
+    --vs-shadow-button-glass: 0 6px 18px rgba(0, 0, 0, 0.35);
+    --vs-shadow-button-glass-hover: 0 10px 26px rgba(99, 102, 241, 0.28);
+    --vs-shadow-float: 0 20px 50px rgba(0, 0, 0, 0.55);
+    --vs-focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.35);
+  }
+}

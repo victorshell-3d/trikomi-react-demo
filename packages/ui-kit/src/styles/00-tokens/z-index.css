@@ -1,0 +1,24 @@
+/* ==========================================================================
+   00-tokens / z-index.css
+   Deterministic stacking scale replacing 26 ad-hoc z-index values.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    --vs-z-base: 0;
+    --vs-z-canvas: 1;
+    --vs-z-raised: 10;
+    --vs-z-hud: 20;
+    --vs-z-sticky: 30;
+    --vs-z-drawer: 40;
+    --vs-z-header: 50;
+    --vs-z-dropdown: 60;
+    --vs-z-popover: 70;
+    --vs-z-tooltip: 80;
+    --vs-z-backdrop: 90;
+    --vs-z-modal: 100;
+    --vs-z-toast: 200;
+  }
+}

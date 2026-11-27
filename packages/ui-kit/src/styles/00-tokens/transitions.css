@@ -1,0 +1,25 @@
+/* ==========================================================================
+   00-tokens / transitions.css
+   Easing curves, interaction transition presets & animation durations.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    --vs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --vs-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --vs-transition-fast: 0.16s ease;
+    --vs-transition-normal: 0.22s var(--vs-ease);
+    --vs-transition-control: 0.2s var(--vs-ease);
+    --vs-transition-panel: 0.25s var(--vs-ease);
+    --vs-transition-overlay: 0.22s ease;
+    --vs-transition-drawer: 0.3s var(--vs-ease);
+    --vs-transition-code: 0.32s var(--vs-ease);
+
+    --vs-duration-spinner: 0.85s;
+    --vs-duration-shimmer: 1.6s;
+    --vs-duration-pulse: 1.8s;
+  }
+}

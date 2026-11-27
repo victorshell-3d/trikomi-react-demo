@@ -1,0 +1,161 @@
+/* ==========================================================================
+   04-layouts / sidebar-layout.css
+   Reusable desktop sticky sidebar + mobile collapsible off-canvas nav shell
+   inside @layer vs.layouts. Prevents desktop squeezing and mobile crowding.
+   ========================================================================== */
+
+@layer vs.layouts {
+  .vs-nav-shell {
+    position: relative;
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    grid-template-columns: 260px minmax(0, 1fr);
+    padding-top: var(--vs-header-height);
+  }
+
+  .vs-nav-shell__sidebar {
+    position: sticky;
+    top: var(--vs-header-height);
+    z-index: var(--vs-z-sticky);
+    display: flex;
+    height: calc(100vh - var(--vs-header-height));
+    flex-direction: column;
+    gap: var(--vs-space-5);
+    overflow-y: auto;
+    padding: var(--vs-space-5) var(--vs-space-4);
+    border-right: 1px solid var(--vs-border);
+    background: var(--vs-bg-secondary);
+  }
+
+  .vs-nav-shell__sidebar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-2);
+    padding-bottom: var(--vs-space-3);
+    border-bottom: 1px solid var(--vs-divider);
+  }
+
+  .vs-nav-shell__main {
+    min-width: 0;
+    width: 100%;
+    padding: var(--vs-space-6) clamp(1rem, 3vw, 2.5rem) var(--vs-space-16);
+  }
+
+  .vs-nav-shell__content {
+    width: min(100%, 1240px);
+    margin-inline: auto;
+  }
+
+  .vs-nav-shell__overlay {
+    display: none;
+  }
+
+  .vs-nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vs-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .vs-nav-menu__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-2);
+    padding: 0.55rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-md);
+    color: var(--vs-ink-secondary);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-medium);
+    text-decoration: none;
+    transition: background-color var(--vs-transition-fast), border-color var(--vs-transition-fast), color var(--vs-transition-fast);
+  }
+
+  .vs-nav-menu__link:hover {
+    background: var(--vs-surface-hover);
+    color: var(--vs-ink);
+  }
+
+  .vs-nav-menu__link.is-active {
+    border-color: var(--vs-outline-border);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-nav-menu__label {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--vs-space-2);
+  }
+
+  .vs-nav-menu__index {
+    color: var(--vs-accent-secondary);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-2xs);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  @media (max-width: 1140px) {
+    .vs-nav-shell {
+      grid-template-columns: 224px minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .vs-nav-shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vs-nav-shell__sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: var(--vs-z-modal);
+      width: min(290px, 86vw);
+      height: 100dvh;
+      box-shadow: var(--vs-shadow-lg);
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(-105%);
+      transition: transform var(--vs-transition-drawer), visibility 0s linear 0.3s;
+    }
+
+    .vs-nav-shell__sidebar.is-open {
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(0);
+      transition: transform var(--vs-transition-drawer), visibility 0s;
+    }
+
+    .vs-nav-shell__overlay {
+      position: fixed;
+      inset: 0;
+      z-index: var(--vs-z-backdrop);
+      background: var(--vs-backdrop-scrim);
+      backdrop-filter: var(--vs-blur-sm);
+      -webkit-backdrop-filter: var(--vs-blur-sm);
+    }
+
+    .vs-nav-shell__overlay.is-open {
+      display: block;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vs-nav-shell {
+      padding-top: 56px;
+    }
+
+    .vs-nav-shell__main {
+      padding: var(--vs-space-4) var(--vs-space-3) var(--vs-space-12);
+    }
+  }
+}

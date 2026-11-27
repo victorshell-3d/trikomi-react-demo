@@ -1,0 +1,13 @@
+/* ==========================================================================
+   00-tokens / index.css
+   Unified barrel import for all design tokens.
+   ========================================================================== */
+
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './radii.css';
+@import './shadows.css';
+@import './blur.css';
+@import './z-index.css';
+@import './transitions.css';

@@ -1,0 +1,69 @@
+/* ==========================================================================
+   04-layouts / responsive.css
+   Standardized 4-breakpoint utilities inside @layer vs.utilities.
+   Media queries ordered strictly descending for max-width (1280 -> 1024 -> 768 -> 480)
+   to prevent smaller-screen rules from being overridden by wider rules.
+   ========================================================================== */
+
+@layer vs.utilities {
+  .vs-show-mobile {
+    display: none;
+  }
+
+  .vs-w-full {
+    width: 100%;
+  }
+
+  .vs-min-w-0 {
+    min-width: 0;
+  }
+
+  .vs-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  @media (max-width: 1024px) {
+    .vs-hide-tablet {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vs-hide-mobile {
+      display: none;
+    }
+
+    .vs-show-mobile {
+      display: inline-flex;
+    }
+
+    .vs-stack-mobile {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .vs-full-mobile {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .vs-hide-xs {
+      display: none;
+    }
+
+    .vs-touch-target {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+}

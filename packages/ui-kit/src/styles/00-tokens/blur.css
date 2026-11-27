@@ -1,0 +1,28 @@
+/* ==========================================================================
+   00-tokens / blur.css
+   Backdrop blur filter scale and length tokens.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    /* Raw length tokens (safe inside blur(var(...))) */
+    --vs-blur-radius-sm: 8px;
+    --vs-blur-radius-md: 12px;
+    --vs-blur-radius-panel: 16px;
+    --vs-blur-radius-lg: 20px;
+    --vs-blur-radius-xl: 24px;
+    --vs-blur-xl: var(--vs-blur-radius-xl);
+
+    /* Ready-to-apply filter values (safe inside backdrop-filter: var(...)) */
+    --vs-blur-none: none;
+    --vs-blur-sm: blur(var(--vs-blur-radius-sm));
+    --vs-blur-subtle: blur(var(--vs-blur-radius-md));
+    --vs-blur-panel: blur(var(--vs-blur-radius-panel));
+    --vs-blur: blur(var(--vs-blur-radius-lg));
+    --vs-blur-float: blur(var(--vs-blur-radius-xl));
+    --vs-glass-blur: var(--vs-blur);
+    --vs-glass-blur-lg: var(--vs-blur-float);
+  }
+}

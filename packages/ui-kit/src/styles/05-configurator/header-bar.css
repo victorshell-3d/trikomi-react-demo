@@ -1,0 +1,192 @@
+/* ==========================================================================
+   05-configurator / header-bar.css
+   Frosted configurator header HUD inside @layer vs.configurator.
+   Unifies "Back to Overview", brand mark, and drawer toggle into one flex bar
+   so controls never overlap on mobile viewports.
+   ========================================================================== */
+
+@layer vs.configurator {
+  .vs-cfg-header {
+    position: fixed;
+    z-index: var(--vs-z-header);
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    height: var(--vs-header-height);
+    align-items: center;
+    padding: 0 var(--vs-space-6);
+    border-bottom: 1px solid var(--vs-glass-border);
+    background: var(--vs-glass-strong);
+    color: var(--vs-ink);
+    backdrop-filter: var(--vs-glass-blur);
+    -webkit-backdrop-filter: var(--vs-glass-blur);
+    box-shadow: var(--vs-shadow-sm);
+    pointer-events: auto;
+  }
+
+  .vs-cfg-header__inner {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-4);
+  }
+
+  .vs-cfg-header__left,
+  .vs-cfg-header__right {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-cfg-header__back-btn {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-2) var(--vs-space-4);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-bg);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-body);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    box-shadow: var(--vs-shadow-ambient);
+    transition:
+      background-color var(--vs-transition-control),
+      border-color var(--vs-transition-control),
+      color var(--vs-transition-control),
+      transform var(--vs-transition-control);
+  }
+
+  .vs-cfg-header__back-btn:hover {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-card);
+    color: var(--vs-ink-accent);
+    transform: translateY(-1px);
+  }
+
+  .vs-cfg-header__back-btn:focus-visible,
+  .vs-cfg-header__drawer-toggle:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  .vs-cfg-header__brand {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--vs-space-2);
+    font-family: var(--vs-font-display);
+  }
+
+  .vs-cfg-header__brand-title {
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-base);
+    font-weight: var(--vs-font-weight-extrabold);
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .vs-cfg-header__brand-divider {
+    color: var(--vs-primary);
+    font-weight: var(--vs-font-weight-bold);
+    opacity: 0.6;
+  }
+
+  .vs-cfg-header__brand-subtitle {
+    overflow: hidden;
+    color: var(--vs-ink-accent);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-semibold);
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .vs-cfg-header__drawer-toggle {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-1_5);
+    padding: var(--vs-space-2) var(--vs-space-3);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-bg);
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), border-color var(--vs-transition-control), color var(--vs-transition-control);
+  }
+
+  .vs-cfg-header__drawer-toggle:hover,
+  .vs-cfg-header__drawer-toggle.is-active {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  @media (max-width: 1024px) {
+    .vs-cfg-header {
+      padding: 0 var(--vs-space-4);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vs-cfg-header {
+      height: 56px;
+      padding: 0 var(--vs-space-3);
+    }
+
+    .vs-cfg-header__back-label,
+    .vs-cfg-header__brand-divider,
+    .vs-cfg-header__brand-subtitle {
+      display: none;
+    }
+
+    .vs-cfg-header__back-btn {
+      padding: var(--vs-space-1_5) var(--vs-space-2_5);
+    }
+
+    .vs-cfg-header__brand-title {
+      font-size: var(--vs-font-size-md);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .vs-cfg-header {
+      padding: 0 var(--vs-space-2);
+    }
+
+    .vs-cfg-header__inner {
+      gap: var(--vs-space-1_5);
+    }
+
+    .vs-cfg-header__left,
+    .vs-cfg-header__right {
+      gap: var(--vs-space-1_5);
+    }
+
+    .vs-cfg-header__brand-title {
+      overflow: hidden;
+      font-size: 0.8125rem;
+      letter-spacing: 0.04em;
+      text-overflow: ellipsis;
+    }
+
+    .vs-cfg-header__back-btn,
+    .vs-cfg-header__drawer-toggle {
+      padding: var(--vs-space-1_5) var(--vs-space-2);
+      font-size: var(--vs-font-size-xs);
+    }
+  }
+}

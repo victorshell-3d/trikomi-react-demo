@@ -1,0 +1,100 @@
+/* ==========================================================================
+   00-tokens / colors.css
+   Centralized color palette, glass surfaces, ink hierarchy & semantic states.
+   Preserves all existing --vs-* tokens while adding elevated/secondary tokens.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    /* Canvas & Ambient Tones */
+    --vs-bg-page: #F9F9FF;
+    --vs-bg-secondary: #F1F5F9;
+    --vs-bg-start: #F9F9FF;
+    --vs-bg-end: #F9F9FF;
+    --vs-ice-blue: #EAF1FF;
+    --vs-soft-lavender: #EDE5FF;
+
+    /* Glass & Card Surfaces */
+    --vs-card-bg: #FFFFFF;
+    --vs-glass-bg: rgba(255, 255, 255, 0.9);
+    --vs-glass-strong: #FFFFFF;
+    --vs-glass-subtle: rgba(255, 255, 255, 0.72);
+    --vs-glass-border: #E2D9F8;
+    --vs-light-lavender-border: #E6D9FF;
+    --vs-dashed-border: #C4B5FD;
+
+    /* Surface & Panel Roles */
+    --vs-surface-card: var(--vs-card-bg);
+    --vs-surface-elevated: #F8FAFC;
+    --vs-surface-border: var(--vs-glass-border);
+    --vs-surface-card-border: var(--vs-glass-border);
+    --vs-panel-bg: var(--vs-glass-bg);
+    --vs-panel-border: var(--vs-glass-border);
+    --vs-surface-hover: rgba(118, 40, 217, 0.07);
+    --vs-surface-header: rgba(255, 255, 255, 0.9);
+    --vs-surface-footer: #F8FAFC;
+    --vs-surface-input: #FFFFFF;
+    --vs-surface-input-focus: #FFFFFF;
+    --vs-surface-menu: rgba(255, 255, 255, 0.98);
+    --vs-surface-stage: rgba(248, 250, 252, 0.85);
+    --vs-surface-swatch: #F8FAFC;
+    --vs-surface-popover-header: #F4F1FC;
+    --vs-backdrop-scrim: rgba(15, 23, 42, 0.45);
+    --vs-backdrop-modal: rgba(15, 23, 42, 0.56);
+    --vs-surface-danger-soft: #FEF2F2;
+    --vs-surface-success-soft: #ECFDF5;
+    --vs-surface-warning-soft: #FFFBEB;
+    --vs-surface-info-soft: #ECFEFF;
+    --vs-kbd-bg: #F1F5F9;
+    --vs-track-bg: rgba(118, 40, 217, 0.2);
+    --vs-switch-track-bg: #E2E8F0;
+
+    /* Brand & Accent Palette */
+    --vs-primary: #7628D9;
+    --vs-primary-light: #8E3EE2;
+    --vs-primary-dark: #6420C8;
+    --vs-accent-secondary: #0891B2;
+    --vs-accent-secondary-soft: rgba(8, 145, 178, 0.12);
+    --vs-primary-glow: rgba(118, 40, 217, 0.28);
+    --vs-primary-gradient: linear-gradient(135deg, #6420C8 0%, #8B5CF6 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #5719B5 0%, #7C3AED 100%);
+    --vs-tonal-lavender: #EDE5FF;
+    --vs-tonal-hover: #E4D8FF;
+
+    /* Text & Ink Hierarchy */
+    --vs-ink: #0F172A;
+    --vs-ink-secondary: #334155;
+    --vs-ink-muted: #475569;
+    --vs-ink-subtle: #64748B;
+    --vs-ink-accent: #6D28D9;
+    --vs-ink-inverse: #FFFFFF;
+
+    /* Semantic Status Colors */
+    --vs-emerald: #10B981;
+    --vs-crimson: #EF4444;
+    --vs-amber: #F59E0B;
+    --vs-dark-pill: #0F172A;
+    --vs-secondary: var(--vs-surface-elevated);
+    --vs-accent: var(--vs-primary);
+    --vs-success: #059669;
+    --vs-warning: #B45309;
+    --vs-error: #DC2626;
+    --vs-info: var(--vs-accent-secondary);
+    --vs-danger-text: #B91C1C;
+    --vs-danger-border: rgba(220, 38, 38, 0.38);
+    --vs-success-text: #047857;
+    --vs-warning-text: #B45309;
+
+    /* Borders & Interactive Control States */
+    --vs-border: var(--vs-glass-border);
+    --vs-control-border: #CBD5E1;
+    --vs-checkbox-border: #64748B;
+    --vs-outline-border: #8B5CF6;
+    --vs-divider: rgba(15, 23, 42, 0.1);
+    --vs-disabled-bg: #E2E8F0;
+    --vs-disabled-border: #CBD5E1;
+    --vs-disabled-text: #475569;
+  }
+}

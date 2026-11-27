@@ -13,6 +13,14 @@ export default defineConfig({
       '@trikomi/ui-kit': path.resolve(packageRoot, 'src/index.ts')
     }
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(packageRoot, 'index.html'),
+        showcase: path.resolve(packageRoot, 'css-kit-showcase.html')
+      }
+    }
+  },
   server: {
     host: '127.0.0.1'
   }

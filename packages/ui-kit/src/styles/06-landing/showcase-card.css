@@ -1,0 +1,102 @@
+/* ==========================================================================
+   06-landing / showcase-card.css
+   Strictly isolated marketing showcase & interactive customizer card module
+   inside @layer vs.landing (never loaded by active 3D configurator apps).
+   ========================================================================== */
+
+@layer vs.landing {
+  .vs-landing-showcase {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-6);
+  }
+
+  .vs-landing-showcase__stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .vs-landing-customizer {
+    position: relative;
+    z-index: var(--vs-z-raised);
+    display: flex;
+    width: 310px;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-6);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-glass-bg);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+  }
+
+  .vs-landing-customizer__title {
+    margin: 0;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: var(--vs-font-size-lg);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-landing-customizer__tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--vs-space-1);
+    padding: var(--vs-space-1);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-soft-lavender);
+  }
+
+  .vs-landing-customizer__tabs--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .vs-landing-customizer__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-1);
+    padding: var(--vs-space-1_5) var(--vs-space-2);
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-md);
+    background: transparent;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-fast), border-color var(--vs-transition-fast), color var(--vs-transition-fast);
+  }
+
+  .vs-landing-customizer__tab.is-active {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-card);
+    color: var(--vs-primary);
+    box-shadow: var(--vs-shadow-sm);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-landing-customizer__swatches {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--vs-space-2);
+  }
+
+  @media (max-width: 1024px) {
+    .vs-landing-showcase {
+      flex-direction: column;
+    }
+
+    .vs-landing-customizer {
+      width: 100%;
+      max-width: 440px;
+    }
+  }
+}

@@ -1,0 +1,175 @@
+/* ==========================================================================
+   05-configurator / inspector-drawer.css
+   Floating glass inspector sidebar (desktop) -> bottom sheet (mobile).
+   Single descending breakpoint order cleanly avoids cascade conflicts.
+   ========================================================================== */
+
+@layer vs.configurator {
+  .vs-cfg-drawer {
+    position: fixed;
+    z-index: var(--vs-z-drawer);
+    top: calc(var(--vs-header-height) + var(--vs-space-4));
+    bottom: var(--vs-space-6);
+    display: flex;
+    width: var(--vs-drawer-width);
+    max-width: calc(100vw - 2rem);
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-glass-strong);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-body);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-glass-blur-lg);
+    -webkit-backdrop-filter: var(--vs-glass-blur-lg);
+    pointer-events: auto;
+    transition: transform var(--vs-transition-drawer), width var(--vs-transition-drawer);
+  }
+
+  .vs-cfg-drawer--right {
+    right: var(--vs-space-6);
+  }
+
+  .vs-cfg-drawer--left {
+    left: var(--vs-space-6);
+  }
+
+  .vs-cfg-drawer--right.is-collapsed {
+    transform: translateX(calc(100% + var(--vs-space-8)));
+  }
+
+  .vs-cfg-drawer--left.is-collapsed {
+    transform: translateX(calc(-100% - var(--vs-space-8)));
+  }
+
+  .vs-cfg-drawer__handle {
+    display: none;
+    width: 40px;
+    height: 4px;
+    flex: 0 0 auto;
+    margin: var(--vs-space-2_5) auto var(--vs-space-1);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-primary-glow);
+    cursor: pointer;
+  }
+
+  .vs-cfg-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-4) var(--vs-space-5);
+    border-bottom: 1px solid var(--vs-divider);
+  }
+
+  .vs-cfg-drawer__title {
+    margin: 0;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: var(--vs-font-size-base);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-cfg-drawer__subtitle {
+    margin: 2px 0 0;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+  }
+
+  .vs-cfg-drawer__tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--vs-space-1_5);
+    padding: var(--vs-space-1_5) var(--vs-space-3);
+    border-bottom: 1px solid var(--vs-divider);
+    background: var(--vs-glass-subtle);
+  }
+
+  .vs-cfg-drawer__tab {
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-1_5);
+    padding: var(--vs-space-2) var(--vs-space-3);
+    border: 0;
+    border-radius: var(--vs-radius-pill);
+    background: transparent;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), color var(--vs-transition-control), box-shadow var(--vs-transition-control);
+  }
+
+  .vs-cfg-drawer__tab:hover {
+    color: var(--vs-ink);
+  }
+
+  .vs-cfg-drawer__tab.is-active {
+    background: var(--vs-surface-card);
+    color: var(--vs-primary);
+    box-shadow: var(--vs-shadow-sm);
+  }
+
+  .vs-cfg-drawer__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-y: auto;
+    padding: var(--vs-space-5);
+  }
+
+  .vs-cfg-drawer__footer {
+    padding: var(--vs-space-4) var(--vs-space-5);
+    border-top: 1px solid var(--vs-divider);
+    background: var(--vs-surface-footer);
+  }
+
+  @media (max-width: 1024px) {
+    .vs-cfg-drawer {
+      width: 310px;
+    }
+
+    .vs-cfg-drawer--right {
+      right: var(--vs-space-4);
+    }
+
+    .vs-cfg-drawer--left {
+      left: var(--vs-space-4);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vs-cfg-drawer {
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 65dvh;
+      border-radius: var(--vs-radius-xl) var(--vs-radius-xl) 0 0;
+      transform: translateY(0);
+    }
+
+    .vs-cfg-drawer--right.is-collapsed,
+    .vs-cfg-drawer--left.is-collapsed {
+      transform: translateY(100%);
+    }
+
+    .vs-cfg-drawer__handle {
+      display: block;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .vs-cfg-drawer {
+      max-height: 72dvh;
+    }
+
+    .vs-cfg-drawer__body {
+      padding: var(--vs-space-4);
+    }
+  }
+}

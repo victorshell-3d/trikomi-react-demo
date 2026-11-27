@@ -1,0 +1,203 @@
+/* ==========================================================================
+   03-patterns / dialogs.css
+   Themeable frosted BEM modals & slide-over drawers inside @layer vs.patterns.
+   ========================================================================== */
+
+@layer vs.patterns {
+  .vs-modal__backdrop,
+  .vs-drawer__backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      opacity var(--vs-transition-overlay),
+      visibility 0s linear 0.25s;
+  }
+
+  .vs-modal__backdrop {
+    z-index: var(--vs-z-backdrop);
+    align-items: center;
+    justify-content: center;
+    padding: var(--vs-space-5);
+    background: var(--vs-backdrop-modal);
+    backdrop-filter: var(--vs-blur-sm);
+    -webkit-backdrop-filter: var(--vs-blur-sm);
+    overflow-y: auto;
+  }
+
+  .vs-modal__backdrop.is-open,
+  .vs-drawer__backdrop.is-open {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  .vs-modal__panel {
+    position: relative;
+    z-index: var(--vs-z-modal);
+    display: flex;
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100dvh - 2.5rem);
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-surface-menu);
+    color: var(--vs-ink);
+    box-shadow: var(--vs-shadow-modal);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+    transform: scale(0.96) translateY(10px);
+    transition: transform var(--vs-transition-overlay);
+  }
+
+  .vs-modal__backdrop.is-open .vs-modal__panel {
+    transform: scale(1) translateY(0);
+  }
+
+  .vs-modal__panel--sm {
+    max-width: 420px;
+  }
+
+  .vs-modal__panel--md {
+    max-width: 580px;
+  }
+
+  .vs-modal__panel--lg {
+    max-width: 760px;
+  }
+
+  .vs-modal__panel--xl {
+    max-width: 960px;
+  }
+
+  .vs-modal__panel--fullscreen {
+    max-width: calc(100vw - 3rem);
+    height: calc(100dvh - 3rem);
+  }
+
+  .vs-modal__header,
+  .vs-drawer__header {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-5) var(--vs-space-6);
+    border-bottom: 1px solid var(--vs-divider);
+  }
+
+  .vs-modal__heading,
+  .vs-drawer__heading {
+    min-width: 0;
+  }
+
+  .vs-modal__title,
+  .vs-drawer__title {
+    margin: 0;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: var(--vs-font-size-lg);
+    font-weight: var(--vs-font-weight-extrabold);
+    letter-spacing: var(--vs-letter-spacing-tight);
+    line-height: var(--vs-line-height-snug);
+  }
+
+  .vs-modal__subtitle,
+  .vs-drawer__subtitle {
+    margin: var(--vs-space-1) 0 0;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+    line-height: 1.45;
+  }
+
+  .vs-modal__body,
+  .vs-drawer__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-y: auto;
+    padding: var(--vs-space-6);
+    color: var(--vs-ink);
+  }
+
+  .vs-modal__footer,
+  .vs-drawer__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-4) var(--vs-space-6);
+    border-top: 1px solid var(--vs-divider);
+    background: var(--vs-surface-footer);
+  }
+
+  /* Slide-over Drawer Panel */
+  .vs-drawer__backdrop {
+    z-index: var(--vs-z-backdrop);
+    justify-content: flex-end;
+    background: var(--vs-backdrop-scrim);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .vs-drawer__panel {
+    position: fixed;
+    z-index: var(--vs-z-modal);
+    top: var(--vs-space-3);
+    right: var(--vs-space-3);
+    bottom: var(--vs-space-3);
+    display: flex;
+    width: min(380px, calc(100vw - 1.5rem));
+    flex-direction: column;
+    overflow: hidden;
+    visibility: hidden;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-surface-menu);
+    box-shadow: var(--vs-shadow-drawer);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+    transform: translateX(110%);
+    transition:
+      transform var(--vs-transition-drawer),
+      visibility 0s linear 0.28s;
+  }
+
+  .vs-drawer__panel--left {
+    right: auto;
+    left: var(--vs-space-3);
+    transform: translateX(-110%);
+  }
+
+  .vs-drawer__backdrop.is-open .vs-drawer__panel {
+    visibility: visible;
+    transform: translateX(0);
+    transition-delay: 0s;
+  }
+
+  @media (max-width: 768px) {
+    .vs-modal__backdrop {
+      align-items: flex-end;
+      padding: var(--vs-space-3);
+    }
+
+    .vs-modal__panel {
+      max-width: 100%;
+      max-height: 85dvh;
+      border-radius: var(--vs-radius-xl) var(--vs-radius-xl) 0 0;
+    }
+
+    .vs-modal__header,
+    .vs-modal__body,
+    .vs-modal__footer {
+      padding: var(--vs-space-4) var(--vs-space-5);
+    }
+  }
+}

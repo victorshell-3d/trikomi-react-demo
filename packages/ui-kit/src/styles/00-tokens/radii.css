@@ -1,0 +1,30 @@
+/* ==========================================================================
+   00-tokens / radii.css
+   Unified border radius tokens + preserved semantic component radii.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    /* Standardized Geometric Radius Scale */
+    --vs-radius-none: 0px;
+    --vs-radius-xs: 4px;
+    --vs-radius-sm: 8px;
+    --vs-radius-md: 12px;
+    --vs-radius-lg: 16px;
+    --vs-radius-xl: 24px;
+    --vs-radius-circle: 50%;
+    --vs-radius-pill: 9999px;
+
+    /* Semantic Component Radii (Preserved from Legacy UI Kit) */
+    --vs-radius-kbd: 6px;
+    --vs-radius-control: 13px;
+    --vs-radius-swatch: 16px;
+    --vs-radius-stage: 20px;
+    --vs-radius-menu: 22px;
+    --vs-radius-card: 24px;
+    --vs-radius-rail: 30px;
+    --vs-radius-panel: var(--vs-radius-card);
+  }
+}

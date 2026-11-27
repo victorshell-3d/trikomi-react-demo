@@ -17,6 +17,13 @@ export {
 } from './LandingFooter';
 
 export {
+  VictorShellBrandFooter,
+  VICTORSHELL_SOCIAL_LINKS,
+  type VictorShellBrandFooterProps,
+  type VictorShellSocialLink
+} from './VictorShellBrandFooter';
+
+export {
   ProductLandingLayout,
   type ProductLandingLayoutProps
 } from './ProductLandingLayout';

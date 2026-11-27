@@ -1,0 +1,78 @@
+/* ==========================================================================
+   06-landing / section-shell.css
+   Marketing page section wrapper, ambient backdrop & hero badge primitives
+   inside @layer vs.landing.
+   ========================================================================== */
+
+@layer vs.landing {
+  .vs-landing-shell {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow-x: hidden;
+    background: var(--vs-bg-page);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+  }
+
+  .vs-landing-section {
+    position: relative;
+    z-index: var(--vs-z-canvas);
+    padding-block: var(--vs-space-16);
+  }
+
+  .vs-landing-section__header {
+    display: flex;
+    max-width: 720px;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+    margin-inline: auto;
+    margin-bottom: var(--vs-space-10);
+    text-align: center;
+  }
+
+  .vs-landing-section__eyebrow {
+    display: inline-flex;
+    align-self: center;
+    align-items: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-1_5) var(--vs-space-4);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-surface-card);
+    color: var(--vs-primary);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-transform: uppercase;
+  }
+
+  .vs-landing-section__title {
+    margin: 0;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: var(--vs-font-weight-extrabold);
+    letter-spacing: var(--vs-letter-spacing-tight);
+    line-height: var(--vs-line-height-tight);
+  }
+
+  .vs-landing-section__subtitle {
+    margin: 0;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-base);
+    line-height: var(--vs-line-height-relaxed);
+  }
+
+  @media (max-width: 768px) {
+    .vs-landing-section {
+      padding-block: var(--vs-space-10);
+    }
+
+    .vs-landing-section__header {
+      margin-bottom: var(--vs-space-6);
+    }
+  }
+}

@@ -1,0 +1,146 @@
+/* ==========================================================================
+   02-primitives / typography.css
+   Theme-aware BEM typography primitives inside @layer vs.primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-icon {
+    display: inline-block;
+    flex: 0 0 auto;
+    vertical-align: middle;
+  }
+
+  .vs-text,
+  .vs-caption {
+    margin: 0;
+    font-family: var(--vs-font-sans);
+    color: var(--vs-ink);
+  }
+
+  .vs-text--body {
+    font-size: var(--vs-font-size-md);
+    font-weight: var(--vs-font-weight-medium);
+    line-height: var(--vs-line-height-relaxed);
+  }
+
+  .vs-text--small {
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-regular);
+    line-height: var(--vs-line-height-normal);
+  }
+
+  .vs-text--caption,
+  .vs-caption {
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-regular);
+    line-height: var(--vs-line-height-snug);
+  }
+
+  .vs-text--label,
+  .vs-label {
+    display: inline-block;
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-label);
+    font-weight: var(--vs-font-weight-bold);
+    line-height: 1.25;
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-transform: uppercase;
+  }
+
+  .vs-text--mono {
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-medium);
+    line-height: var(--vs-line-height-normal);
+  }
+
+  .vs-heading {
+    margin: 0;
+    font-family: var(--vs-font-display);
+    color: var(--vs-ink);
+    letter-spacing: var(--vs-letter-spacing-tight);
+  }
+
+  .vs-heading--display,
+  .vs-heading--page {
+    font-size: var(--vs-font-size-2xl);
+    font-weight: var(--vs-font-weight-extrabold);
+    line-height: var(--vs-line-height-tight);
+  }
+
+  .vs-heading--section {
+    font-size: var(--vs-font-size-xl);
+    font-weight: var(--vs-font-weight-extrabold);
+    line-height: var(--vs-line-height-snug);
+  }
+
+  .vs-heading--subheading {
+    font-size: var(--vs-font-size-lg);
+    font-weight: var(--vs-font-weight-bold);
+    line-height: 1.4;
+  }
+
+  .vs-title-gradient {
+    margin: 0;
+    font-family: var(--vs-font-display);
+    font-weight: var(--vs-font-weight-extrabold);
+    letter-spacing: var(--vs-letter-spacing-tight);
+    background: var(--vs-primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .vs-text--tone-default,
+  .vs-heading--tone-default,
+  .vs-label--tone-default,
+  .vs-caption--tone-default {
+    color: var(--vs-ink);
+  }
+
+  .vs-text--tone-secondary,
+  .vs-heading--tone-secondary,
+  .vs-label--tone-secondary,
+  .vs-caption--tone-secondary {
+    color: var(--vs-ink-secondary);
+  }
+
+  .vs-text--tone-muted,
+  .vs-heading--tone-muted,
+  .vs-label--tone-muted,
+  .vs-caption--tone-muted {
+    color: var(--vs-ink-muted);
+  }
+
+  .vs-text--tone-subtle,
+  .vs-heading--tone-subtle,
+  .vs-label--tone-subtle,
+  .vs-caption--tone-subtle {
+    color: var(--vs-ink-subtle);
+  }
+
+  .vs-text--tone-accent,
+  .vs-heading--tone-accent,
+  .vs-label--tone-accent,
+  .vs-caption--tone-accent {
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-text--tone-cyan,
+  .vs-heading--tone-cyan,
+  .vs-label--tone-cyan,
+  .vs-caption--tone-cyan {
+    color: var(--vs-accent-secondary);
+  }
+
+  @media (min-width: 768px) {
+    .vs-heading--display,
+    .vs-heading--page {
+      font-size: var(--vs-font-size-3xl);
+    }
+
+    .vs-heading--section {
+      font-size: var(--vs-font-size-2xl);
+    }
+  }
+}

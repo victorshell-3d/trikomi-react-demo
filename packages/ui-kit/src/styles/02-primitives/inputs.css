@@ -1,0 +1,355 @@
+/* ==========================================================================
+   02-primitives / inputs.css
+   Themeable BEM input controls: text, search, textarea, range slider,
+   numeric stepper & color swatch field inside @layer vs.primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid var(--vs-control-border);
+    border-radius: var(--vs-radius-control);
+    outline: none;
+    background: var(--vs-surface-input);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-button);
+    line-height: 1.4;
+    transition:
+      border-color var(--vs-transition-control),
+      background-color var(--vs-transition-control),
+      box-shadow var(--vs-transition-control);
+  }
+
+  .vs-input::placeholder {
+    color: var(--vs-ink-subtle);
+    opacity: 1;
+  }
+
+  .vs-input:focus,
+  .vs-input.is-active {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-input-focus);
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  .vs-input--error,
+  .vs-input.is-error {
+    border-color: var(--vs-crimson);
+    background: var(--vs-surface-danger-soft);
+    box-shadow: var(--vs-focus-ring-danger);
+  }
+
+  .vs-input--success,
+  .vs-input.is-success {
+    border-color: var(--vs-success);
+    background: var(--vs-surface-success-soft);
+    box-shadow: var(--vs-focus-ring-success);
+  }
+
+  .vs-input:disabled {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+    color: var(--vs-disabled-text);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .vs-input--sm {
+    padding: var(--vs-space-1_5) var(--vs-space-3);
+    border-radius: var(--vs-radius-sm);
+    font-size: var(--vs-font-size-sm);
+  }
+
+  .vs-input--lg {
+    padding: 0.78rem 1.125rem;
+    font-size: var(--vs-font-size-md);
+  }
+
+  .vs-input--pill {
+    border-radius: var(--vs-radius-pill);
+  }
+
+  /* Input Group & Addons */
+  .vs-input__group {
+    display: flex;
+    min-width: 0;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1.5px solid var(--vs-control-border);
+    border-radius: var(--vs-radius-control);
+    background: var(--vs-surface-input);
+    transition:
+      border-color var(--vs-transition-control),
+      box-shadow var(--vs-transition-control);
+  }
+
+  .vs-input__group:focus-within {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  .vs-input__group.is-error {
+    border-color: var(--vs-crimson);
+    background: var(--vs-surface-danger-soft);
+    box-shadow: var(--vs-focus-ring-danger);
+  }
+
+  .vs-input__group.is-disabled {
+    border-color: var(--vs-disabled-border);
+    background: var(--vs-disabled-bg);
+  }
+
+  .vs-input__addon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 0 var(--vs-space-3);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-sm);
+    font-weight: var(--vs-font-weight-bold);
+    white-space: nowrap;
+  }
+
+  .vs-input__group .vs-input {
+    flex: 1 1 auto;
+    padding: 0.65rem var(--vs-space-3);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* Search Input Wrapper */
+  .vs-input__search-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .vs-input__search-wrap .vs-input {
+    padding: var(--vs-space-2) 3.5rem var(--vs-space-2) 2.5rem;
+    border-radius: var(--vs-radius-pill);
+    font-size: var(--vs-font-size-xs);
+  }
+
+  .vs-input__icon {
+    position: absolute;
+    z-index: var(--vs-z-canvas);
+    top: 50%;
+    left: 0.875rem;
+    color: var(--vs-ink-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .vs-input__shortcut {
+    position: absolute;
+    top: 50%;
+    right: var(--vs-space-3);
+    padding: 0.125rem var(--vs-space-2);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-kbd);
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-2xs);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  /* Textarea */
+  .vs-textarea {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-1);
+  }
+
+  .vs-textarea__field {
+    min-height: 4rem;
+    resize: vertical;
+  }
+
+  .vs-textarea__counter {
+    align-self: flex-end;
+    color: var(--vs-ink-accent);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-2xs);
+  }
+
+  /* Range Slider Control */
+  .vs-range {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-1_5);
+  }
+
+  .vs-range__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-2);
+  }
+
+  .vs-range__label {
+    color: var(--vs-ink-secondary);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-range__value {
+    color: var(--vs-ink-accent);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-range__slider {
+    width: 100%;
+    height: 8px;
+    padding: 0;
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-pill);
+    outline: none;
+    background: var(--vs-track-bg);
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+
+  .vs-range__slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--vs-ink-inverse);
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-primary-gradient);
+    box-shadow: var(--vs-shadow-primary);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .vs-range__slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 3px solid var(--vs-ink-inverse);
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-primary);
+    box-shadow: var(--vs-shadow-primary);
+    cursor: pointer;
+  }
+
+  .vs-range__slider:focus-visible {
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  .vs-range__slider:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* Numeric Stepper Control (Shared Dimension/Transform Stepper) */
+  .vs-stepper {
+    display: inline-flex;
+    min-width: 0;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1.5px solid var(--vs-control-border);
+    border-radius: var(--vs-radius-sm);
+    background: var(--vs-surface-input);
+  }
+
+  .vs-stepper:focus-within {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  .vs-stepper__btn {
+    display: inline-flex;
+    width: 2rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+    font-weight: var(--vs-font-weight-bold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-fast), color var(--vs-transition-fast);
+  }
+
+  .vs-stepper__btn:first-child {
+    border-right: 1px solid var(--vs-surface-border);
+  }
+
+  .vs-stepper__btn:last-child {
+    border-left: 1px solid var(--vs-surface-border);
+  }
+
+  .vs-stepper__btn:hover:not(:disabled) {
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-stepper__field {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 2.75rem;
+    padding: var(--vs-space-1) var(--vs-space-2);
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-xs);
+    text-align: center;
+  }
+
+  /* Inline Color Swatch + Hex Row */
+  .vs-color-field {
+    display: flex;
+    align-items: center;
+    gap: var(--vs-space-2_5);
+    padding: var(--vs-space-1_5) var(--vs-space-2_5);
+    border: 1px solid var(--vs-control-border);
+    border-radius: var(--vs-radius-sm);
+    background: var(--vs-surface-input);
+  }
+
+  .vs-color-field__swatch {
+    position: relative;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-xs);
+  }
+
+  .vs-color-field__input {
+    position: absolute;
+    inset: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .vs-color-field__hex {
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-xs);
+    text-transform: uppercase;
+  }
+}

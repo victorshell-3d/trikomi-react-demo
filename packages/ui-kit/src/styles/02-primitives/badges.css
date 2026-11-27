@@ -1,0 +1,153 @@
+/* ==========================================================================
+   02-primitives / badges.css
+   Themeable BEM badges, status indicators & keyboard keycaps inside @layer vs.primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-1_5);
+    max-width: 100%;
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-pill);
+    font-family: var(--vs-font-sans);
+    font-weight: var(--vs-font-weight-bold);
+    line-height: 1.25;
+    white-space: nowrap;
+  }
+
+  .vs-badge__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    flex: 0 0 auto;
+    border-radius: var(--vs-radius-circle);
+    background: currentColor;
+  }
+
+  .vs-badge__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Sizes */
+  .vs-badge--sm {
+    min-height: 1.25rem;
+    padding: 0.125rem var(--vs-space-2);
+    font-size: var(--vs-font-size-2xs);
+  }
+
+  .vs-badge--md {
+    min-height: 1.5rem;
+    padding: var(--vs-space-1) var(--vs-space-2_5);
+    font-size: var(--vs-font-size-sm);
+  }
+
+  .vs-badge--lg {
+    min-height: 1.75rem;
+    padding: var(--vs-space-1_5) var(--vs-space-3);
+    font-size: var(--vs-font-size-button);
+  }
+
+  /* Semantic Variants */
+  .vs-badge--neutral {
+    border-color: var(--vs-glass-border);
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+  }
+
+  .vs-badge--accent {
+    border-color: var(--vs-control-border);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-badge--cyan {
+    border-color: rgba(6, 182, 212, 0.38);
+    background: var(--vs-accent-secondary-soft);
+    color: var(--vs-accent-secondary);
+  }
+
+  .vs-badge--success {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: var(--vs-surface-success-soft);
+    color: var(--vs-success-text);
+  }
+
+  .vs-badge--warning {
+    border-color: rgba(245, 158, 11, 0.38);
+    background: var(--vs-surface-warning-soft);
+    color: var(--vs-warning-text);
+  }
+
+  .vs-badge--danger,
+  .vs-badge--error {
+    border-color: var(--vs-danger-border);
+    background: var(--vs-surface-danger-soft);
+    color: var(--vs-danger-text);
+  }
+
+  .vs-badge--outline {
+    border-color: var(--vs-outline-border);
+    background: transparent;
+    color: var(--vs-ink);
+  }
+
+  /* Status Indicator */
+  .vs-status {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--vs-space-2);
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-sm);
+    line-height: 1.4;
+  }
+
+  .vs-status__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: 0 0 auto;
+    border-radius: var(--vs-radius-circle);
+    background: currentColor;
+  }
+
+  .vs-status--success .vs-status__dot {
+    color: var(--vs-success);
+  }
+
+  .vs-status--warning .vs-status__dot {
+    color: var(--vs-warning);
+  }
+
+  .vs-status--danger .vs-status__dot {
+    color: var(--vs-error);
+  }
+
+  .vs-status--info .vs-status__dot {
+    color: var(--vs-info);
+  }
+
+  .vs-status__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Keyboard Shortcut Keycap */
+  .vs-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem var(--vs-space-1_5);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-kbd);
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-2xs);
+    font-weight: var(--vs-font-weight-semibold);
+    line-height: 1.25;
+  }
+}

@@ -1,0 +1,167 @@
+/* ==========================================================================
+   03-patterns / tables.css
+   Themeable responsive BEM data tables & pagination controls inside @layer vs.patterns.
+   ========================================================================== */
+
+@layer vs.patterns {
+  .vs-table {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+  }
+
+  .vs-table__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-table__scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--vs-border);
+    border-radius: var(--vs-radius-lg);
+    background: var(--vs-bg-secondary);
+    box-shadow: var(--vs-shadow-sm);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vs-table__element {
+    width: 100%;
+    min-width: 540px;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--vs-font-size-xs);
+  }
+
+  .vs-table__th {
+    padding: 0.875rem 1.125rem;
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .vs-table__td {
+    padding: 0.875rem 1.125rem;
+    border-top: 1px solid var(--vs-divider);
+    color: var(--vs-ink-secondary);
+    vertical-align: middle;
+  }
+
+  .vs-table__th--right,
+  .vs-table__td--right {
+    text-align: right;
+  }
+
+  .vs-table__row {
+    transition: background-color var(--vs-transition-fast);
+  }
+
+  .vs-table__row:hover {
+    background: var(--vs-surface-hover);
+  }
+
+  .vs-table__td--primary {
+    color: var(--vs-ink);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-table__td--mono {
+    color: var(--vs-accent-secondary);
+    font-family: var(--vs-font-mono);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-table__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vs-space-1_5);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .vs-table__sort:hover,
+  .vs-table__sort.is-sorted {
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-table__sort:focus-visible {
+    outline: 2px solid var(--vs-accent-secondary);
+    outline-offset: 2px;
+    border-radius: var(--vs-radius-xs);
+  }
+
+  /* Pagination Bar */
+  .vs-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+    padding-top: var(--vs-space-3);
+    border-top: 1px solid var(--vs-divider);
+    color: var(--vs-ink-secondary);
+    font-size: var(--vs-font-size-xs);
+  }
+
+  .vs-pagination__info strong {
+    color: var(--vs-ink);
+  }
+
+  .vs-pagination__pages {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vs-space-1_5);
+  }
+
+  .vs-pagination__btn {
+    display: inline-flex;
+    min-width: 2rem;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--vs-space-2);
+    border: 1px solid var(--vs-border);
+    border-radius: var(--vs-radius-sm);
+    background: var(--vs-surface-elevated);
+    color: var(--vs-ink-secondary);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-fast), border-color var(--vs-transition-fast), color var(--vs-transition-fast);
+  }
+
+  .vs-pagination__btn:hover:not(:disabled) {
+    border-color: var(--vs-primary);
+    color: var(--vs-ink);
+  }
+
+  .vs-pagination__btn.is-active {
+    border-color: transparent;
+    background: var(--vs-primary-gradient);
+    color: var(--vs-ink-inverse);
+    box-shadow: var(--vs-shadow-primary);
+  }
+
+  .vs-pagination__btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}

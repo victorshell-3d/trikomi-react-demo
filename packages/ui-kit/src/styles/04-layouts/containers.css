@@ -1,0 +1,151 @@
+/* ==========================================================================
+   04-layouts / containers.css
+   Reusable grid, flex, stack, cluster & container layout primitives.
+   ========================================================================== */
+
+@layer vs.layouts {
+  .vs-container {
+    width: min(100%, var(--vs-container-max));
+    margin-inline: auto;
+    padding-inline: var(--vs-container-gutter);
+  }
+
+  .vs-container--sm {
+    width: min(100%, 720px);
+  }
+
+  .vs-container--md {
+    width: min(100%, 1024px);
+  }
+
+  .vs-container--lg {
+    width: min(100%, 1280px);
+  }
+
+  .vs-container--xl {
+    width: min(100%, var(--vs-container-max));
+  }
+
+  .vs-container--fluid {
+    width: 100%;
+    max-width: none;
+  }
+
+  .vs-stack {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-stack-gap);
+  }
+
+  .vs-stack--xs {
+    gap: var(--vs-space-1);
+  }
+
+  .vs-stack--sm {
+    gap: var(--vs-space-2);
+  }
+
+  .vs-stack--md {
+    gap: var(--vs-space-4);
+  }
+
+  .vs-stack--lg {
+    gap: var(--vs-space-6);
+  }
+
+  .vs-cluster {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vs-cluster-gap);
+  }
+
+  .vs-cluster--xs {
+    gap: var(--vs-space-1);
+  }
+
+  .vs-cluster--sm {
+    gap: var(--vs-space-2);
+  }
+
+  .vs-cluster--md {
+    gap: var(--vs-space-3);
+  }
+
+  .vs-cluster--lg {
+    gap: var(--vs-space-5);
+  }
+
+  .vs-flex {
+    display: flex;
+    min-width: 0;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-flex--col {
+    flex-direction: column;
+  }
+
+  .vs-flex--wrap {
+    flex-wrap: wrap;
+  }
+
+  .vs-flex--center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vs-flex--between {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .vs-grid {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--vs-grid-gap);
+  }
+
+  .vs-grid--tight {
+    gap: var(--vs-space-3);
+  }
+
+  .vs-grid--auto {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .vs-spacer {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  @media (min-width: 640px) {
+    .vs-grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vs-grid--4 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .vs-grid--3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .vs-grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .vs-grid--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+}

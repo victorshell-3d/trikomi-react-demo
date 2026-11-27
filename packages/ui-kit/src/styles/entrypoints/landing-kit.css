@@ -1,0 +1,34 @@
+/* ==========================================================================
+   entrypoints / landing-kit.css
+   Opt-in Vanilla CSS bundle for product landing & marketing pages.
+   Strictly excludes active 3D configurator HUD chrome (05-configurator/*).
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import '../layers.css';
+@import '../00-tokens/index.css';
+@import '../01-reset/scoped-reset.css';
+
+@import '../02-primitives/typography.css';
+@import '../02-primitives/buttons.css';
+@import '../02-primitives/cards.css';
+@import '../02-primitives/forms.css';
+@import '../02-primitives/inputs.css';
+@import '../02-primitives/badges.css';
+@import '../02-primitives/selection.css';
+@import '../02-primitives/media.css';
+
+@import '../03-patterns/dropdowns.css';
+@import '../03-patterns/dialogs.css';
+@import '../03-patterns/overlays.css';
+@import '../03-patterns/tables.css';
+
+@import '../04-layouts/containers.css';
+@import '../04-layouts/sidebar-layout.css';
+@import '../04-layouts/responsive.css';
+
+@import '../06-landing/showcase-card.css';
+@import '../06-landing/section-shell.css';
+
+@import '../07-themes/dark-mode.css';
+@import '../07-themes/accents.css';

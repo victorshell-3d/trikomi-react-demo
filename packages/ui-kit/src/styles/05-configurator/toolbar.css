@@ -1,0 +1,145 @@
+/* ==========================================================================
+   05-configurator / toolbar.css
+   Floating canvas control toolbar, hotspots & 3D projection measurement tags.
+   ========================================================================== */
+
+@layer vs.configurator {
+  .vs-cfg-toolbar {
+    position: fixed;
+    z-index: var(--vs-z-hud);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vs-space-1_5);
+    padding: var(--vs-space-1_5) var(--vs-space-2_5);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-glass-blur);
+    -webkit-backdrop-filter: var(--vs-glass-blur);
+    pointer-events: auto;
+  }
+
+  .vs-cfg-toolbar--vertical {
+    flex-direction: column;
+    padding: var(--vs-space-2_5) var(--vs-space-1_5);
+  }
+
+  .vs-cfg-toolbar--bottom-right {
+    right: var(--vs-space-6);
+    bottom: var(--vs-space-6);
+  }
+
+  .vs-cfg-toolbar--bottom-left {
+    bottom: var(--vs-space-6);
+    left: var(--vs-space-6);
+  }
+
+  .vs-cfg-toolbar--top-right {
+    top: calc(var(--vs-header-height) + var(--vs-space-4));
+    right: var(--vs-space-6);
+  }
+
+  .vs-cfg-toolbar__btn {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-circle);
+    background: transparent;
+    color: var(--vs-ink-muted);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), border-color var(--vs-transition-control), color var(--vs-transition-control);
+  }
+
+  .vs-cfg-toolbar__btn:hover {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-card);
+    color: var(--vs-primary);
+  }
+
+  .vs-cfg-toolbar__btn.is-active {
+    background: var(--vs-primary);
+    color: var(--vs-ink-inverse);
+  }
+
+  .vs-cfg-toolbar__divider {
+    width: 1px;
+    height: 18px;
+    margin: 0 var(--vs-space-1);
+    background: var(--vs-divider);
+  }
+
+  .vs-cfg-toolbar--vertical .vs-cfg-toolbar__divider {
+    width: 18px;
+    height: 1px;
+    margin: var(--vs-space-1) 0;
+  }
+
+  /* Interactive 3D Canvas Hotspot Ring */
+  .vs-cfg-hotspot {
+    display: inline-flex;
+    width: var(--vs-circle-icon-size);
+    height: var(--vs-circle-icon-size);
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid var(--vs-ink-inverse);
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-primary);
+    cursor: pointer;
+    transition: transform var(--vs-transition-control);
+  }
+
+  .vs-cfg-hotspot::before {
+    width: 16px;
+    height: 16px;
+    border: 3.5px solid var(--vs-primary);
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-ink-inverse);
+    content: "";
+  }
+
+  .vs-cfg-hotspot:hover {
+    transform: scale(1.12);
+  }
+
+  /* Projected CAD Axis Measurement Tag */
+  .vs-cfg-measure-tag {
+    position: absolute;
+    z-index: var(--vs-z-raised);
+    padding: 2px 6px;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-xs);
+    background: var(--vs-dark-pill);
+    color: var(--vs-ink-inverse);
+    font-family: var(--vs-font-mono);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  @media (max-width: 768px) {
+    .vs-cfg-toolbar--bottom-right {
+      right: var(--vs-space-3);
+      bottom: 5rem;
+    }
+
+    .vs-cfg-toolbar--bottom-left {
+      bottom: 5rem;
+      left: var(--vs-space-3);
+    }
+
+    .vs-cfg-toolbar__btn {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+}

@@ -1,0 +1,189 @@
+/* ==========================================================================
+   05-configurator / floating-dock.css
+   Floating bottom/top pill docks, preset carousels, capture bars & orbital dials.
+   ========================================================================== */
+
+@layer vs.configurator {
+  .vs-cfg-dock {
+    position: fixed;
+    z-index: var(--vs-z-hud);
+    left: 50%;
+    display: flex;
+    max-width: calc(100vw - 2rem);
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .vs-cfg-dock--bottom {
+    bottom: var(--vs-space-6);
+  }
+
+  .vs-cfg-dock--top {
+    top: calc(var(--vs-header-height) + var(--vs-space-4));
+  }
+
+  .vs-cfg-dock__pill {
+    pointer-events: auto;
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-2) var(--vs-space-3);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-glass-blur);
+    -webkit-backdrop-filter: var(--vs-glass-blur);
+  }
+
+  .vs-cfg-dock__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-2) var(--vs-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--vs-radius-pill);
+    background: transparent;
+    color: var(--vs-ink-muted);
+    font-family: var(--vs-font-body);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-semibold);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), border-color var(--vs-transition-control), color var(--vs-transition-control);
+  }
+
+  .vs-cfg-dock__tab:hover:not(:disabled) {
+    background: var(--vs-surface-hover);
+    color: var(--vs-ink);
+  }
+
+  .vs-cfg-dock__tab.is-active {
+    border-color: var(--vs-primary);
+    background: var(--vs-surface-card);
+    color: var(--vs-primary);
+    box-shadow: var(--vs-shadow-sm);
+  }
+
+  .vs-cfg-dock__tab-badge {
+    padding: 2px 6px;
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-primary);
+    color: var(--vs-ink-inverse);
+    font-size: var(--vs-font-size-2xs);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-cfg-dock__popover {
+    pointer-events: auto;
+    width: min(520px, calc(100vw - 2rem));
+    margin-bottom: var(--vs-space-3);
+    padding: var(--vs-space-4) var(--vs-space-5);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-float);
+    backdrop-filter: var(--vs-glass-blur-lg);
+    -webkit-backdrop-filter: var(--vs-glass-blur-lg);
+  }
+
+  /* Preset Carousel Strip (Eyewear / Face Mocap / Sportswear Camera Strip) */
+  .vs-cfg-carousel {
+    pointer-events: auto;
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-2);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-bg);
+    backdrop-filter: var(--vs-glass-blur);
+    -webkit-backdrop-filter: var(--vs-glass-blur);
+    box-shadow: var(--vs-shadow-float);
+  }
+
+  .vs-cfg-carousel__arrow {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-glass-strong);
+    color: var(--vs-ink);
+    cursor: pointer;
+    transition: background-color var(--vs-transition-control), color var(--vs-transition-control);
+  }
+
+  .vs-cfg-carousel__arrow:hover {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-primary);
+  }
+
+  /* Camera & Mocap Capture Bar */
+  .vs-cfg-capture-bar {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vs-space-4);
+    padding: var(--vs-space-2) var(--vs-space-5);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-glass-strong);
+    box-shadow: var(--vs-shadow-float);
+  }
+
+  .vs-cfg-record-btn {
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid var(--vs-primary);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-surface-card);
+    cursor: pointer;
+    transition: transform var(--vs-transition-control);
+  }
+
+  .vs-cfg-record-btn__dot {
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-crimson);
+  }
+
+  .vs-cfg-record-btn.is-recording .vs-cfg-record-btn__dot {
+    border-radius: var(--vs-radius-kbd);
+  }
+
+  @media (max-width: 768px) {
+    .vs-cfg-dock--bottom {
+      bottom: var(--vs-space-4);
+      width: calc(100% - 1.5rem);
+    }
+
+    .vs-cfg-dock__pill {
+      width: 100%;
+      justify-content: space-around;
+      gap: var(--vs-space-1);
+      padding: var(--vs-space-1_5) var(--vs-space-2);
+    }
+
+    .vs-cfg-dock__tab {
+      flex: 1 1 0;
+      justify-content: center;
+      padding: var(--vs-space-1_5) var(--vs-space-2);
+      font-size: var(--vs-font-size-xs);
+    }
+  }
+}

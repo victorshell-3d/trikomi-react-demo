@@ -1,0 +1,67 @@
+/* ==========================================================================
+   01-reset / scoped-reset.css
+   Zero-leakage box-sizing, typography inheritance, focus & scrollbar utilities.
+   Wrapped in :where(...) inside @layer vs.reset to maintain [0,0,0] specificity.
+   ========================================================================== */
+
+@layer vs.reset {
+  :where(html, body) {
+    margin: 0;
+    padding: 0;
+  }
+
+  :where(.vs-ui-root, .vs-kit-root),
+  :where(.vs-ui-root, .vs-kit-root) *,
+  :where(.vs-ui-root, .vs-kit-root) *::before,
+  :where(.vs-ui-root, .vs-kit-root) *::after {
+    box-sizing: border-box;
+  }
+
+  :where(.vs-ui-root, .vs-kit-root) {
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+    line-height: var(--vs-line-height-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :where(.vs-ui-root, .vs-kit-root) :where(h1, h2, h3, h4, h5, h6, p) {
+    margin: 0;
+  }
+
+  :where(.vs-ui-root, .vs-kit-root) :where(button, input, select, textarea) {
+    font-family: inherit;
+  }
+
+  /* Custom Frosted Scrollbar Utility */
+  .vs-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--vs-primary-glow) transparent;
+  }
+
+  .vs-scroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .vs-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .vs-scroll::-webkit-scrollbar-thumb {
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-primary-glow);
+  }
+
+  .vs-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--vs-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(.vs-ui-root, .vs-kit-root) *,
+    :where(.vs-ui-root, .vs-kit-root) *::before,
+    :where(.vs-ui-root, .vs-kit-root) *::after {
+      scroll-behavior: auto;
+    }
+  }
+}

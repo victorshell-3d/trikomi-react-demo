@@ -1,0 +1,46 @@
+/* ==========================================================================
+   00-tokens / spacing.css
+   4px-grid rem spacing scale, layout gap defaults & interactive sizing tokens.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    --vs-space-0: 0;
+    --vs-space-1: 0.25rem;
+    --vs-space-1_5: 0.375rem;
+    --vs-space-2: 0.5rem;
+    --vs-space-2_5: 0.625rem;
+    --vs-space-3: 0.75rem;
+    --vs-space-4: 1rem;
+    --vs-space-5: 1.25rem;
+    --vs-space-6: 1.5rem;
+    --vs-space-7: 1.75rem;
+    --vs-space-8: 2rem;
+    --vs-space-9: 2.25rem;
+    --vs-space-10: 2.5rem;
+    --vs-space-12: 3rem;
+    --vs-space-16: 4rem;
+
+    /* Layout Rhythm Tokens */
+    --vs-stack-gap: var(--vs-space-4);
+    --vs-cluster-gap: var(--vs-space-3);
+    --vs-grid-gap: var(--vs-space-6);
+    --vs-container-max: 1440px;
+    --vs-container-gutter: var(--vs-space-4);
+    --vs-drawer-width: 340px;
+    --vs-header-height: 64px;
+
+    /* Interactive Component Dimensions */
+    --vs-btn-padding-block: 0.65rem;
+    --vs-btn-padding-inline: 1.35rem;
+    --vs-btn-font-size: var(--vs-font-size-button);
+    --vs-orbital-size: 60px;
+    --vs-circle-icon-size: 40px;
+    --vs-switch-width: 44px;
+    --vs-switch-height: 24px;
+    --vs-check-size: 19px;
+    --vs-swatch-orb-size: 34px;
+  }
+}

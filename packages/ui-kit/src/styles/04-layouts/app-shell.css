@@ -1,0 +1,131 @@
+/* ==========================================================================
+   04-layouts / app-shell.css
+   Full-viewport 3D configurator layout shell inside @layer vs.layouts.
+   Separates canvas, top HUD strip (preventing Back/Drawer overlap), and sidebars.
+   ========================================================================== */
+
+@layer vs.layouts {
+  .vs-app-shell {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--vs-bg-page);
+    color: var(--vs-ink);
+  }
+
+  .vs-app-shell__viewport {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .vs-app-shell__canvas {
+    position: absolute;
+    inset: 0;
+    z-index: var(--vs-z-canvas);
+    width: 100%;
+    height: 100%;
+  }
+
+  .vs-app-shell__hud-top {
+    position: fixed;
+    z-index: var(--vs-z-header);
+    top: var(--vs-space-4);
+    right: var(--vs-space-4);
+    left: var(--vs-space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+    pointer-events: none;
+  }
+
+  .vs-app-shell__hud-group {
+    display: flex;
+    align-items: center;
+    gap: var(--vs-space-2_5);
+    pointer-events: auto;
+  }
+
+  .vs-app-shell__hud-bottom {
+    position: fixed;
+    z-index: var(--vs-z-hud);
+    bottom: var(--vs-space-5);
+    left: 50%;
+    display: flex;
+    max-width: calc(100vw - 2rem);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vs-space-3);
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .vs-app-shell__hud-bottom > * {
+    pointer-events: auto;
+  }
+
+  .vs-app-shell__sidebar {
+    position: relative;
+    z-index: var(--vs-z-drawer);
+    display: flex;
+    width: var(--vs-drawer-width);
+    max-width: 100%;
+    height: 100%;
+    flex: 0 0 auto;
+    flex-direction: column;
+    border-left: 1px solid var(--vs-glass-border);
+    background: var(--vs-glass-strong);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+    transition: transform var(--vs-transition-drawer), opacity var(--vs-transition-drawer);
+  }
+
+  .vs-app-shell__sidebar--left {
+    order: -1;
+    border-right: 1px solid var(--vs-glass-border);
+    border-left: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .vs-app-shell__sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(360px, 88vw);
+      box-shadow: var(--vs-shadow-drawer);
+    }
+
+    .vs-app-shell__sidebar--left {
+      right: auto;
+      left: 0;
+    }
+
+    .vs-app-shell__sidebar.is-collapsed {
+      transform: translateX(100%);
+      pointer-events: none;
+    }
+
+    .vs-app-shell__sidebar--left.is-collapsed {
+      transform: translateX(-100%);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vs-app-shell__hud-top {
+      top: var(--vs-space-3);
+      right: var(--vs-space-3);
+      left: var(--vs-space-3);
+    }
+
+    .vs-app-shell__hud-bottom {
+      bottom: var(--vs-space-4);
+      width: calc(100% - 1.5rem);
+    }
+  }
+}

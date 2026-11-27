@@ -1,0 +1,172 @@
+/* ==========================================================================
+   02-primitives / cards.css
+   Reusable card, frosted glass panel & divider primitives inside @layer vs.primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-card {
+    display: flex;
+    height: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-4);
+    padding: var(--vs-space-5);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-card);
+    background: var(--vs-surface-card);
+    color: var(--vs-ink);
+    box-shadow: var(--vs-shadow-ambient);
+    transition:
+      border-color var(--vs-transition-panel),
+      box-shadow var(--vs-transition-panel),
+      transform var(--vs-transition-panel),
+      background-color var(--vs-transition-panel);
+  }
+
+  .vs-card__header {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-card__heading {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-1);
+  }
+
+  .vs-card__title {
+    margin: 0;
+    color: var(--vs-ink);
+    font-family: var(--vs-font-display);
+    font-size: var(--vs-font-size-md);
+    font-weight: var(--vs-font-weight-bold);
+    line-height: var(--vs-line-height-snug);
+  }
+
+  .vs-card__subtitle {
+    margin: 0;
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+    line-height: var(--vs-line-height-normal);
+  }
+
+  .vs-card__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--vs-space-2);
+  }
+
+  .vs-card__media {
+    overflow: hidden;
+    border-radius: var(--vs-radius-md);
+    background: var(--vs-surface-hover);
+  }
+
+  .vs-card__body {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .vs-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-3);
+    padding-top: var(--vs-space-3);
+    border-top: 1px solid var(--vs-divider);
+  }
+
+  /* Card Surface Variants */
+  .vs-card--glass {
+    border-color: var(--vs-glass-border);
+    background: var(--vs-glass-bg);
+    backdrop-filter: var(--vs-blur);
+    -webkit-backdrop-filter: var(--vs-blur);
+  }
+
+  .vs-card--strong {
+    border-color: var(--vs-glass-border);
+    background: var(--vs-glass-strong);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+  }
+
+  .vs-card--elevated {
+    border-color: var(--vs-glass-border);
+    background: var(--vs-surface-elevated);
+    box-shadow: var(--vs-shadow-float);
+  }
+
+  .vs-card--stage {
+    border-style: dashed;
+    border-width: 1.5px;
+    border-color: var(--vs-dashed-border);
+    border-radius: var(--vs-radius-stage);
+    background: var(--vs-surface-stage);
+    box-shadow: none;
+  }
+
+  .vs-card--compact {
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-3) var(--vs-space-4);
+    border-radius: var(--vs-radius-md);
+  }
+
+  .vs-card--interactive {
+    cursor: pointer;
+  }
+
+  .vs-card--interactive:hover {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-shadow-float);
+    transform: translateY(-2px);
+  }
+
+  .vs-card--interactive:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+  }
+
+  .vs-card.is-selected {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-focus-ring);
+  }
+
+  /* Dividers */
+  .vs-divider {
+    flex: 0 0 auto;
+    margin: 0;
+    border: 0;
+    background: var(--vs-divider);
+  }
+
+  .vs-divider--horizontal {
+    width: 100%;
+    height: 1px;
+  }
+
+  .vs-divider--vertical {
+    width: 1px;
+    height: 100%;
+    min-height: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    .vs-card {
+      padding: var(--vs-space-4);
+      border-radius: var(--vs-radius-lg);
+    }
+
+    .vs-card--compact {
+      padding: var(--vs-space-3);
+      border-radius: var(--vs-radius-md);
+    }
+  }
+}

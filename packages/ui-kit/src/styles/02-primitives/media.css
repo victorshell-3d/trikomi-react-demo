@@ -1,0 +1,96 @@
+/* ==========================================================================
+   02-primitives / media.css
+   Shared loader spinners, skeletons, avatars & file dropzone primitives.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-spinner {
+    display: inline-block;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 3px solid var(--vs-track-bg);
+    border-top-color: var(--vs-primary);
+    border-radius: var(--vs-radius-circle);
+    animation: vs-kit-spin var(--vs-duration-spinner) linear infinite;
+  }
+
+  .vs-spinner--sm {
+    width: 1.125rem;
+    height: 1.125rem;
+    border-width: 2px;
+  }
+
+  .vs-spinner--lg {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-width: 4px;
+  }
+
+  .vs-skeleton {
+    border-radius: var(--vs-radius-sm);
+    background: linear-gradient(
+      90deg,
+      var(--vs-surface-hover) 25%,
+      var(--vs-tonal-lavender) 50%,
+      var(--vs-surface-hover) 75%
+    );
+    background-size: 200% 100%;
+    animation: vs-kit-shimmer var(--vs-duration-shimmer) infinite;
+  }
+
+  .vs-upload-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--vs-space-2);
+    padding: var(--vs-space-6);
+    border: 1.5px dashed var(--vs-dashed-border);
+    border-radius: var(--vs-radius-lg);
+    background: var(--vs-surface-stage);
+    color: var(--vs-ink-muted);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--vs-transition-control), background-color var(--vs-transition-control);
+  }
+
+  .vs-upload-dropzone:hover,
+  .vs-upload-dropzone.is-dragging {
+    border-color: var(--vs-primary);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink);
+  }
+
+  .vs-upload-dropzone__title {
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-button);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-upload-dropzone__hint {
+    color: var(--vs-ink-muted);
+    font-size: var(--vs-font-size-xs);
+  }
+
+  @keyframes vs-kit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes vs-kit-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vs-spinner,
+    .vs-skeleton {
+      animation: none;
+    }
+  }
+}

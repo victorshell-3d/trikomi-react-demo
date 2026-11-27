@@ -1,0 +1,100 @@
+/* ==========================================================================
+   07-themes / preset-light-studio.css
+   High-Key Porcelain Studio preset aligned with Sportswear 3D Studio.
+   Activated opt-in via [data-vs-preset='light-studio'].
+   ========================================================================== */
+
+@layer vs.themes {
+  [data-vs-preset='light-studio'],
+  [data-vs-preset='light-studio'][data-theme],
+  [data-vs-preset='light-studio'][data-accent],
+  [data-vs-preset='light-studio'][data-theme][data-accent] {
+    --vs-bg-page: #E2E8F0;
+    --vs-bg-secondary: #F8FAFC;
+    --vs-bg-start: #E2E8F0;
+    --vs-bg-end: #F1F5F9;
+    --vs-soft-lavender: #EFF6FF;
+    --vs-card-bg: #FFFFFF;
+    --vs-glass-bg: #FFFFFF;
+    --vs-glass-strong: #FFFFFF;
+    --vs-glass-subtle: #F8FAFC;
+    --vs-glass-border: #CBD5E1;
+    --vs-surface-card: #FFFFFF;
+    --vs-surface-elevated: #F8FAFC;
+    --vs-surface-border: #CBD5E1;
+    --vs-surface-card-border: #CBD5E1;
+    --vs-light-lavender-border: #CBD5E1;
+    --vs-dashed-border: #94A3B8;
+    --vs-panel-bg: #FFFFFF;
+    --vs-panel-border: #CBD5E1;
+    --vs-surface-menu: #FFFFFF;
+    --vs-surface-input: #F8FAFC;
+    --vs-surface-input-focus: #FFFFFF;
+    --vs-surface-stage: #F8FAFC;
+    --vs-surface-swatch: #F8FAFC;
+    --vs-surface-popover-header: #EFF6FF;
+    --vs-surface-header: rgba(255, 255, 255, 0.96);
+    --vs-surface-footer: #F8FAFC;
+    --vs-surface-hover: rgba(37, 99, 235, 0.06);
+    --vs-surface-danger-soft: #FEF2F2;
+    --vs-surface-success-soft: #ECFDF5;
+    --vs-surface-warning-soft: #FFFBEB;
+    --vs-surface-info-soft: #EFF6FF;
+    --vs-backdrop-scrim: rgba(15, 23, 42, 0.42);
+    --vs-backdrop-modal: rgba(15, 23, 42, 0.52);
+    --vs-kbd-bg: #E2E8F0;
+    --vs-track-bg: #CBD5E1;
+    --vs-control-border: #CBD5E1;
+    --vs-checkbox-border: #64748B;
+    --vs-outline-border: #2563EB;
+    --vs-divider: #CBD5E1;
+    --vs-border: #CBD5E1;
+    --vs-disabled-bg: #F1F5F9;
+    --vs-disabled-border: #CBD5E1;
+    --vs-disabled-text: #475569;
+    --vs-switch-track-bg: #CBD5E1;
+
+    --vs-primary: #2563EB;
+    --vs-primary-light: #3B82F6;
+    --vs-primary-dark: #1D4ED8;
+    --vs-accent: #2563EB;
+    --vs-accent-secondary: #2563EB;
+    --vs-accent-secondary-soft: #EFF6FF;
+    --vs-primary-glow: rgba(37, 99, 235, 0.22);
+    --vs-primary-gradient: linear-gradient(135deg, #2563EB 0%, #2563EB 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #1D4ED8 0%, #1D4ED8 100%);
+    --vs-tonal-lavender: #EFF6FF;
+    --vs-tonal-hover: #DBEAFE;
+
+    --vs-ink: #0F172A;
+    --vs-ink-secondary: #475569;
+    --vs-ink-muted: #475569;
+    --vs-ink-subtle: #64748B;
+    --vs-ink-accent: #1D4ED8;
+    --vs-ink-inverse: #FFFFFF;
+    --vs-dark-pill: #0F172A;
+    --vs-emerald: #059669;
+    --vs-success: #059669;
+    --vs-info: #2563EB;
+    --vs-danger-text: #B91C1C;
+    --vs-danger-border: rgba(220, 38, 38, 0.38);
+    --vs-success-text: #047857;
+    --vs-warning-text: #B45309;
+
+    --vs-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --vs-shadow-ambient: 0 4px 16px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+    --vs-shadow-card: var(--vs-shadow-ambient);
+    --vs-shadow-raised: 0 8px 24px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04);
+    --vs-shadow-lg: 0 14px 32px rgba(15, 23, 42, 0.09);
+    --vs-shadow-float: 0 16px 36px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+    --vs-shadow-primary: 0 4px 12px rgba(37, 99, 235, 0.24);
+    --vs-shadow-primary-hover: 0 6px 16px rgba(37, 99, 235, 0.34);
+    --vs-shadow-primary-active: 0 0 0 3px rgba(37, 99, 235, 0.22);
+    --vs-shadow-button-glass: 0 1px 3px rgba(15, 23, 42, 0.05);
+    --vs-shadow-button-glass-hover: 0 4px 12px rgba(37, 99, 235, 0.12);
+    --vs-shadow-popover: 0 14px 32px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.06);
+    --vs-shadow-modal: 0 20px 48px rgba(15, 23, 42, 0.16);
+    --vs-shadow-drawer: -8px 0 28px rgba(15, 23, 42, 0.12);
+    --vs-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+}

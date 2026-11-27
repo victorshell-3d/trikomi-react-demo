@@ -1,0 +1,32 @@
+/* ==========================================================================
+   00-tokens / shadows.css
+   Elevation shadows, interactive button glows & accessible focus rings.
+   ========================================================================== */
+
+@layer vs.tokens {
+  :root,
+  .vs-ui-root,
+  .vs-kit-root {
+    --vs-shadow-none: none;
+    --vs-shadow-sm: 0 2px 8px rgba(23, 21, 47, 0.06);
+    --vs-shadow-ambient: 0 10px 30px rgba(118, 40, 217, 0.05), 0 2px 8px rgba(23, 21, 47, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    --vs-shadow-raised: 0 14px 36px rgba(118, 40, 217, 0.08), 0 4px 12px rgba(23, 21, 47, 0.04);
+    --vs-shadow-lg: 0 18px 44px rgba(118, 40, 217, 0.12), 0 4px 14px rgba(23, 21, 47, 0.05);
+    --vs-shadow-float: 0 20px 48px rgba(118, 40, 217, 0.09), 0 4px 14px rgba(23, 21, 47, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    --vs-shadow-card: var(--vs-shadow-ambient);
+
+    --vs-shadow-primary: 0 10px 24px rgba(100, 32, 200, 0.32);
+    --vs-shadow-primary-hover: 0 12px 28px rgba(110, 44, 242, 0.42);
+    --vs-shadow-primary-active: 0 0 0 4px rgba(110, 44, 242, 0.22);
+    --vs-shadow-button-glass: 0 6px 18px rgba(26, 22, 43, 0.06);
+    --vs-shadow-button-glass-hover: 0 10px 24px rgba(110, 44, 242, 0.16);
+
+    --vs-shadow-popover: 0 22px 50px rgba(26, 22, 43, 0.16), 0 4px 16px rgba(110, 44, 242, 0.14);
+    --vs-shadow-modal: 0 24px 60px rgba(26, 22, 43, 0.24);
+    --vs-shadow-drawer: -12px 0 40px rgba(26, 22, 43, 0.18);
+
+    --vs-focus-ring: 0 0 0 4px rgba(118, 40, 217, 0.15);
+    --vs-focus-ring-danger: 0 0 0 3px rgba(239, 68, 68, 0.16);
+    --vs-focus-ring-success: 0 0 0 3px rgba(16, 185, 129, 0.16);
+  }
+}

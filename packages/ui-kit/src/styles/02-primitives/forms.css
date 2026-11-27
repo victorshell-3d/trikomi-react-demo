@@ -1,0 +1,110 @@
+/* ==========================================================================
+   02-primitives / forms.css
+   Structured BEM form layout, fieldset, label & validation messaging modules.
+   ========================================================================== */
+
+@layer vs.primitives {
+  .vs-form {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-4);
+  }
+
+  .vs-form--compact {
+    gap: var(--vs-space-3);
+  }
+
+  .vs-form__section {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-3);
+  }
+
+  .vs-form__section-title {
+    margin: 0;
+    color: var(--vs-ink-muted);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+    letter-spacing: var(--vs-letter-spacing-caps);
+    text-transform: uppercase;
+  }
+
+  .vs-form__grid {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--vs-space-4);
+  }
+
+  .vs-form__field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--vs-space-1);
+  }
+
+  .vs-form__label-row {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vs-space-2);
+  }
+
+  .vs-form__label {
+    color: var(--vs-ink-secondary);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-bold);
+    line-height: 1.4;
+  }
+
+  .vs-form__required {
+    color: var(--vs-ink-accent);
+  }
+
+  .vs-form__hint,
+  .vs-form__error,
+  .vs-form__success {
+    margin: 0;
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-2xs);
+    line-height: 1.4;
+  }
+
+  .vs-form__hint {
+    color: var(--vs-ink-muted);
+  }
+
+  .vs-form__error {
+    color: var(--vs-danger-text);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-form__success {
+    color: var(--vs-success-text);
+    font-weight: var(--vs-font-weight-semibold);
+  }
+
+  .vs-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--vs-space-3);
+    padding-top: var(--vs-space-2);
+  }
+
+  @media (min-width: 768px) {
+    .vs-form__grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .vs-form__grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}

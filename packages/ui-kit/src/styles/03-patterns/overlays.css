@@ -1,0 +1,236 @@
+/* ==========================================================================
+   03-patterns / overlays.css
+   Themeable BEM popover, tooltip, alert & toast patterns inside @layer vs.patterns.
+   ========================================================================== */
+
+@layer vs.patterns {
+  /* Popover */
+  .vs-popover {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    overflow: visible;
+    vertical-align: middle;
+  }
+
+  .vs-popover__panel {
+    position: absolute;
+    z-index: var(--vs-z-popover);
+    right: 0;
+    bottom: calc(100% + var(--vs-space-2_5));
+    display: none;
+    width: min(16rem, calc(100vw - 2rem));
+    padding: var(--vs-space-4);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-lg);
+    background: var(--vs-surface-menu);
+    backdrop-filter: var(--vs-blur-float);
+    -webkit-backdrop-filter: var(--vs-blur-float);
+    box-shadow: var(--vs-shadow-popover);
+    color: var(--vs-ink);
+    font-size: var(--vs-font-size-xs);
+    line-height: var(--vs-line-height-normal);
+  }
+
+  .vs-popover__panel.is-open {
+    display: block;
+  }
+
+  .vs-popover__panel--portal {
+    position: fixed;
+    right: auto;
+    bottom: auto;
+  }
+
+  /* Tooltip */
+  .vs-tooltip {
+    position: relative;
+    display: inline-flex;
+    max-width: 100%;
+    vertical-align: middle;
+  }
+
+  .vs-tooltip__bubble {
+    position: absolute;
+    z-index: var(--vs-z-tooltip);
+    bottom: calc(100% + var(--vs-space-2));
+    left: 50%;
+    display: none;
+    width: max-content;
+    max-width: min(240px, calc(100vw - 2rem));
+    padding: var(--vs-space-1_5) var(--vs-space-3);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-pill);
+    background: var(--vs-dark-pill);
+    box-shadow: var(--vs-shadow-popover);
+    color: var(--vs-ink-inverse);
+    font-size: var(--vs-font-size-label);
+    font-weight: var(--vs-font-weight-semibold);
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .vs-tooltip__bubble.is-visible {
+    display: inline-block;
+  }
+
+  .vs-tooltip__bubble--end {
+    right: 0;
+    left: auto;
+    transform: none;
+  }
+
+  /* Alert Banner */
+  .vs-alert {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: var(--vs-space-3);
+    padding: var(--vs-space-3) var(--vs-space-4);
+    border: 1px solid var(--vs-glass-border);
+    border-radius: var(--vs-radius-lg);
+    background: var(--vs-glass-strong);
+    color: var(--vs-ink);
+    font-family: var(--vs-font-sans);
+    font-size: var(--vs-font-size-xs);
+    line-height: 1.45;
+  }
+
+  .vs-alert--info {
+    border-color: rgba(6, 182, 212, 0.4);
+    background: var(--vs-surface-info-soft);
+  }
+
+  .vs-alert--success {
+    border-color: rgba(16, 185, 129, 0.38);
+    background: var(--vs-surface-success-soft);
+  }
+
+  .vs-alert--warning {
+    border-color: rgba(245, 158, 11, 0.38);
+    background: var(--vs-surface-warning-soft);
+  }
+
+  .vs-alert--danger,
+  .vs-alert--error {
+    border-color: var(--vs-danger-border);
+    background: var(--vs-surface-danger-soft);
+  }
+
+  .vs-alert__icon {
+    display: inline-flex;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--vs-radius-circle);
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink-accent);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-alert--info .vs-alert__icon {
+    background: var(--vs-accent-secondary-soft);
+    color: var(--vs-accent-secondary);
+  }
+
+  .vs-alert--success .vs-alert__icon {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--vs-success-text);
+  }
+
+  .vs-alert--warning .vs-alert__icon {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--vs-warning-text);
+  }
+
+  .vs-alert--danger .vs-alert__icon,
+  .vs-alert--error .vs-alert__icon {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--vs-danger-text);
+  }
+
+  .vs-alert__content {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .vs-alert__title {
+    color: var(--vs-ink);
+    font-weight: var(--vs-font-weight-bold);
+  }
+
+  .vs-alert__description {
+    color: var(--vs-ink-secondary);
+  }
+
+  .vs-alert__dismiss {
+    display: inline-flex;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--vs-radius-pill);
+    background: transparent;
+    color: var(--vs-ink-secondary);
+    cursor: pointer;
+    transition: color var(--vs-transition-fast), background-color var(--vs-transition-fast);
+  }
+
+  .vs-alert__dismiss:hover {
+    background: var(--vs-tonal-lavender);
+    color: var(--vs-ink);
+  }
+
+  /* Toast Notification */
+  .vs-toast {
+    position: fixed;
+    z-index: var(--vs-z-toast);
+    right: var(--vs-space-5);
+    bottom: var(--vs-space-5);
+    display: flex;
+    width: max-content;
+    max-width: calc(100vw - 2.5rem);
+    align-items: center;
+    gap: var(--vs-space-2_5);
+    padding: var(--vs-space-3) var(--vs-space-4);
+    border: 1px solid var(--vs-surface-border);
+    border-radius: var(--vs-radius-lg);
+    background: var(--vs-dark-pill);
+    box-shadow: var(--vs-shadow-modal);
+    color: var(--vs-ink-inverse);
+    font-size: var(--vs-font-size-xs);
+    font-weight: var(--vs-font-weight-semibold);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(var(--vs-space-2));
+    transition: opacity var(--vs-transition-control), transform var(--vs-transition-control);
+  }
+
+  .vs-toast.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    .vs-popover__panel {
+      right: auto;
+      left: 0;
+      width: min(16rem, 100%);
+    }
+
+    .vs-toast {
+      right: var(--vs-space-4);
+      bottom: var(--vs-space-4);
+      max-width: calc(100vw - 2rem);
+    }
+  }
+}

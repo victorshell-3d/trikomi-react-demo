@@ -1,0 +1,100 @@
+/* ==========================================================================
+   07-themes / accents.css
+   Accent theme packs (Violet, Indigo, Orchid) for light & dark modes
+   inside @layer vs.themes.
+   ========================================================================== */
+
+@layer vs.themes {
+  [data-accent='violet'],
+  .vs-ui-root[data-accent='violet'],
+  .vs-kit-root[data-accent='violet'] {
+    --vs-primary: #7628D9;
+    --vs-primary-light: #8E3EE2;
+    --vs-primary-dark: #6420C8;
+    --vs-primary-glow: rgba(118, 40, 217, 0.28);
+    --vs-primary-gradient: linear-gradient(135deg, #6420C8 0%, #8B5CF6 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #5719B5 0%, #7C3AED 100%);
+    --vs-tonal-lavender: #EDE5FF;
+    --vs-tonal-hover: #E4D8FF;
+    --vs-ink-accent: #6D28D9;
+    --vs-shadow-primary: 0 10px 24px rgba(100, 32, 200, 0.32);
+  }
+
+  [data-accent='indigo'],
+  .vs-ui-root[data-accent='indigo'],
+  .vs-kit-root[data-accent='indigo'] {
+    --vs-primary: #4338CA;
+    --vs-primary-light: #6366F1;
+    --vs-primary-dark: #312E81;
+    --vs-primary-glow: rgba(67, 56, 202, 0.28);
+    --vs-primary-gradient: linear-gradient(135deg, #4338CA 0%, #6366F1 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #3730A3 0%, #4F46E5 100%);
+    --vs-tonal-lavender: #EEF2FF;
+    --vs-tonal-hover: #E0E7FF;
+    --vs-ink-accent: #4338CA;
+    --vs-shadow-primary: 0 8px 24px rgba(67, 56, 202, 0.34);
+  }
+
+  [data-accent='orchid'],
+  .vs-ui-root[data-accent='orchid'],
+  .vs-kit-root[data-accent='orchid'] {
+    --vs-primary: #A21CAF;
+    --vs-primary-light: #D946EF;
+    --vs-primary-dark: #86198F;
+    --vs-primary-glow: rgba(162, 28, 175, 0.28);
+    --vs-primary-gradient: linear-gradient(135deg, #A21CAF 0%, #D946EF 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #86198F 0%, #C026D3 100%);
+    --vs-tonal-lavender: #FDF4FF;
+    --vs-tonal-hover: #FAE8FF;
+    --vs-ink-accent: #A21CAF;
+    --vs-shadow-primary: 0 8px 24px rgba(162, 28, 175, 0.32);
+  }
+
+  [data-theme='dark'][data-accent='violet'],
+  .vs-ui-root[data-theme='dark'][data-accent='violet'],
+  .vs-kit-root[data-theme='dark'][data-accent='violet'] {
+    --vs-primary: #8B5CF6;
+    --vs-primary-light: #C4B5FD;
+    --vs-primary-dark: #6D28D9;
+    --vs-primary-glow: rgba(139, 92, 246, 0.35);
+    --vs-primary-gradient: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #6D28D9 0%, #7C3AED 100%);
+    --vs-tonal-lavender: rgba(139, 92, 246, 0.22);
+    --vs-tonal-hover: rgba(139, 92, 246, 0.32);
+    --vs-ink-accent: #C4B5FD;
+    --vs-outline-border: #8B5CF6;
+    --vs-shadow-primary: 0 8px 24px rgba(139, 92, 246, 0.35);
+  }
+
+  [data-theme='dark'][data-accent='indigo'],
+  .vs-ui-root[data-theme='dark'][data-accent='indigo'],
+  .vs-kit-root[data-theme='dark'][data-accent='indigo'] {
+    --vs-primary: #6366F1;
+    --vs-primary-light: #A5B4FC;
+    --vs-primary-dark: #4338CA;
+    --vs-primary-glow: rgba(99, 102, 241, 0.38);
+    --vs-primary-gradient: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+    --vs-tonal-lavender: rgba(99, 102, 241, 0.22);
+    --vs-tonal-hover: rgba(99, 102, 241, 0.32);
+    --vs-ink-accent: #A5B4FC;
+    --vs-outline-border: #6366F1;
+    --vs-shadow-primary: 0 8px 24px rgba(99, 102, 241, 0.4);
+  }
+
+  [data-theme='dark'][data-accent='orchid'],
+  .vs-ui-root[data-theme='dark'][data-accent='orchid'],
+  .vs-kit-root[data-theme='dark'][data-accent='orchid'] {
+    --vs-primary: #D946EF;
+    --vs-primary-light: #F0ABFC;
+    --vs-primary-dark: #A21CAF;
+    --vs-primary-glow: rgba(217, 70, 239, 0.38);
+    --vs-primary-gradient: linear-gradient(135deg, #C026D3 0%, #D946EF 100%);
+    --vs-primary-gradient-hover: linear-gradient(135deg, #A21CAF 0%, #C026D3 100%);
+    --vs-tonal-lavender: rgba(217, 70, 239, 0.22);
+    --vs-tonal-hover: rgba(217, 70, 239, 0.32);
+    --vs-ink-accent: #F0ABFC;
+    --vs-outline-border: #D946EF;
+    --vs-shadow-primary: 0 8px 24px rgba(217, 70, 239, 0.4);
+  }
+}

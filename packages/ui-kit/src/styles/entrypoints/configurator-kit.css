@@ -1,0 +1,43 @@
+/* ==========================================================================
+   entrypoints / configurator-kit.css
+   Opt-in Vanilla CSS bundle for all 7 3D Configurators & companion studios.
+   Includes tokens, reset, primitives, patterns, full-viewport app-shell,
+   configurator chrome (05-configurator/*), and all dark/light themes.
+   Strictly excludes landing page CSS.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import '../layers.css';
+@import '../00-tokens/index.css';
+@import '../01-reset/scoped-reset.css';
+
+@import '../02-primitives/typography.css';
+@import '../02-primitives/buttons.css';
+@import '../02-primitives/cards.css';
+@import '../02-primitives/forms.css';
+@import '../02-primitives/inputs.css';
+@import '../02-primitives/badges.css';
+@import '../02-primitives/selection.css';
+@import '../02-primitives/media.css';
+
+@import '../03-patterns/dropdowns.css';
+@import '../03-patterns/dialogs.css';
+@import '../03-patterns/overlays.css';
+@import '../03-patterns/tables.css';
+
+@import '../04-layouts/containers.css';
+@import '../04-layouts/sidebar-layout.css';
+@import '../04-layouts/app-shell.css';
+@import '../04-layouts/responsive.css';
+
+@import '../05-configurator/header-bar.css';
+@import '../05-configurator/inspector-drawer.css';
+@import '../05-configurator/floating-dock.css';
+@import '../05-configurator/toolbar.css';
+@import '../05-configurator/swatches.css';
+
+@import '../07-themes/dark-mode.css';
+@import '../07-themes/accents.css';
+@import '../07-themes/preset-dark-indigo.css';
+@import '../07-themes/preset-dark-cyan.css';
+@import '../07-themes/preset-light-studio.css';

@@ -1,0 +1,6 @@
+/* ==========================================================================
+   VictorShell Vanilla CSS Module Kit — Cascade Layer Registry
+   Must be imported before all kit modules so layer precedence stays fixed.
+   ========================================================================== */
+
+@layer vs.reset, vs.tokens, vs.primitives, vs.patterns, vs.layouts, vs.configurator, vs.landing, vs.themes, vs.utilities;
