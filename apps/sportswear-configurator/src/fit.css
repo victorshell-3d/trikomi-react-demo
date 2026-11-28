@@ -1,0 +1,90 @@
+/* Compact fit: panels and cards scale with the window so nothing needs a scrollbar */
+.canvas-host{filter:none!important}
+.carousel-arrow.left{left:0}.carousel-arrow.right{right:0}
+@media (min-width:901px){.canvas-host{inset:0 62px 38px 62px}}
+.panel,.info{scrollbar-width:none}
+.panel::-webkit-scrollbar,.info::-webkit-scrollbar{display:none}
+
+@media (min-width:901px){
+  .panel{padding:clamp(12px,2.2vh,24px) clamp(14px,1.4vw,24px);margin-top:clamp(10px,3.5vh,45px)}
+  .panel h3{font-size:clamp(16px,2.3vh,20px);padding-bottom:clamp(6px,1.4vh,14px);margin-bottom:clamp(6px,1.4vh,14px)}
+  .panel h4{font-size:clamp(14px,2.1vh,18px);margin:clamp(6px,1.4vh,18px) 0 clamp(4px,.9vh,10px)}
+  .styles button{aspect-ratio:auto;height:clamp(54px,11vh,108px)}
+  .ctabs button{height:clamp(26px,4.2vh,34px);font-size:clamp(12px,1.8vh,14px)}
+  .cp{gap:clamp(6px,1.1vh,10px);margin-top:clamp(6px,1vh,10px)}
+  .cp-sv{height:clamp(40px,7.5vh,96px)}
+  .cp-chip,.cp-hex{height:clamp(28px,4.2vh,34px)}.cp-chip{width:clamp(28px,4.2vh,34px)}
+  .fabrics{gap:clamp(6px,.7vw,10px)}
+  .fabrics button{height:clamp(44px,7.6vh,62px);flex-direction:row;gap:clamp(5px,.5vw,8px);padding:0 clamp(5px,.5vw,9px);min-width:0;justify-content:center;overflow:hidden}
+  .fabrics button .i3d{width:clamp(24px,4vh,34px)!important;height:clamp(24px,4vh,34px)!important}
+  .fab-txt{line-height:1.25;display:flex;flex-direction:column;align-items:flex-start;min-width:0;line-height:1.15}
+  .fabrics b{font-size:clamp(12px,1.9vh,15px)}.fabrics small{font-size:clamp(9.5px,1.4vh,11px);white-space:nowrap}
+  .addtext{height:clamp(46px,7.8vh,68px);padding:0 clamp(10px,1vw,22px) 0 clamp(8px,.9vw,14px);gap:clamp(6px,.6vw,12px)}
+  .addtext .i3d{width:clamp(26px,4.4vh,40px)!important;height:clamp(26px,4.4vh,40px)!important}
+  .addtext span{font-size:clamp(12px,1.9vh,15px);margin-left:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .addtext em{font-size:clamp(24px,3.6vh,36px)}
+
+}
+@media (min-width:1200px){
+  .info{padding-top:clamp(10px,3.5vh,56px)}
+  .eyebrow{font-size:clamp(14px,2.2vh,22px)}
+  .info h1{font-size:clamp(26px,min(3.1vw,5.2vh),49px);margin-top:clamp(4px,1vh,10px)}
+  .sub{font-size:clamp(15px,2.3vh,22px);margin-top:clamp(8px,2vh,30px)}
+  .bar{margin-top:clamp(8px,1.6vh,18px)}
+  .fabric{display:block!important;height:clamp(84px,19vh,218px);margin-top:clamp(10px,2.4vh,32px)}
+  .tag{padding:clamp(14px,2.6vh,28px) 22px clamp(8px,1.4vh,16px);font-size:clamp(12px,1.7vh,14px)}
+  .feat{margin-top:clamp(8px,2.2vh,34px);padding:clamp(6px,1vh,10px) 0}
+  .feat li{font-size:clamp(10.5px,1.55vh,13px);line-height:1.25;min-height:0;padding:0 2px;white-space:nowrap}
+  .feat .i3d{width:clamp(28px,5vh,46px)!important;height:clamp(28px,5vh,46px)!important;margin-bottom:clamp(4px,.9vh,10px)}
+  .cta{padding-top:clamp(8px,1.8vh,20px)}
+  .add{height:clamp(46px,7.4vh,63px);font-size:clamp(15px,2.2vh,18px)}
+  .add .i3d{width:clamp(26px,4.2vh,34px)!important;height:clamp(26px,4.2vh,34px)!important}
+}
+@media (max-width:1199px) and (min-width:901px){.carousel-arrow.left{left:0}.carousel-arrow.right{right:0}}
+@media (max-width:900px){.carousel-arrow.left{left:20px}.carousel-arrow.right{right:20px}}
+@media (max-width:760px){.carousel-arrow.right{right:6px}}
+.ring{display:none!important}
+/* narrow side panel: stack icon over label so text never clips */
+@media (min-width:901px) and (max-width:1279px){
+  .fabrics button{flex-direction:column!important;gap:3px!important;justify-content:center!important;height:clamp(72px,10.5vh,84px);padding:6px 4px}
+  .fabrics button .i3d{width:30px!important;height:30px!important}
+  .fabrics .fab-txt{align-items:center;text-align:center}
+  .fabrics small{white-space:nowrap}
+}
+/* tablet landscape: keep the fabric image and feature strip under the stage */
+@media (min-width:901px) and (max-width:1199px){
+  .info{display:grid!important;grid-template-columns:150px minmax(0,1fr);gap:6px 12px;align-items:center}
+  .info h1{grid-column:1/-1;font-size:22px}
+  .info .fabric{display:block!important;height:78px;margin:0;grid-column:1}
+  .info .fabric .tag{padding:10px 10px 6px;font-size:10px;gap:5px}
+  .info .feat{display:flex!important;margin:0;grid-column:2;padding:4px 0}
+  .info .feat li{font-size:10.5px;white-space:nowrap;line-height:1.2;padding:0 2px}
+  .info .feat .i3d{width:28px!important;height:28px!important;margin-bottom:3px}
+  .info .cta{grid-column:1/-1;padding-top:4px}
+}
+@media (min-width:1200px){.viewer-box{transform:scale(.86);transform-origin:50% 50%}}
+.pcol{display:contents}
+/* tablet portrait: two-column panel so every control is visible without cropping */
+@media (min-width:761px) and (max-width:900px){
+  .panel{display:grid!important;grid-template-columns:1fr 1fr;column-gap:28px;align-content:start;overflow-y:auto}
+  .panel>h3,.panel>.styles{grid-column:1/-1}
+  .pcol{display:block}
+  .app{grid-template-rows:74px minmax(220px,34dvh) auto minmax(0,1fr)!important}
+  .panel{padding:16px 22px}
+  .panel h3{margin-bottom:8px;padding-bottom:8px}
+  .panel .styles button{height:clamp(64px,8vh,92px)!important}
+  .panel h4{margin:12px 0 8px}
+  .panel .cp-sv{height:90px}
+  .app{grid-template-rows:74px minmax(200px,31dvh) auto minmax(0,1fr)!important}
+  .info{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center}
+  .info h1{grid-column:1;grid-row:1;font-size:22px}
+  .info .cta{grid-column:2;grid-row:1}
+  .info .fabric{display:block!important;grid-column:1;grid-row:2;height:72px;margin:0}
+  .info .fabric .tag{padding:12px 12px 6px;font-size:11px}
+  .info .feat{display:flex!important;grid-column:2;grid-row:2;margin:0;padding:4px 0;width:340px}
+  .info .feat li{font-size:10.5px;white-space:nowrap;line-height:1.2;padding:0 2px}
+  .info .feat .i3d{width:28px!important;height:28px!important;margin-bottom:3px}
+}
+
+/* style card thumbnails: show collar/shoulders, crop at the bottom */
+@media (min-width:901px){.styles img{object-position:50% 0}}

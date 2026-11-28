@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useConfigStore } from '../store/ConfiguratorStore';
+import { ColorTabs } from './ColorPicker';
 
 type ActivePanel = 'color' | 'texture' | 'logo' | 'text' | 'finishing' | null;
 
@@ -9,7 +10,7 @@ const COLOR_PALETTE = [
   '#16a34a', '#0284c7', '#4f46e5', '#9333ea', '#db2777'
 ];
 
-export const MobileConfigDock: React.FC = observer(() => {
+export const MobileConfigDock: React.FC<{ modelIndex: number }> = observer(({ modelIndex }) => {
   const configStore = useConfigStore();
   const [activePanel, setActivePanel] = useState<ActivePanel>(null);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -104,56 +105,7 @@ export const MobileConfigDock: React.FC = observer(() => {
         <div ref={popupRef} className="dock-tooltip-bubble animate-spring-up">
           {/* 1. COLOR PANEL: Just #1 #2 #3 and compact swatches */}
           {activePanel === 'color' && (
-            <div className="tooltip-color-wrap">
-              <div className="layer-numbers-bar">
-                {configStore.parts.map((part, idx) => {
-                  const isActive = configStore.activePartId === part.id;
-                  return (
-                    <button
-                      key={part.id}
-                      className={`layer-num-btn ${isActive ? 'active' : ''}`}
-                      onClick={() => configStore.setActivePart(part.id)}
-                    >
-                      <span className="layer-dot" style={{ backgroundColor: part.color }} />
-                      <span className="layer-num">#{idx + 1}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="swatch-ribbon">
-                {COLOR_PALETTE.map(hex => {
-                  const currentPart = configStore.parts.find(p => p.id === configStore.activePartId);
-                  const isSelected = currentPart?.color.toLowerCase() === hex.toLowerCase();
-                  return (
-                    <button
-                      key={hex}
-                      className={`micro-swatch ${isSelected ? 'selected' : ''}`}
-                      style={{ backgroundColor: hex }}
-                      onClick={() => {
-                        if (configStore.activePartId) {
-                          configStore.setPartColor(configStore.activePartId, hex);
-                        }
-                      }}
-                    />
-                  );
-                })}
-
-                {configStore.activePartId && (
-                  <label className="native-picker-trigger" title="Custom Color">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    <input
-                      type="color"
-                      value={configStore.parts.find(p => p.id === configStore.activePartId)?.color || '#ffffff'}
-                      onChange={e => configStore.setPartColor(configStore.activePartId, e.target.value)}
-                      className="hidden-color-input"
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
+            <div className="tooltip-color-wrap"><ColorTabs modelIndex={modelIndex} /></div>
           )}
 
           {/* 2. TEXTURE PANEL */}

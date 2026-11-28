@@ -4,18 +4,17 @@ import { ThreeViewer, EnvironmentPlugin, OrbitControlsPlugin, CenterModelPlugin,
 import { useConfigStore } from '../store/ConfiguratorStore';
 import { SportswearConfigurator, type SportswearModelDef } from '@trikomi/core/sportswear';
 
-const AVAILABLE_MODELS: SportswearModelDef[] = [
+export const AVAILABLE_MODELS: SportswearModelDef[] = [
   { name: 'Rugby Jersey', url: `${import.meta.env.BASE_URL}models/RugbyJersey.gltf`, svg: `${import.meta.env.BASE_URL}textures/JSY-85 RL.svg`, mat: 'main' },
   { name: 'Basketball Singlet', url: `${import.meta.env.BASE_URL}models/BasketballSinglet.gltf`, svg: `${import.meta.env.BASE_URL}textures/BAS20_01.svg`, mat: 'main' },
   { name: 'Soccer Jersey', url: `${import.meta.env.BASE_URL}models/SoccerJersey.gltf`, svg: `${import.meta.env.BASE_URL}textures/FTB20_01.svg`, mat: 'main' }
 ];
 
-export const ThreeCanvas: React.FC = observer(() => {
+export const ThreeCanvas: React.FC<{ modelIndex: number; onModelChange: (i: number) => void }> = observer(({ modelIndex, onModelChange }) => {
   const configStore = useConfigStore();
   const contextStore = useViewerStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const configuratorRef = useRef<SportswearConfigurator | null>(null);
-  const [modelIndex, setModelIndex] = useState(0);
   const isInitialRef = useRef(true);
 
   useEffect(() => {
@@ -112,12 +111,12 @@ export const ThreeCanvas: React.FC = observer(() => {
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      <div ref={containerRef} className="viewer-box" style={{ width: "100%", height: "100%" }} />
 
       {/* Left Carousel Arrow */}
       <button
         className="carousel-arrow left"
-        onClick={() => setModelIndex((prev) => (prev > 0 ? prev - 1 : AVAILABLE_MODELS.length - 1))}
+        onClick={() => onModelChange(modelIndex > 0 ? modelIndex - 1 : AVAILABLE_MODELS.length - 1)}
         aria-label="Previous Model"
         title={AVAILABLE_MODELS[(modelIndex > 0 ? modelIndex - 1 : AVAILABLE_MODELS.length - 1)].name}
       >
@@ -129,7 +128,7 @@ export const ThreeCanvas: React.FC = observer(() => {
       {/* Right Carousel Arrow */}
       <button
         className="carousel-arrow right"
-        onClick={() => setModelIndex((prev) => (prev < AVAILABLE_MODELS.length - 1 ? prev + 1 : 0))}
+        onClick={() => onModelChange(modelIndex < AVAILABLE_MODELS.length - 1 ? modelIndex + 1 : 0)}
         aria-label="Next Model"
         title={AVAILABLE_MODELS[(modelIndex < AVAILABLE_MODELS.length - 1 ? modelIndex + 1 : 0)].name}
       >
